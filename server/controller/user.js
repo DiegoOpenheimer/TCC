@@ -6,6 +6,7 @@ const email = require('../utils/senderEmail')
 const jwt = require('../utils/jwt')
 const html = require('../utils/pagesHtml')
 const constants = require('../utils/constants')
+const {JsonWebTokenError} = require('jsonwebtoken')
 
 const createUser = (req, res) => {
     const user = req.body
@@ -21,7 +22,7 @@ const createUser = (req, res) => {
         const token = jwt.signJwt({ email: user.email }, { expiresIn: '1d' })
         const link = 'http://' + process.env.URI + ':' + process.env.PORT + '/user' + '/' + token
         email.sender(user.email, 'Confirmação de conta', html.confirmAccount(link))
-        response.handlerResponse(res, { message: 'user registered', status: 200 })
+        response.handlerResponse(res, { message: 'user registered', status: 200})
     })
     .catch(e => {
         if (e instanceof HandlerError) {
