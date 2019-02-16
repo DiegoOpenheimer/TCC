@@ -1,0 +1,17 @@
+{
+  "name": "server-bus",
+  "version": "0.0.1",
+  "description": "Servidor em nodejs, criado para projeto tcc",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Júlio Gonçalves | Diego Alves Openheimer",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.13"
+  }
+}
