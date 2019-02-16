@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
 const secretKey = 'tcc-bus'
 
-const signJwt = data => {
-    return jwt.sign(data, new Buffer.from(secretKey, 'base64'))
+const signJwt = (data, options = null) => {
+    return jwt.sign(data, new Buffer.from(secretKey, 'base64'), options)
 }
 
 const verifyJwt = token => {
@@ -17,10 +17,6 @@ const verifyJwt = token => {
         })
     })
 }
-
-const token = signJwt({name: 'diego'})
-console.log(token)
-verifyJwt(token)
 
 module.exports = {
     signJwt,

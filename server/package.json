@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start1": "nodemon index.js"
+    "start-nodemon": "nodemon index.js",
+    "pm2": "pm2 start index.js --name tcc"
   },
   "author": "Júlio Gonçalves | Diego Alves Openheimer",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^5.4.13",
+    "nodemailer": "^5.1.1",
     "winston": "^3.2.1"
   }
 }
