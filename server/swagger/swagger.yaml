@@ -1,0 +1,93 @@
+swagger: "2.0"
+info:
+  description: "Documentado api que será usado no projeto tcc"
+  version: "1.0.0"
+  title: "Locator API"
+  contact:
+    email: "diegoop.pa@hotmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:3000"
+basePath: "/"
+tags:
+- name: "User"
+  description: "Everything about users"
+schemes:
+- "https"
+- "http"
+paths:
+  /user:
+    post:
+      tags:
+      - "User"
+      summary: "Register a new user"
+      description: "register a user"
+      operationId: "createUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object that needs to be registered"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "User registered"
+          schema:
+            $ref: "#/definitions/ApiResponseOk"
+        409:
+          description: "Conflict with user"
+          schema:
+            $ref: "#/definitions/ApiResponseConflictUser"
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/ApiResponseBadRequest"
+securityDefinitions:
+  ApiKey:
+    type: "apiKey"
+    name: "token"
+    in: "header"
+definitions:
+  User:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+
+  ApiResponseOk:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "user registered"
+      status:
+        type: "integer"
+        example: 200
+  ApiResponseConflictUser:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "user already registered"
+      status:
+        type: "integer"
+        example: 409
+  ApiResponseBadRequest:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "missing values or type values are incorrects"
+      status:
+        type: "integer"
+        example: 400

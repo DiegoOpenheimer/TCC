@@ -1,6 +1,6 @@
 const handlerCreateUser = (req, res, next) => {
     if (!req.body || !(req.body.email && req.body.password && req.body.name)) {
-        res.status(400).send({ message: 'missing invalids' })
+        res.status(400).send({ message: 'missing values or type values are incorrects' })
     } else {
         next()
     }

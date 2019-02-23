@@ -8,13 +8,14 @@ const html = require('../utils/pagesHtml')
 const constants = require('../utils/constants')
 const {JsonWebTokenError} = require('jsonwebtoken')
 
+// create user, if user already exist, a new email is sent to user to enabled account
 const createUser = (req, res) => {
     const user = req.body
     User.findOne({ email: user.email })
     .then(userFound => {
-        if(userFound) {
+        if(userFound && userFound.status === constants.USER_STATUS.ENABLED) {
             return Promise.reject(new HandlerError('user already registered', 409))
-        } else {
+        } else if(!userFound) {
             return User.create(user)
         }
     })
