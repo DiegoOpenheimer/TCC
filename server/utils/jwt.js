@@ -18,7 +18,10 @@ const verifyJwt = token => {
     })
 }
 
+const decode = token => jwt.decode(token)
+
 module.exports = {
     signJwt,
-    verifyJwt
+    verifyJwt,
+    decode
 }

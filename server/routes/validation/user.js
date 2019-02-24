@@ -1,20 +1,31 @@
 const handlerCreateUser = (req, res, next) => {
     if (!req.body || !(req.body.email && req.body.password && req.body.name)) {
-        res.status(400).send({ message: 'missing invalids' })
+        badRequest()
     } else {
         next()
     }
 }
 
-const handlerConfirmAccount = (req, res, next) => {
-    if (!req.params.id) {
-        res.status(400).send({ message: 'missing token' })
+const handlerRecoverPassword = param => (req, res, next) => {
+    if (!req.body || !req.body[param]) {
+        badRequest(res)
     } else {
         next()
     }
 }
+
+const validationId = (req, res, next) => {
+    if (!req.params.id) {
+        badRequest()    
+    } else {
+        next()
+    }
+}
+
+const badRequest = res => res.status(400).send({ message: 'missing values or type values are incorrects', status: 400 })
 
 module.exports = {
     handlerCreateUser,
-    handlerConfirmAccount
+    handlerRecoverPassword,
+    validationId
 }

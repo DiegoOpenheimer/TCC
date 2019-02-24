@@ -6,7 +6,7 @@ const transporter = nodeMailer.createTransport({
         pass:'Astra@123'
     }
 })
-const logger = require('../utils/logger')
+const logger = require('./logger')
 
 const getMailOptions = (email, subject,html) => {
     return {
