@@ -1,93 +1,274 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: "Documentado api que será usado no projeto tcc"
-  version: "1.0.0"
-  title: "Locator API"
+  description: Documentado api que será usado no projeto tcc
+  version: 1.0.0
+  title: Locator API
   contact:
-    email: "diegoop.pa@hotmail.com"
+    email: diegoop.pa@hotmail.com
   license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:3000"
-basePath: "/"
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'localhost:3000'
+basePath: /
 tags:
-- name: "User"
-  description: "Everything about users"
+  - name: User
+    description: Everything about users
+  - name: Auth
+    description: How you can authenticate at server
 schemes:
-- "https"
-- "http"
+  - http
 paths:
   /user:
     post:
       tags:
-      - "User"
-      summary: "Register a new user"
-      description: "register a user"
-      operationId: "createUser"
+        - User
+      summary: Register a new user
+      description: register a user
+      operationId: createUser
       consumes:
-      - "application/json"
+        - application/json
       produces:
-      - "application/json"
+        - application/json
       parameters:
-      - in: "body"
-        name: "body"
-        description: "User object that needs to be registered"
+        - in: body
+          name: body
+          description: User object that needs to be registered
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: User registered
+          schema:
+            $ref: '#/definitions/ApiResponseOk'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '409':
+          description: Conflict with user
+          schema:
+            $ref: '#/definitions/ApiResponseConflictUser'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+  /user/recover-password:
+    post:
+      tags:
+        - User
+      summary: End point to recover password to user
+      description: Recover password
+      operationId: requestToRecoverPassword
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: email to recover password
+          required: true
+          schema:
+            $ref: '#/definitions/SchemaRecoverPassword'
+      responses:
+        '200':
+          description: success
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: password changed
+              status:
+                type: integer
+                example: 200
+        '400':
+          description: bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '404':
+          description: case user there is not
+          schema:
+            $ref: '#/definitions/UserNotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+        - ApiKey: []
+  /user/change-password:
+    patch:
+      tags:
+        - User
+      summary: End point to recover password to user
+      description: Recover password
+      operationId: recoverPassword
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: email to recover password
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              password:
+                type: 'string'
+      responses:
+        '200':
+          description: success
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: password changed
+              status:
+                type: integer
+                example: 200
+        '400':
+          description: bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '404':
+          description: case user there is not
+          schema:
+            $ref: '#/definitions/UserNotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'  
+      security:
+        - ApiKey: []
+  /auth:
+    post:
+      tags:
+      - Auth
+      summary: authenticate on serve
+      description: authenticate on serve
+      consumes: 
+      - application/json
+      produces: 
+      - application/json
+      parameters: 
+      - in: body
+        name: body
+        description: email and password to authenticate on serve
         required: true
         schema:
-          $ref: "#/definitions/User"
+          $ref: '#/definitions/Auth'
       responses:
         200:
-          description: "User registered"
+          description: success
           schema:
-            $ref: "#/definitions/ApiResponseOk"
-        409:
-          description: "Conflict with user"
+            type: object
+            properties:
+              message:
+                type: string
+                example: authorized
+              status:
+                type: integer
+                example: 200
+        '400':
+          description: bad request
           schema:
-            $ref: "#/definitions/ApiResponseConflictUser"
-        400:
-          description: "Bad request"
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '404':
+          description: case user there is not
           schema:
-            $ref: "#/definitions/ApiResponseBadRequest"
+            $ref: '#/definitions/UserNotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'  
 securityDefinitions:
   ApiKey:
-    type: "apiKey"
-    name: "token"
-    in: "header"
+    type: apiKey
+    name: token
+    in: header
 definitions:
   User:
-    type: "object"
+    type: object
     properties:
       name:
-        type: "string"
+        type: string
       email:
-        type: "string"
+        type: string
       password:
-        type: "string"
-
+        type: string
   ApiResponseOk:
-    type: "object"
+    type: object
     properties:
       message:
-        type: "string"
-        example: "user registered"
+        type: string
+        example: user registered
       status:
-        type: "integer"
+        type: integer
         example: 200
   ApiResponseConflictUser:
-    type: "object"
+    type: object
     properties:
       message:
-        type: "string"
-        example: "user already registered"
+        type: string
+        example: user already registered
       status:
-        type: "integer"
+        type: integer
         example: 409
   ApiResponseBadRequest:
-    type: "object"
+    type: object
     properties:
       message:
-        type: "string"
-        example: "missing values or type values are incorrects"
+        type: string
+        example: missing values or type values are incorrects
       status:
-        type: "integer"
+        type: integer
         example: 400
+  SchemaRecoverPassword:
+    type: object
+    properties:
+      email:
+        type: string
+  UserNotFound:
+    type: object
+    properties:
+      message:
+        type: string
+        example: user not found
+      status:
+        type: integer
+        example: 404
+  UnknownServerError:
+    type: object
+    properties:
+      message:
+        type: string
+        example: Unexpected error
+      status:
+        type: integer
+        example: 500
+  Auth:
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+components:
+  schemas:
+    mResponses:
+      '400':
+        description: bad request
+        schema:
+          $ref: '#/definitions/ApiResponseBadRequest'
+      '404':
+        description: case user there is not
+        schema:
+          $ref: '#/definitions/UserNotFound'
+      '500':
+        description: unknown error
+        schema:
+          $ref: '#/definitions/UnknownServerError'  

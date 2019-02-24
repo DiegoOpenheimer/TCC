@@ -9,7 +9,9 @@ const authenticate = (req, res) => {
     const user = req.body
     User.findOne({ email: user.email })
     .then(uResult => {
-        if (!uResult || uResult.status !== constants.USER_STATUS.ENABLED) {
+        if (!uResult) {
+            return Promise.reject(new HandlerError('user not found', 404))
+        } else if (uResult.status !== constants.USER_STATUS.ENABLED) {
             return Promise.reject(new HandlerError('not authorized', 401))
         }
         return uResult.checkPassword(user.password)

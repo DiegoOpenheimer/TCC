@@ -6,3 +6,9 @@
 {"timestamp":"2019-02-23T13:15:33.904Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
 {"timestamp":"2019-02-23T13:16:04.759Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
 {"timestamp":"2019-02-23T13:16:36.221Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-02-23T18:30:24.561Z","message":"error to send email Error: No recipients defined"}
+{"timestamp":"2019-02-24T20:33:58.741Z","message":"error to request to recover password CastError: Cast to string failed for value \"{ email: 'diegoop.pa@hotmail.comm' }\" at path \"email\" for model \"User\""}
+{"timestamp":"2019-02-24T20:36:42.055Z","message":"error to request to recover password TypeError: email.sender is not a function"}
+{"timestamp":"2019-02-24T20:37:58.241Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
+{"timestamp":"2019-02-24T20:45:28.932Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
+{"timestamp":"2019-02-24T21:08:50.315Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
