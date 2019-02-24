@@ -42,7 +42,7 @@ const enableAccount = (req, res) => {
         if (e instanceof JsonWebTokenError) {
             response.handlerResponse(res, { message: 'invalid token', status: 401 })
         } else {
-            handlerUnexpectError(res, `FAIL TO ENABLE ACCOUNT ${e}`)
+            handlerUnexpectError(res, `fail to enable account ${e}`)
         }
     })
 }
@@ -111,7 +111,7 @@ const changePassword = (req, res) => {
         })
         .then(_ => response.handlerResponse(res, { message: 'password changed', status: 200 }))
         .catch(e => {
-            handlerUnexpectError(res, `FAIL TO ENABLE ACCOUNT ${e}`)
+            handlerUnexpectError(res, `fail to change password ${e}`)
         })
     } else {
         response.handlerResponse(res, new HandlerError('user not found', 404))
