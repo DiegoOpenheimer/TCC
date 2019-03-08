@@ -1,0 +1,15 @@
+{
+  "name": "tcc_raspberry_locator",
+  "version": "1.0.0",
+  "description": "localização do dispositivo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Julio Goncalves | Diego Alves",
+  "license": "ISC",
+  "dependencies": {
+    "gps": "^0.5.1",
+    "serialport": "^7.1.4"
+  }
+}
