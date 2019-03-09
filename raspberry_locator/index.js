@@ -1,11 +1,11 @@
 const SerialPort = require('serialport');
-console.log(SerialPort.Readline)
-const port = new SerialPort('/dev/ttyAMA0', { // change path
+const GPS = require('gps');
+
+const port = new SerialPort('/dev/ttyAMA0', {
   baudRate: 9200,
 });
- 
-var GPS = require('gps');
-var gps = new GPS;
+
+const gps = new GPS;
  
 gps.on('data', function(data) {
   console.log(data, gps.state);
