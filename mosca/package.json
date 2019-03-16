@@ -1,0 +1,14 @@
+{
+  "name": "server_mqtt",
+  "version": "1.0.0",
+  "description": "servidor mqtt criado para comunicação entre servidor http, raspberry e aplicativo móvel",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Diego Alves Openheimer | Júlio Gonçalves",
+  "license": "ISC",
+  "dependencies": {
+    "mosca": "^2.8.3"
+  }
+}
