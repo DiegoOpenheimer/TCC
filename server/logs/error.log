@@ -1,3 +1,6 @@
 {"timestamp":"2019-02-23T18:30:24.561Z","message":"error to send email Error: No recipients defined"}
 {"timestamp":"2019-02-24T20:33:58.741Z","message":"error to request to recover password CastError: Cast to string failed for value \"{ email: 'diegoop.pa@hotmail.comm' }\" at path \"email\" for model \"User\""}
 {"timestamp":"2019-02-24T20:36:42.055Z","message":"error to request to recover password TypeError: email.sender is not a function"}
+{"timestamp":"2019-03-22T23:10:18.457Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
+{"timestamp":"2019-03-22T23:14:31.375Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
+{"timestamp":"2019-03-22T23:18:46.151Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}

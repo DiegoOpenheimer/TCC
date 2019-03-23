@@ -4,8 +4,8 @@
   "description": "Servidor em nodejs, criado para projeto tcc",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "start-nodemon": "nodemon index.js",
+    "start": "node src/index.js",
+    "start-nodemon": "nodemon src/index.js",
     "pm2": "pm2 start index.js --name tcc"
   },
   "author": "Júlio Gonçalves | Diego Alves Openheimer",

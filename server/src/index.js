@@ -14,6 +14,4 @@ mongoose.connectMongoDb()
         }
     })
 })
-.catch(e => {
-    logger.error(`FAIL TO CONNECT MONGODB ${e}`)
-})
+.catch(e => logger.error(`FAIL TO CONNECT MONGODB ${e}`))

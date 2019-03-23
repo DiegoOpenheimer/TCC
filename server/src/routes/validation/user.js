@@ -1,6 +1,6 @@
 const handlerCreateUser = (req, res, next) => {
     if (!req.body || !(req.body.email && req.body.password && req.body.name)) {
-        badRequest()
+        badRequest(res)
     } else {
         next()
     }
@@ -16,7 +16,7 @@ const handlerRecoverPassword = param => (req, res, next) => {
 
 const validationId = (req, res, next) => {
     if (!req.params.id) {
-        badRequest()    
+        badRequest(res)    
     } else {
         next()
     }

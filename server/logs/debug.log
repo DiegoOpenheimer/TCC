@@ -12,3 +12,6 @@
 {"timestamp":"2019-02-24T20:37:58.241Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
 {"timestamp":"2019-02-24T20:45:28.932Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
 {"timestamp":"2019-02-24T21:08:50.315Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
+{"timestamp":"2019-03-22T23:10:18.457Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
+{"timestamp":"2019-03-22T23:14:31.375Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
+{"timestamp":"2019-03-22T23:18:46.151Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
