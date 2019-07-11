@@ -5,6 +5,7 @@ const swaggerUi = require('swagger-ui-express')
 const YAML = require('yamljs')
 const swaggerDocument = YAML.load('./swagger/swagger.yaml')
 
+app.set('views', './src/views')
 app.set('view engine', 'ejs')
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use(bodyParser.json({extended: true}))

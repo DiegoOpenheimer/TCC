@@ -1,5 +1,4 @@
 const User  = require('../model/user')
-const logger = require('../utils/logger')
 const response = require('./handlerResponse')
 const HandlerError = require('./handlerError')
 const emailService = require('../utils/senderEmail')
@@ -29,7 +28,7 @@ const createUser = (req, res) => {
         if (e instanceof HandlerError) {
             response.handlerResponse(res, e)
         } else {
-            handlerUnexpectError(res, `error find one user ${e}`)
+            response.handlerUnexpectError(res, `error find one user ${e}`)
         }
     })
 }
@@ -42,7 +41,7 @@ const enableAccount = (req, res) => {
         if (e instanceof JsonWebTokenError) {
             response.handlerResponse(res, { message: 'invalid token', status: 401 })
         } else {
-            handlerUnexpectError(res, `fail to enable account ${e}`)
+            response.handlerUnexpectError(res, `fail to enable account ${e}`)
         }
     })
 }
@@ -57,7 +56,7 @@ const renderPageToChangePassword = (req, res) => {
     })
     .then(user => {
         if (user) {
-            res.render('recoverPassword')
+            res.render('recoverPassword', { entity: 'user' })
         } else {
             return Promise.reject(new HandlerError('user not found', 404))
         }
@@ -68,7 +67,7 @@ const renderPageToChangePassword = (req, res) => {
         } else if (e instanceof JsonWebTokenError) {
             response.handlerResponse(res, new HandlerError('invalid token', 401))
         } else {
-            handlerUnexpectError(res, `fail to render page to change password ${e}`)
+            response.handlerUnexpectError(res, `fail to render page to change password ${e}`)
         }
     })
 }
@@ -90,7 +89,7 @@ const recoverPassword = (req, res) => {
         if (e instanceof HandlerError) {
             response.handlerResponse(res, e)
         } else {
-            handlerUnexpectError(res, `error to request to recover password ${e}`)
+            response.handlerUnexpectError(res, `error to request to recover password ${e}`)
         }
     })
 }
@@ -111,7 +110,7 @@ const changePassword = (req, res) => {
         })
         .then(_ => response.handlerResponse(res, { message: 'password changed', status: 200 }))
         .catch(e => {
-            handlerUnexpectError(res, `fail to change password ${e}`)
+            response.handlerUnexpectError(res, `fail to change password ${e}`)
         })
     } else {
         response.handlerResponse(res, new HandlerError('user not found', 404))
@@ -119,10 +118,7 @@ const changePassword = (req, res) => {
 }
 
 
-const handlerUnexpectError = (res, message) => {
-    response.handlerResponse(res, { message: 'Unexpected error', status: 500 })
-    logger.error(message)
-}
+
 
 
 module.exports = {

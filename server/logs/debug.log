@@ -15,3 +15,23 @@
 {"timestamp":"2019-03-22T23:10:18.457Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
 {"timestamp":"2019-03-22T23:14:31.375Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
 {"timestamp":"2019-03-22T23:18:46.151Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
+{"timestamp":"2019-07-11T22:15:29.349Z","message":"email sent to openheimerdiego@gmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T22:15:46.317Z","message":"email sent to openheimerdiego@gmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T22:35:44.042Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
+{"timestamp":"2019-07-11T22:36:38.429Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
+{"timestamp":"2019-07-11T22:52:50.079Z","message":"error to create employee ReferenceError: jwt is not defined"}
+{"timestamp":"2019-07-11T22:53:33.715Z","message":"error to create employee ReferenceError: emailService is not defined"}
+{"timestamp":"2019-07-11T22:53:59.578Z","message":"error to create employee ReferenceError: html is not defined"}
+{"timestamp":"2019-07-11T22:54:43.053Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T22:57:31.599Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:00:17.395Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:01:20.729Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:03:06.196Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:10:58.148Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:12:24.093Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:14:13.704Z","message":"error to send email Error: No recipients defined"}
+{"timestamp":"2019-07-11T23:15:08.776Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:16:35.341Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:17:14.193Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-11T23:20:01.434Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}
+{"timestamp":"2019-07-11T23:20:43.784Z","message":"email sent to diegoop.pa@hotmail.com with subject Troca de senha"}

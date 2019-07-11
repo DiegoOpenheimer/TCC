@@ -3,6 +3,12 @@ const USER_STATUS = {
     PENDING: 'PEDING'
 }
 
+const EMPLOYEE_ROLE = {
+    COMMON: 'COMMON',
+    ADMIN: 'ADMIN'
+}
+
 module.exports = {
-    USER_STATUS
+    USER_STATUS,
+    EMPLOYEE_ROLE
 }

@@ -15,6 +15,8 @@ tags:
     description: Everything about users
   - name: Auth
     description: How you can authenticate at server
+  - name: Employee
+    description: Everything about employee
 schemes:
   - http
 paths:
@@ -144,7 +146,178 @@ paths:
             $ref: '#/definitions/UnknownServerError'  
       security:
         - ApiKey: []
-  /auth:
+
+
+  /employee:
+    post:
+      tags:
+        - Employee
+      summary: Register a new user
+      description: register a user
+      operationId: createEmployee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Employee object that needs to be registered
+          required: true
+          schema:
+            $ref: '#/definitions/Employee'
+      responses:
+        '200':
+          description: Employee registered
+          schema:
+            $ref: '#/definitions/ApiResponseOk'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '409':
+          description: Conflict with employee
+          schema:
+            $ref: '#/definitions/ApiResponseConflictUser'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+  /employee/recover-password:
+    post:
+      tags:
+        - Employee
+      summary: End point to recover password to employee
+      description: Recover password
+      operationId: requestToRecoverPassword
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: email to recover password
+          required: true
+          schema:
+            $ref: '#/definitions/SchemaRecoverPassword'
+      responses:
+        '200':
+          description: success
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: password changed
+              status:
+                type: integer
+                example: 200
+        '400':
+          description: bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '404':
+          description: case user there is not
+          schema:
+            $ref: '#/definitions/UserNotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+        - ApiKey: []
+  /employee/change-password:
+    patch:
+      tags:
+        - Employee
+      summary: End point to recover password to user
+      description: Recover password
+      operationId: recoverPassword
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: email to recover password
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              password:
+                type: 'string'
+      responses:
+        '200':
+          description: success
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: password changed
+              status:
+                type: integer
+                example: 200
+        '400':
+          description: bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '404':
+          description: case user there is not
+          schema:
+            $ref: '#/definitions/UserNotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'  
+      security:
+        - ApiKey: []
+
+
+  /auth/user:
+    post:
+      tags:
+      - Auth
+      summary: authenticate on serve
+      description: authenticate on serve
+      consumes: 
+      - application/json
+      produces: 
+      - application/json
+      parameters: 
+      - in: body
+        name: body
+        description: email and password to authenticate on serve
+        required: true
+        schema:
+          $ref: '#/definitions/Auth'
+      responses:
+        200:
+          description: success
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: authorized
+              status:
+                type: integer
+                example: 200
+        '400':
+          description: bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '404':
+          description: case user there is not
+          schema:
+            $ref: '#/definitions/UserNotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'  
+  /auth/employee:
     post:
       tags:
       - Auth
@@ -199,6 +372,17 @@ definitions:
       email:
         type: string
       password:
+        type: string
+  Employee:
+    type: object
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      cpf:
         type: string
   ApiResponseOk:
     type: object

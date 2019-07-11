@@ -4,3 +4,7 @@
 {"timestamp":"2019-03-22T23:10:18.457Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
 {"timestamp":"2019-03-22T23:14:31.375Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
 {"timestamp":"2019-03-22T23:18:46.151Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
+{"timestamp":"2019-07-11T22:52:50.079Z","message":"error to create employee ReferenceError: jwt is not defined"}
+{"timestamp":"2019-07-11T22:53:33.715Z","message":"error to create employee ReferenceError: emailService is not defined"}
+{"timestamp":"2019-07-11T22:53:59.578Z","message":"error to create employee ReferenceError: html is not defined"}
+{"timestamp":"2019-07-11T23:14:13.704Z","message":"error to send email Error: No recipients defined"}

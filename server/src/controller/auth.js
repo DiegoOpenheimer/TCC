@@ -1,24 +1,31 @@
-const User = require('../model/user')
 const HandlerError = require('./handlerError')
 const jwt = require('../utils/jwt')
 const response = require('./handlerResponse')
 const logger = require('../utils/logger')
 const constants = require('../utils/constants')
 
-const authenticate = (req, res) => {
+const authenticate = Entity => (req, res) => {
     const user = req.body
-    User.findOne({ email: user.email })
+    let role
+    Entity.findOne({ email: user.email })
     .then(uResult => {
         if (!uResult) {
             return Promise.reject(new HandlerError('user not found', 404))
         } else if (uResult.status !== constants.USER_STATUS.ENABLED) {
             return Promise.reject(new HandlerError('not authorized', 401))
         }
+        if ('role' in uResult) {
+            role = uResult.role
+        }
         return uResult.checkPassword(user.password)
     })
     .then((value) => {
         if (value) {
-            const token = jwt.signJwt({ email: user.email })
+            const jwtOb = { email: user.email }
+            if (role) {
+                jwtOb.role = role
+            }
+            const token = jwt.signJwt(jwtOb)
             response.handlerResponse(res, { message: 'authorized', token, status: 200 })
         } else {
             return Promise.reject(new HandlerError('not authorized', 401))
