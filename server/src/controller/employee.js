@@ -35,8 +35,8 @@ const createEmployee = (req, res) => {
 
 const enableAccount = (req, res) => {
     jwt.verifyJwt(req.params.id)
-    .then(result => Employee.findOneAndUpdate({ email: result.email }, { status: constants.USER_STATUS.ENABLED }))
-    .then(_ => response.handlerResponse(res, { message: 'employee enabled', status: 200 }))
+    .then(result => Employee.findOneAndUpdate({ email: result.email }, { status: constants.USER_STATUS.NOT_AUTHORIZED }))
+    .then(_ => response.handlerResponse(res, { message: 'Account confirmed', status: 200 }))
     .catch(e => {
         if (e instanceof JsonWebTokenError) {
             response.handlerResponse(res, { message: 'invalid token', status: 401 })
