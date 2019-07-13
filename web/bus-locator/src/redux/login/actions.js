@@ -1,10 +1,10 @@
 import network from '../../services/network'
+import storage from '../../services/storage'
 
 export const type = {
     LOADING: 'LOADING',
     LOGIN_SUCCESS: 'LOGIN_SUCCESS',
 }
-
 
 export const requestLogin = (user, success, error) => dispatch => {
     dispatch(handleLoading(true))
@@ -12,12 +12,16 @@ export const requestLogin = (user, success, error) => dispatch => {
     .then(response => {
         dispatch(handleLoading(false))
         dispatch(handleResponse(response))
-        localStorage.setItem('token', response.data.token)
+        storage.saveUser(response.data)
         success()
     })
-    .catch(_ => {
+    .catch(e => {
         dispatch(handleLoading(false))
-        error('Sem permissão para acesso')
+        if (e.response) {
+            error('Sem permissão para acesso')
+        } else {
+            error('Falha de comunicação com o servidor')
+        }
     })
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Tabs, Tab, useTheme, LinearProgress } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 import createStyle from './styles'
@@ -9,6 +9,7 @@ import FieldsRegister from './components/fieldsRegister'
 import ForgotPassword from './components/forgotPassword'
 import { connect } from 'react-redux'
 import { requestLogin, createAccount, recoverPassword } from '../../redux/login/actions'
+import storage from '../../services/storage'
 
 const Login = props => {
     const [ state, setState ] = useState(0)
@@ -20,23 +21,34 @@ const Login = props => {
         setState(index);
     }
 
+    useEffect(() => {
+        if (storage.getUser()) {
+            props.history.push('/home')
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ ])
+
     const registerUser = user => {
-        if (user.password !== user.confirmPassword) {
-            toast.error('Senhas diferentes', { position: toast.POSITION.TOP_LEFT })
-        } else {
-            props.createAccount(
-                user,
-                () => toast.success('Conta criada com sucesso, confirme no seu email'),
-                e => toast.error(e)
-            )
+        if (!props.isLoading) {
+            if (user.password !== user.confirmPassword) {
+                toast.error('Senhas diferentes', { position: toast.POSITION.TOP_LEFT })
+            } else {
+                props.createAccount(
+                    user,
+                    () => toast.success('Conta criada com sucesso, confirme no seu email'),
+                    e => toast.error(e)
+                )
+            }
         }
     }
     
     const requestLogin = user => {
-        props.requestLogin(user, () => {
-            toast.success('Login efetuado com sucess')
-            props.history.push('/home')
-        }, e => toast.error(e))
+        if (!props.isLoading) {
+            props.requestLogin(user, () => {
+                toast.success('Login efetuado com sucess', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 2000 })
+                props.history.push('/home')
+            }, e => toast.error(e))
+        }
     }
 
     const recoverPassword = email => {

@@ -1,8 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TextField, Grid, Button } from '@material-ui/core'
 import createStyle from '../styles'
 
 const FieldsLogin = ({ onClick, onClickRecoverPassword }) => {
+
+    useEffect(() => {
+        const callback = e => {
+            if (e.key === 'Enter' && !verifyUser()) {
+                onClick(user)
+            }
+        }
+        document.addEventListener('keypress', callback)
+        return () => document.removeEventListener('keypress', callback)
+    })
+
     const classes = createStyle()
     const [ user, setUser ] = useState({
         email: '',
@@ -10,6 +21,9 @@ const FieldsLogin = ({ onClick, onClickRecoverPassword }) => {
     })
     const handleInput = target => event => {
         setUser({ ...user, [target]: event.target.value })
+        if (!verifyUser() && event.keyCode === 13) {
+            onClick(user)
+        }
     }
     const verifyUser = _ => {
         if (user.email && user.password) {
