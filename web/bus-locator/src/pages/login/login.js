@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
-import { Grid, Tabs, Tab, useTheme } from '@material-ui/core'
+import { Grid, Tabs, Tab, useTheme, LinearProgress } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 import createStyle from './styles'
 import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
 import { Route } from 'react-router-dom'
-
 import FieldsLogin from './components/fieldsLogin'
 import FieldsRegister from './components/fieldsRegister'
 import ForgotPassword from './components/forgotPassword'
+import { connect } from 'react-redux'
+import { requestLogin, createAccount, recoverPassword } from '../../redux/login/actions'
 
 const Login = props => {
-    console.log(props)
     const [ state, setState ] = useState(0)
     const handleChange = (_, newValue) => setState(newValue)
     const classes = createStyle()
@@ -25,24 +24,40 @@ const Login = props => {
         if (user.password !== user.confirmPassword) {
             toast.error('Senhas diferentes', { position: toast.POSITION.TOP_LEFT })
         } else {
-            console.log('request server to save')
+            props.createAccount(
+                user,
+                () => toast.success('Conta criada com sucesso, confirme no seu email'),
+                e => toast.error(e)
+            )
         }
     }
-
-    const requestLogin = console.log
     
+    const requestLogin = user => {
+        props.requestLogin(user, () => {
+            toast.success('Login efetuado com sucess')
+            props.history.push('/home')
+        }, e => toast.error(e))
+    }
+
+    const recoverPassword = email => {
+        props.recoverPassword(email, () => toast.success('Verifique seu email'), e => toast.error(e))
+    }
+
     return (
         <Grid container className={classes.root} wrap="nowrap">
-
+            {
+                props.isLoading &&
+                <LinearProgress className={classes.linearProgress} />
+            }
             <Grid container justify="center" alignItems="center" item className={classes.contentLogo}>
                 <h1>Bus Locator</h1>
             </Grid>
 
 
-            <Grid item container direction="column" justify="space-evenly" alignItems="center" className={classes.fields} >
+            <Grid item container direction="column" justify="center" alignItems="center" className={classes.fields} >
                 <Route path={props.match.url} exact render={() => {
                     return (
-                    <Grid item container direction="column" justify="center" style={{width: 400}}>
+                    <Grid item container direction="column" alignItems="center" justify="center" style={{width: 320}}>
                         <Tabs
                         className={classes.tabs}
                         variant="fullWidth"
@@ -66,11 +81,17 @@ const Login = props => {
                     )
                 }}/>
 
-                <Route path={props.match.url + '/forgot-password'} exact component={ForgotPassword} />
+                <Route path={props.match.url + '/forgot-password'} exact render={() => <ForgotPassword goBack={props.history.goBack} recoverPassword={recoverPassword} />} />
             </Grid>
         </Grid>
     )
 
 }
 
-export default Login
+const mapStateToProps = state => {
+    return {
+        isLoading: state.login.isLoading,
+    }
+}
+
+export default connect(mapStateToProps, { requestLogin, createAccount, recoverPassword })(Login)

@@ -30,8 +30,17 @@ const styles = makeStyles({
         margin: '16px 0px'
     },
     contentForgotPassword: {
-        width: 400,
+        width: 320,
         height: '80%',
+    },
+    linearProgress: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%'
+    },
+    addMarginBottom: {
+        marginBottom: 10
     }
 })
 

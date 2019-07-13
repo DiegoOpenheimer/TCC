@@ -24,7 +24,6 @@ const FieldsLogin = ({ onClick, onClickRecoverPassword }) => {
                     onChange={handleInput('email')}
                     label="Email"
                     margin="normal"
-                    variant="outlined"
                     className={classes.textFields}
                     placeholder="Informe email"
                     />
@@ -33,7 +32,6 @@ const FieldsLogin = ({ onClick, onClickRecoverPassword }) => {
                     className={classes.textFields}
                     label="Senha"
                     margin="normal"
-                    variant="outlined"
                     type="password"
                     placeholder="Informe senha"
                 />

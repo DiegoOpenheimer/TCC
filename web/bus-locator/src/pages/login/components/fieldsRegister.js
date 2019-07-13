@@ -6,6 +6,7 @@ import createStyle from '../styles'
 const FieldsRegister = ({ onClick }) => {
     const classes = createStyle()
     const [ user, setUser ] = useState({
+        name: '',
         email: '',
         cpf: '',
         password: '',
@@ -16,8 +17,8 @@ const FieldsRegister = ({ onClick }) => {
     }
     const verifyUser = () => {
         if (user) {
-            const { email, cpf, password, confirmPassword } = user
-            if (email && cpf && password && confirmPassword) {
+            const { email, cpf, password, confirmPassword, name } = user
+            if (email && cpf && password && confirmPassword && name) {
                 return false
             }
             return true
@@ -28,10 +29,16 @@ const FieldsRegister = ({ onClick }) => {
         <>
         <Grid container direction="column" >
             <TextField
+                onChange={handleInput('name')}
+                label="Nome"
+                margin="normal"
+                className={classes.textFields}
+                placeholder="Informe email"
+                />
+            <TextField
                 onChange={handleInput('email')}
                 label="Email"
                 margin="normal"
-                variant="outlined"
                 className={classes.textFields}
                 placeholder="Informe email"
                 />
@@ -41,7 +48,6 @@ const FieldsRegister = ({ onClick }) => {
                         {...props}
                         label="Cpf"
                         margin="normal"
-                        variant="outlined"
                         className={classes.textFields}
                     />
                 }
@@ -50,7 +56,6 @@ const FieldsRegister = ({ onClick }) => {
                 onChange={handleInput('password')}
                 label="Senha"
                 margin="normal"
-                variant="outlined"
                 type="password"
                 className={classes.textFields}
                 placeholder="Informe senha"
@@ -59,7 +64,6 @@ const FieldsRegister = ({ onClick }) => {
                 onChange={handleInput('confirmPassword')}
                 label="Confirme senha"
                 margin="normal"
-                variant="outlined"
                 type="password"
                 className={classes.textFields}
                 placeholder="Informe senha"
