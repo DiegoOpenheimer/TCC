@@ -11,5 +11,14 @@ export default {
     },
     saveUser(user) {
         localStorage.setItem('user', JSON.stringify(user))
+    },
+    getToken() {
+        const data = localStorage.getItem('user')
+        if (data) {
+            return JSON.parse(data).token
+        }
+    },
+    removeUser() {
+        localStorage.removeItem('user')
     }
 }

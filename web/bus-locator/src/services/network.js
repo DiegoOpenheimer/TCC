@@ -1,4 +1,5 @@
 import axios from 'axios'
+import storage from './storage'
 
 const instance = axios.create({
     baseURL: 'http://localhost:3001/',
@@ -9,7 +10,7 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
-    config.headers.Authorization = localStorage.getItem('token')
+    config.headers.Authorization = storage.getToken()
     return config
 })
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import './App.css'
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import store from './redux/index'
 import { Provider } from 'react-redux'
@@ -14,9 +14,12 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <Route path="/login" component={Login} />
-        <Route path="/home" component={Home} />
-        <Redirect from="*" to="/login" />
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/home" component={Home} />
+          <Redirect from="*" to='/login' />
+          <Redirect from="/" to='/login' />
+        </Switch>
       </Router>
     </Provider>
   )

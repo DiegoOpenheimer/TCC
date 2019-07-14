@@ -18,7 +18,7 @@ const CustomDialog = props => {
             open={props.open}
             TransitionComponent={buildTransition()}
             keepMounted
-            onClose={props.handleClose}
+            onClose={props.onClose}
             aria-labelledby="alert-dialog-slide-title"
             aria-describedby="alert-dialog-slide-description"
         >
