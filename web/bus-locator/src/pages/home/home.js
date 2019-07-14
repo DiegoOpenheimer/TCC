@@ -11,6 +11,7 @@ import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 import { Redirect } from 'react-router-dom'
 import storage from '../../services/storage'
+import clsx from 'clsx'
 
 const Home = props => {
     const { isLoadingTotalUsers, totalUsers, requestTotalUsers, errorLoadTotalUsers, requestEmployeeToEnable, usersNotAuthorized } = props
@@ -20,6 +21,7 @@ const Home = props => {
     const [ openCustomDialog, setOpenCustomDialog ] = useState(false)
     const [ redirect, setRedirect ] = useState(false)
     const [ user, setUser ] = useState(null)
+    const [ openDrawer, onDrawer ] = useState(false)
     const handleClose = () => setOpen(!open)
     const handleCloseCustomDialog = () => setOpenCustomDialog(!openCustomDialog)
     const logout = () => {
@@ -58,7 +60,7 @@ const Home = props => {
     return (
         <>
             <Grid className={classes.maxContainer} container item direction="column" wrap="nowrap" alignItems="center">
-                <AppBar handleClose={handleClose} usersNotAuthorized={usersNotAuthorized} onSelectedUser={handleUserToAprrove} />
+                <AppBar onDrawer={onDrawer} handleClose={handleClose} usersNotAuthorized={usersNotAuthorized} onSelectedUser={handleUserToAprrove} />
                 <Dialog
                     transition="Slide"
                     title="Atenção"
@@ -75,7 +77,7 @@ const Home = props => {
                     negativeAction={handleCloseCustomDialog}
                 />
 
-                <Grid item container className={classesLocal.content}>
+                <Grid item container className={clsx(classesLocal.content, { [classesLocal.contentShift]: openDrawer })}>
                     <Card buttonError={() => requestTotalUsers()} error={errorLoadTotalUsers} isLoading={isLoadingTotalUsers} icon="people_outline" title="Total de usuários" content={totalUsers} />
                 </Grid>
             </Grid>

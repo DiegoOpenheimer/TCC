@@ -1,11 +1,26 @@
 import React, { useState } from 'react'
 import createStyle from '../../../style/global'
 import createStyleLocal from '../style'
-import MenuIcon from '@material-ui/icons/Menu'
+import { Menu, Close } from '@material-ui/icons'
 import { Notifications, ExitToApp, ChevronRight } from '@material-ui/icons'
-import { AppBar, Toolbar, IconButton, Typography, Badge, Popover, Grid, List, ListItemText, ListItemSecondaryAction, ListItem, Divider, Drawer } from '@material-ui/core'
+import {
+    AppBar,
+    Toolbar,
+    IconButton,
+    Typography,
+    Badge,
+    Popover,
+    Grid,
+    List,
+    ListItemText,
+    ListItemSecondaryAction,
+    ListItem,
+    Divider
+} from '@material-ui/core'
 import { EMPLOYEE_ROLE } from '../../../utils/constants'
 import storage from '../../../services/storage'
+import Drawer from './Drawer'
+import clsx from 'clsx'
 
 const CustomAppBar = props => {
 
@@ -18,7 +33,10 @@ const CustomAppBar = props => {
     const size = props.usersNotAuthorized.length
 
     const handleClose = () => setOpen(!open)
-    const handleDrawer = () => setDrawer(!openDrawer)
+    const handleDrawer = () => {
+        props.onDrawer(!openDrawer)
+        setDrawer(!openDrawer)
+    }
 
     function handleClick(event) {
         if (size) {
@@ -63,7 +81,7 @@ const CustomAppBar = props => {
 
     return (
         <>
-            <AppBar position="relative" className={classesLocal.appBar}>
+            <AppBar position="relative" className={clsx(classesLocal.appBar, { [classesLocal.appBarShift]: openDrawer })}>
                 <Toolbar className={classesLocal.toolbar}>
                     <IconButton
                         onClick={handleDrawer}
@@ -71,7 +89,9 @@ const CustomAppBar = props => {
                         className={classes.menuButton}
                         aria-label="Open drawer"
                     >
-                        <MenuIcon />
+                    {
+                        openDrawer ? <Close /> : <Menu />
+                    }
                     </IconButton>
                     <Typography variant="h6" className={classesLocal.title}>
                         Painel de controle
@@ -110,17 +130,7 @@ const CustomAppBar = props => {
                     </List>
                 </Grid>
             </Popover>
-            <Drawer
-                onClose={handleDrawer}
-                className={classesLocal.drawer}
-                anchor="left"
-                open={openDrawer}
-                classes={{
-                paper: classesLocal.drawerPaper,
-                }}
-            >
-            <h1 onClick={handleDrawer}>ola</h1>
-            </Drawer>
+            <Drawer  onClose={handleDrawer} open={openDrawer} />
         </>
     )
 }

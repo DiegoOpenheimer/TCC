@@ -3,9 +3,21 @@ import image from '../../assets/connected_world.svg'
 
 const drawerWidth = 240
 
-export default makeStyles({
+export default makeStyles(theme => ({
     appBar: {
-        boxShadow: 'none'
+        boxShadow: 'none',
+        transition: theme.transitions.create(['margin', 'width'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(['margin', 'width'], {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
     },
     toolbar: {
         backgroundColor: '#FFF',
@@ -22,7 +34,20 @@ export default makeStyles({
         color: '#66788A'
     },
     content: {
-        padding: 16
+        padding: 16,
+        flexGrow: 1,
+        transition: theme.transitions.create('margin', {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    contentShift: {
+        transition: theme.transitions.create('margin', {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`
     },
     result: {
         color: '#000'
@@ -59,4 +84,4 @@ export default makeStyles({
       drawerPaper: {
         width: drawerWidth,
     }
-})
+}))
