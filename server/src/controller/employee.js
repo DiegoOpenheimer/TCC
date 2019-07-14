@@ -117,6 +117,13 @@ const renderPageToChangePassword = (req, res) => {
     })
 }
 
+const getEmployeeNotAuthorized = (_, res) => {
+    Employee.find({ status: constants.USER_STATUS.NOT_AUTHORIZED })
+    .select(['-password'])
+    .then(result => res.send(result))
+    .catch(_ => response.handlerUnexpectError(res, 'fail to get employee'))
+}
+
 
 
 module.exports = {
@@ -124,5 +131,6 @@ module.exports = {
     enableAccount,
     recoverPassword,
     changePassword,
-    renderPageToChangePassword
+    renderPageToChangePassword,
+    getEmployeeNotAuthorized
 }

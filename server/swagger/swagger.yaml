@@ -8,7 +8,7 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-host: 'localhost:3000'
+host: 'localhost:3001'
 basePath: /
 tags:
   - name: User
@@ -55,6 +55,35 @@ paths:
           description: unknown error
           schema:
             $ref: '#/definitions/UnknownServerError'
+  /user/count:
+    get:
+      tags:
+        - User
+      summary: get users amount
+      description: get users amount
+      operationId: getUserAmount
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Users amount
+          schema:
+            type: object
+            properties:
+              count:
+                type: number
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
   /user/recover-password:
     post:
       tags:
@@ -144,9 +173,6 @@ paths:
           description: unknown error
           schema:
             $ref: '#/definitions/UnknownServerError'  
-      security:
-        - ApiKey: []
-
 
   /employee:
     post:
@@ -187,7 +213,7 @@ paths:
     post:
       tags:
         - Employee
-      summary: End point to recover password to employee
+      summary: End point to render page to change password to employee
       description: Recover password
       operationId: requestToRecoverPassword
       consumes:
@@ -231,7 +257,7 @@ paths:
     patch:
       tags:
         - Employee
-      summary: End point to recover password to user
+      summary: End point to recover password to employee
       description: Recover password
       operationId: recoverPassword
       consumes:
@@ -268,6 +294,31 @@ paths:
           description: case user there is not
           schema:
             $ref: '#/definitions/UserNotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'  
+      security:
+        - ApiKey: []
+
+  /employee/not_authorized:
+    get:
+      tags:
+        - Employee
+      summary: End point to get not authorzied employee
+      description: Get employee
+      operationId: getEmployeeNotAuthorized
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Employees'
         '500':
           description: unknown error
           schema:
@@ -361,7 +412,7 @@ paths:
 securityDefinitions:
   ApiKey:
     type: apiKey
-    name: token
+    name: Authorization
     in: header
 definitions:
   User:
@@ -425,6 +476,15 @@ definitions:
       status:
         type: integer
         example: 404
+  NotAuthorized:
+    type: object
+    properties:
+      message:
+        type: string
+        example: not authorized
+      status:
+        type: integer
+        example: 404
   UnknownServerError:
     type: object
     properties:
@@ -440,6 +500,19 @@ definitions:
       email:
         type: string
       password:
+        type: string
+  Employees:
+    type: object
+    properties:
+      role:
+        type: string
+      status:
+        type: string
+      name:
+        type: string
+      email:
+        type: string
+      cpf:
         type: string
 components:
   schemas:

@@ -118,7 +118,11 @@ const changePassword = (req, res) => {
 }
 
 
-
+const userAmount = (_, res) => {
+    User.countDocuments()
+    .then(count => response.handlerResponse(res, { count }))
+    .catch(_ => response.handlerUnexpectError(res, 'Fail to get users amount'))
+}
 
 
 module.exports = {
@@ -126,5 +130,6 @@ module.exports = {
     enableAccount,
     recoverPassword,
     changePassword,
-    renderPageToChangePassword
+    renderPageToChangePassword,
+    userAmount
 }
