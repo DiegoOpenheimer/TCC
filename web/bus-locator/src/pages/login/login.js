@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Tabs, Tab, useTheme, LinearProgress } from '@material-ui/core'
+import { Grid, Tabs, Tab, useTheme, LinearProgress, Typography } from '@material-ui/core'
 import SwipeableViews from 'react-swipeable-views'
 import createStyle from './styles'
 import { toast } from 'react-toastify'
@@ -82,7 +82,7 @@ const Login = props => {
                                 <Tab className={classes.textTab} label="Entrar" />
                                 <Tab className={classes.textTab} label="Nova Conta" />
                             </Tabs>
-                            <h2 className={classes.textPresent}>Bem vindo ao Bus locator</h2>
+                            <Typography variant="h6" className={classes.textPresent}>Bem vindo ao Bus locator</Typography>
                             <SwipeableViews
                             axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                             index={state}

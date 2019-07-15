@@ -17,7 +17,7 @@ const styles = makeStyles({
         marginBottom: 16
     },
     fields: {
-        flex: 1.2,
+        flex: 1.4,
     },
     textTab: {
         fontSize: '20px'
@@ -43,7 +43,7 @@ const styles = makeStyles({
         marginBottom: 10
     },
     content: {
-        padding: 16
+        padding: '0px 16px'
     }
 })
 
