@@ -21,9 +21,15 @@ import { EMPLOYEE_ROLE } from '../../../utils/constants'
 import storage from '../../../services/storage'
 import Drawer from './Drawer'
 import clsx from 'clsx'
+import { withRouter } from 'react-router-dom'
+import { ROUTES } from '../../../utils/constants'
 
 const CustomAppBar = props => {
 
+    const titles = {
+        [ROUTES.HOME]: 'Painel de controle',
+        [ROUTES.EMPLOYEES]: 'Funcionários'
+    }
     const user = storage.getUser()
     const classes = createStyle()
     const classesLocal = createStyleLocal()
@@ -94,7 +100,7 @@ const CustomAppBar = props => {
                     }
                     </IconButton>
                     <Typography variant="h6" className={classesLocal.title}>
-                        Painel de controle
+                        { titles[props.location.pathname] }
                     </Typography>
                     {   (user && user.role === EMPLOYEE_ROLE.ADMIN) &&
                         <IconButton onClick={handleClick}>
@@ -130,9 +136,9 @@ const CustomAppBar = props => {
                     </List>
                 </Grid>
             </Popover>
-            <Drawer  onClose={handleDrawer} open={openDrawer} />
+            <Drawer onClose={handleDrawer} open={openDrawer} />
         </>
     )
 }
 
-export default CustomAppBar
+export default withRouter(CustomAppBar)

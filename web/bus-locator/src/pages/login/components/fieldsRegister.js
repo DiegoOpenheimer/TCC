@@ -27,7 +27,7 @@ const FieldsRegister = ({ onClick }) => {
     }
     return (
         <>
-        <Grid container direction="column" >
+        <Grid className={classes.content} container direction="column" >
             <TextField
                 onChange={handleInput('name')}
                 label="Nome"

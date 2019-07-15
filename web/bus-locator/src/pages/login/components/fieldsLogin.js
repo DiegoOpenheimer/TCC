@@ -33,7 +33,7 @@ const FieldsLogin = ({ onClick, onClickRecoverPassword }) => {
     }
     return (
         <>
-            <Grid container direction="column" >
+            <Grid className={classes.content} container direction="column" >
                 <TextField
                     onChange={handleInput('email')}
                     label="Email"

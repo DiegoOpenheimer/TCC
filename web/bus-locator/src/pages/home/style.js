@@ -80,8 +80,8 @@ export default makeStyles(theme => ({
     drawer: {
         width: drawerWidth,
         flexShrink: 0,
-      },
-      drawerPaper: {
+    },
+    drawerPaper: {
         width: drawerWidth,
     }
 }))

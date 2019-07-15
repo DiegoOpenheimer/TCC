@@ -23,7 +23,7 @@ const Card = props => {
     }
 
     return (
-        <Grid item xs={6} sm={6} md={6} lg={3} xl={3}>
+        <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
             <Paper className={classesLocal.paper}>
                 <Grid container direction="row" wrap="nowrap" justify="center" alignItems="center">
                     <Grid className={classesLocal.contentInformation} item container direction="column">

@@ -9,9 +9,11 @@ import createStyleLocal from './style'
 import { requestTotalUsers, requestEmployeeToEnable } from '../../redux/home/actions'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Route } from 'react-router-dom'
 import storage from '../../services/storage'
 import clsx from 'clsx'
+import { ROUTES } from '../../utils/constants'
+import Employee from '../employess/employees'
 
 const Home = props => {
     const { isLoadingTotalUsers, totalUsers, requestTotalUsers, errorLoadTotalUsers, requestEmployeeToEnable, usersNotAuthorized } = props
@@ -34,7 +36,6 @@ const Home = props => {
         setUser(user)
         handleCloseCustomDialog()
     }
-
     useEffect(() => {
         if (!storage.getUser()) {
             setRedirect(true)
@@ -78,7 +79,15 @@ const Home = props => {
                 />
 
                 <Grid item container className={clsx(classesLocal.content, { [classesLocal.contentShift]: openDrawer })}>
-                    <Card buttonError={() => requestTotalUsers()} error={errorLoadTotalUsers} isLoading={isLoadingTotalUsers} icon="people_outline" title="Total de usuários" content={totalUsers} />
+                    <Route exact path={ROUTES.HOME} render={() =>
+                        <Card
+                            buttonError={() => requestTotalUsers()}
+                            error={errorLoadTotalUsers}
+                            isLoading={isLoadingTotalUsers}
+                            icon="people_outline"
+                            title="Total de usuários"
+                            content={totalUsers} />} />
+                     <Route path={ROUTES.EMPLOYEES} component={Employee} />   
                 </Grid>
             </Grid>
             <Redirect from="*" to="/home" />

@@ -70,7 +70,7 @@ const Login = props => {
                 <Grid item container direction="column" justify="center" alignItems="center" className={classes.fields} >
                     <Route path={props.match.url} exact render={() => {
                         return (
-                        <Grid item container direction="column" alignItems="center" justify="center" style={{width: 320}}>
+                        <Grid item container direction="column" alignItems="center" justify="center" style={{width: 336}}>
                             <Tabs
                             className={classes.tabs}
                             variant="fullWidth"

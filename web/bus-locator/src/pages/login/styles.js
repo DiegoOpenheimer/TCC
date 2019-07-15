@@ -41,6 +41,9 @@ const styles = makeStyles({
     },
     addMarginBottom: {
         marginBottom: 10
+    },
+    content: {
+        padding: 16
     }
 })
 

@@ -68,7 +68,7 @@ const CustomDialog = props => {
                 </Grid>
                 <Grid container direction="row" wrap="nowrap" alignItems="center" >
                     <Grid>
-                        <Checkbox checked={value} onChange={event => setValue(event.target.checked)} className={styles.checkBox} />
+                        <Checkbox color="primary" checked={value} onChange={event => setValue(event.target.checked)} className={styles.checkBox} />
                     </Grid>
                     <Grid>
                         <Typography >Aprovar usuário como admin?</Typography>
