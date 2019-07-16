@@ -38,3 +38,6 @@
 {"timestamp":"2019-07-11T23:31:47.893Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
 {"timestamp":"2019-07-13T00:35:34.480Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
 {"timestamp":"2019-07-14T00:27:27.422Z","message":"email sent to openheimerdiego@gmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-07-16T22:51:50.094Z","message":"fail to get employee by email"}
+{"timestamp":"2019-07-16T22:53:35.418Z","message":"fail to get employee by email RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: ENABLED"}
+{"timestamp":"2019-07-16T22:55:04.706Z","message":"fail to get employee by email RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: ENABLED"}

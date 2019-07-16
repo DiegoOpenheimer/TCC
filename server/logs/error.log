@@ -8,3 +8,6 @@
 {"timestamp":"2019-07-11T22:53:33.715Z","message":"error to create employee ReferenceError: emailService is not defined"}
 {"timestamp":"2019-07-11T22:53:59.578Z","message":"error to create employee ReferenceError: html is not defined"}
 {"timestamp":"2019-07-11T23:14:13.704Z","message":"error to send email Error: No recipients defined"}
+{"timestamp":"2019-07-16T22:51:50.094Z","message":"fail to get employee by email"}
+{"timestamp":"2019-07-16T22:53:35.418Z","message":"fail to get employee by email RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: ENABLED"}
+{"timestamp":"2019-07-16T22:55:04.706Z","message":"fail to get employee by email RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: ENABLED"}

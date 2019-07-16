@@ -7,6 +7,13 @@ const emailService = require('../utils/senderEmail')
 const {JsonWebTokenError} = require('jsonwebtoken')
 const html = require('../views/pagesHtml')
 
+const getActiveEmployee  = (_, res) => {
+    Employee.find()
+    .select(['-password'])
+    .then(result => response.handlerResponse(res, result))
+    .catch(e => response.handlerUnexpectError(res, 'error to get employees ' + e))
+}
+
 const createEmployee = (req, res) => {
     const employee = req.body
     Employee.findOne({ email: employee.email })
@@ -21,7 +28,7 @@ const createEmployee = (req, res) => {
         const token = jwt.signJwt({ email: employee.email }, { expiresIn: '1d' })
         const link = 'http://' + process.env.URI + ':' + process.env.PORT + '/employee' + '/' + token
         emailService.sender(employee.email, 'Confirmação de conta', html.confirmAccount(link))
-        response.handlerResponse(res, { message: 'employee registered', status: 200})
+        response.handlerResponse(res, { message: 'employee registered'})
     })
     .catch(e => {
         if (e instanceof HandleError) {
@@ -33,10 +40,26 @@ const createEmployee = (req, res) => {
 
 }
 
+const getEmployeeByEmail = (req, res) => {
+    const token = req.headers.authorization
+    const { email } = jwt.decode(token)
+    Employee.findOne({ email })
+    .select(['-password'])
+    .then(result => response.handlerResponse(res, result))
+    .catch(e => response.handlerUnexpectError(res, 'fail to get employee by email ' + e))
+}
+
+const editEmployee = (req, res) => {
+    const { email } = jwt.decode(req.headers.authorization)
+    Employee.findOneAndUpdate({ email }, req.body)
+    .then(_ => response.handlerResponse(res, { message: 'Employee edited' }))
+    .catch(e => response.handlerUnexpectError(res, 'fail to edit employee ' + e))
+}
+
 const enableAccount = (req, res) => {
     jwt.verifyJwt(req.params.id)
     .then(result => Employee.findOneAndUpdate({ email: result.email }, { status: constants.USER_STATUS.NOT_AUTHORIZED }))
-    .then(_ => response.handlerResponse(res, { message: 'Account confirmed', status: 200 }))
+    .then(_ => response.handlerResponse(res, { message: 'Account confirmed' }))
     .catch(e => {
         if (e instanceof JsonWebTokenError) {
             response.handlerResponse(res, { message: 'invalid token', status: 401 })
@@ -54,7 +77,7 @@ const recoverPassword = (req, res) => {
             const token = jwt.signJwt({ email }, { expiresIn: '1d' })
             const link = 'http://' + process.env.URI + ':' + process.env.PORT + '/employee' + '/recover-password/' + token
             emailService.sender(email, 'Troca de senha', html.confirmChangePassword(link))
-            response.handlerResponse(res, { message: 'email sent to user', status: 200 })
+            response.handlerResponse(res, { message: 'email sent to user' })
         } else {
             return Promise.reject(new HandlerError('user not found', 404))
         }
@@ -82,7 +105,7 @@ const changePassword = (req, res) => {
                 return Promise.reject(new HandlerError('user not found', 404))
             }
         })
-        .then(_ => response.handlerResponse(res, { message: 'password changed', status: 200 }))
+        .then(_ => response.handlerResponse(res, { message: 'password changed' }))
         .catch(e => {
             response.handlerUnexpectError(res, `fail to change password ${e}`)
         })
@@ -121,9 +144,8 @@ const getEmployeeNotAuthorized = (_, res) => {
     Employee.find({ status: constants.USER_STATUS.NOT_AUTHORIZED })
     .select(['-password'])
     .then(result => res.send(result))
-    .catch(_ => response.handlerUnexpectError(res, 'fail to get employee'))
+    .catch(e => response.handlerUnexpectError(res, 'fail to get employee ' + e))
 }
-
 
 
 module.exports = {
@@ -132,5 +154,8 @@ module.exports = {
     recoverPassword,
     changePassword,
     renderPageToChangePassword,
-    getEmployeeNotAuthorized
+    getEmployeeNotAuthorized,
+    getActiveEmployee,
+    editEmployee,
+    getEmployeeByEmail
 }

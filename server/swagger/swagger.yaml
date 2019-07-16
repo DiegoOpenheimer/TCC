@@ -178,8 +178,8 @@ paths:
     post:
       tags:
         - Employee
-      summary: Register a new user
-      description: register a user
+      summary: Register a new employee
+      description: register a employee
       operationId: createEmployee
       consumes:
         - application/json
@@ -209,6 +209,61 @@ paths:
           description: unknown error
           schema:
             $ref: '#/definitions/UnknownServerError'
+    get:
+      tags:
+        - Employee
+      summary: End point to get employees
+      description: get employees
+      operationId: getActiveEmployees
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: success operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Employees'
+        '401':
+          description: not authorized
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+        - ApiKey: []
+
+  /employee/current:
+    get:
+      tags:
+        - Employee
+      summary: End point to get employees
+      description: get employees
+      operationId: getEmployeeByEmail
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: success operation
+          schema:
+            $ref: '#/definitions/Employees'
+        '401':
+          description: not authorized
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+        - ApiKey: []
+
   /employee/recover-password:
     post:
       tags:
@@ -247,6 +302,48 @@ paths:
           description: case user there is not
           schema:
             $ref: '#/definitions/UserNotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+        - ApiKey: []
+       
+  /employee/edit:
+    patch:
+      tags:
+        - Employee
+      summary: End point to edit employee
+      description: edit employees
+      operationId: editEmployee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: object to edit employee
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              name:
+                type: 'string'
+              cpf:
+                type: 'string'
+              role:
+                type: 'string'
+                enum: ['ADMIN', 'COMMON']
+      responses:
+        '200':
+          description: success
+          schema:
+            $ref: '#/definitions/ApiResponseOk'
+        '401':
+          description: case user there is not
+          schema:
+            $ref: '#/definitions/NotAuthorized'
         '500':
           description: unknown error
           schema:
@@ -325,8 +422,6 @@ paths:
             $ref: '#/definitions/UnknownServerError'  
       security:
         - ApiKey: []
-
-
   /auth/user:
     post:
       tags:
@@ -440,7 +535,7 @@ definitions:
     properties:
       message:
         type: string
-        example: user registered
+        example: success operation
       status:
         type: integer
         example: 200
@@ -484,7 +579,7 @@ definitions:
         example: not authorized
       status:
         type: integer
-        example: 404
+        example: 401
   UnknownServerError:
     type: object
     properties:

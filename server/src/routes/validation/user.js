@@ -6,12 +6,14 @@ const handlerCreateUser = (req, res, next) => {
     }
 }
 
-const handlerRecoverPassword = param => (req, res, next) => {
-    if (!req.body || !req.body[param]) {
-        badRequest(res)
-    } else {
-        next()
+const handleField = (...params) => (req, res, next) => {
+    for (const param of params) {
+        if (!req.body || !req.body[param]) {
+            badRequest(res)
+            return
+        }
     }
+    next()
 }
 
 const validationId = (req, res, next) => {
@@ -26,6 +28,6 @@ const badRequest = res => res.status(400).send({ message: 'missing values or typ
 
 module.exports = {
     handlerCreateUser,
-    handlerRecoverPassword,
+    handleField,
     validationId
 }
