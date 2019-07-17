@@ -219,13 +219,33 @@ paths:
         - application/json
       produces:
         - application/json
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: number
+          description: limit for employees
+        - in: query
+          name: page
+          schema:
+            type: number
+          description: page for employees
       responses:
         '200':
           description: success operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Employees'
+            type: object
+            properties:
+                limit:
+                  type: number
+                page:
+                  type: number
+                total:
+                  type: number
+                docs:
+                  type: array
+                  items:
+                   $ref: '#/definitions/Employees'              
         '401':
           description: not authorized
           schema:
@@ -328,6 +348,8 @@ paths:
           schema:
             type: 'object'
             properties:
+              email:
+                type: 'string'
               name:
                 type: 'string'
               cpf:
@@ -335,6 +357,9 @@ paths:
               role:
                 type: 'string'
                 enum: ['ADMIN', 'COMMON']
+              status:
+                type: 'string'
+                enum: ['ENABLED', 'PENDING', 'NOT_AUTHORIZED']
       responses:
         '200':
           description: success

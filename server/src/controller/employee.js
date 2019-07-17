@@ -7,9 +7,10 @@ const emailService = require('../utils/senderEmail')
 const {JsonWebTokenError} = require('jsonwebtoken')
 const html = require('../views/pagesHtml')
 
-const getActiveEmployee  = (_, res) => {
-    Employee.find()
-    .select(['-password'])
+const getActiveEmployee  = (req, res) => {
+    const page = req.query.page || 1
+    const limit = req.query.limit || 10
+    Employee.paginate({}, { page: Number(page), limit: Number(limit), select: ['-password'] })
     .then(result => response.handlerResponse(res, result))
     .catch(e => response.handlerUnexpectError(res, 'error to get employees ' + e))
 }
@@ -50,7 +51,7 @@ const getEmployeeByEmail = (req, res) => {
 }
 
 const editEmployee = (req, res) => {
-    const { email } = jwt.decode(req.headers.authorization)
+    const { email } = req.body
     Employee.findOneAndUpdate({ email }, req.body)
     .then(_ => response.handlerResponse(res, { message: 'Employee edited' }))
     .catch(e => response.handlerUnexpectError(res, 'fail to edit employee ' + e))

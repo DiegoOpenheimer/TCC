@@ -11,3 +11,8 @@
 {"timestamp":"2019-07-16T22:51:50.094Z","message":"fail to get employee by email"}
 {"timestamp":"2019-07-16T22:53:35.418Z","message":"fail to get employee by email RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: ENABLED"}
 {"timestamp":"2019-07-16T22:55:04.706Z","message":"fail to get employee by email RangeError [ERR_HTTP_INVALID_STATUS_CODE]: Invalid status code: ENABLED"}
+{"timestamp":"2019-07-17T00:07:26.136Z","message":"fail to edit employee MongoError: Performing an update on the path '_id' would modify the immutable field '_id'"}
+{"timestamp":"2019-07-17T01:04:16.587Z","message":"error to get employees MongoError: Failed to parse: { find: \"employees\", filter: {}, projection: { password: 0 }, limit: \"2\", returnKey: false, showRecordId: false, $db: \"tcc\" }. 'limit' field must be numeric."}
+{"timestamp":"2019-07-17T01:04:42.325Z","message":"error to get employees MongoError: Failed to parse: { find: \"employees\", filter: {}, projection: { password: 0 }, limit: \"2\", returnKey: false, showRecordId: false, $db: \"tcc\" }. 'limit' field must be numeric."}
+{"timestamp":"2019-07-17T01:05:15.592Z","message":"error to get employees MongoError: Failed to parse: { find: \"employees\", filter: {}, projection: { password: 0 }, limit: \"2\", returnKey: false, showRecordId: false, $db: \"tcc\" }. 'limit' field must be numeric."}
+{"timestamp":"2019-07-17T01:05:21.608Z","message":"error to get employees MongoError: Failed to parse: { find: \"employees\", filter: {}, projection: { password: 0 }, skip: 2, limit: \"2\", returnKey: false, showRecordId: false, $db: \"tcc\" }. 'limit' field must be numeric."}

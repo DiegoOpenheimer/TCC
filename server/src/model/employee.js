@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const constants = require('../utils/constants')
+const mongoosePaginate = require('mongoose-paginate')
 
 const Schema = mongoose.Schema
 
@@ -45,6 +46,8 @@ employeeSchema.methods.checkPassword = function(password) {
         })
     })
 }
+
+employeeSchema.plugin(mongoosePaginate)
 
 const Employee = mongoose.model('Employee', employeeSchema)
 
