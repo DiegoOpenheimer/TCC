@@ -4,7 +4,8 @@ const INITIAL_STATE = {
     totalUsers: 0,
     isLoadingTotalUsers: false,
     errorLoadTotalUsers: false,
-    usersNotAuthorized: []
+    usersNotAuthorized: [],
+    user: { name: '', email: '', role: '' }
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -17,6 +18,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, errorLoadTotalUsers: action.payload.value }
         case type.USERS_NOT_AUTHORIZED:
             return { ...state, usersNotAuthorized: [...action.payload.value] }
+        case type.UPDATE_USER:
+            return { ...state, user: {...action.payload.value} }
         default:
             return { ...state }
     }

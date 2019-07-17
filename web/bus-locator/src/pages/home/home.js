@@ -6,7 +6,7 @@ import AppBar from './components/AppBar'
 import CustomDialog from './components/CustomDialog'
 import Card from './components/Card'
 import createStyleLocal from './style'
-import { requestTotalUsers, requestEmployeeToEnable } from '../../redux/home/actions'
+import { requestTotalUsers, requestEmployeeToEnable, requestUser, logout } from '../../redux/home/actions'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 import { Redirect, Route } from 'react-router-dom'
@@ -16,7 +16,14 @@ import { ROUTES } from '../../utils/constants'
 import Employee from '../employess/employees'
 
 const Home = props => {
-    const { isLoadingTotalUsers, totalUsers, requestTotalUsers, errorLoadTotalUsers, requestEmployeeToEnable, usersNotAuthorized } = props
+    const { isLoadingTotalUsers,
+        totalUsers,
+        requestTotalUsers,
+        errorLoadTotalUsers,
+        requestEmployeeToEnable,
+        usersNotAuthorized,
+        requestUser,
+        logout } = props
     const classes = createStyle()
     const classesLocal = createStyleLocal()
     const [ open, setOpen ] = useState(false)
@@ -26,7 +33,8 @@ const Home = props => {
     const [ openDrawer, onDrawer ] = useState(false)
     const handleClose = () => setOpen(!open)
     const handleCloseCustomDialog = () => setOpenCustomDialog(!openCustomDialog)
-    const logout = () => {
+    const handleLogout = () => {
+        logout()
         handleClose(!open)
         storage.removeUser()
         setRedirect(true)
@@ -49,7 +57,7 @@ const Home = props => {
             }
             requestTotalUsers(callback)
             requestEmployeeToEnable(callback)
-            
+            requestUser(callback)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps 
     }, [])
@@ -71,8 +79,17 @@ const Home = props => {
                     negativeButton="Não"
                     positiveButton="Sim"
                     negativeAction={handleClose}
-                    positiveAction={logout}/>
+                    positiveAction={handleLogout}/>
                 <CustomDialog
+                    success={() => {
+                        setOpenCustomDialog(false)
+                        requestEmployeeToEnable()
+                        toast.success('Usuário aprovado com sucesso')
+                    }}
+                    error={() => {
+                        setOpenCustomDialog(false)
+                        toast.error('Falha ao aprovar usuário no sistema')
+                    }}
                     user={user}
                     open={openCustomDialog}
                     negativeAction={handleCloseCustomDialog}
@@ -104,4 +121,4 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps, { requestTotalUsers, requestEmployeeToEnable })(Home)
+export default connect(mapStateToProps, { requestTotalUsers, requestEmployeeToEnable, requestUser, logout })(Home)

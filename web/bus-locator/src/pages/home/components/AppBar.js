@@ -18,11 +18,11 @@ import {
     Divider
 } from '@material-ui/core'
 import { EMPLOYEE_ROLE } from '../../../utils/constants'
-import storage from '../../../services/storage'
 import Drawer from './Drawer'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constants'
+import { useSelector } from 'react-redux'
 
 const CustomAppBar = props => {
 
@@ -30,7 +30,7 @@ const CustomAppBar = props => {
         [ROUTES.HOME]: 'Painel de controle',
         [ROUTES.EMPLOYEES]: 'Funcionários'
     }
-    const user = storage.getUser()
+    const user = useSelector(state => state.home.user)
     const classes = createStyle()
     const classesLocal = createStyleLocal()
     const [ open, setOpen ] = useState(false)

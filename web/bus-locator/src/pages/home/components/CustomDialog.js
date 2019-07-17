@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Grid, Typography, makeStyles, Checkbox } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Grid, Typography, makeStyles, Checkbox, CircularProgress } from '@material-ui/core'
+import { EMPLOYEE_ROLE, USER_STATUS } from '../../../utils/constants'
+import network from '../../../services/network'
 
 const createStyle = makeStyles({
     field: {
@@ -20,6 +22,7 @@ const CustomDialog = props => {
 
     const styles = createStyle()
     const [ value, setValue ] = useState(false)
+    const [ loading, setLoading ] = useState(false)
 
     let { user } = props
     if (!user) {
@@ -33,11 +36,37 @@ const CustomDialog = props => {
     }, [ props.open ])
 
     function requestServer() {
-        const body = { ...user }
-        if (value) {
-            body.admin = value
+        const body = {
+            name: user.name,
+            cpf: user.cpf,
+            status: USER_STATUS.ENABLED,
+            email: user.email
         }
-        console.log(body)
+        if (value) {
+            body.role = EMPLOYEE_ROLE.ADMIN
+        } else {
+            body.role = EMPLOYEE_ROLE.COMMON
+        }
+        const callback = cb => {
+            cb()
+            setLoading(false)
+        }
+        setLoading(true)
+        network.patch('employee/edit', body)
+        .then(() => callback(props.success))
+        .catch(e => callback(props.error))
+    }
+
+    function handleLoading() {
+        if (loading) {
+            return <CircularProgress/>
+        } else {
+            return (
+            <Button onClick={requestServer} color="primary">
+                Sim
+            </Button>
+            )
+        }
     }
 
     return (
@@ -79,9 +108,7 @@ const CustomDialog = props => {
                 <Button onClick={props.negativeAction} color="primary">
                     Não
                 </Button>
-                <Button onClick={requestServer} color="primary">
-                    Sim
-                </Button>
+                { handleLoading() }
             </DialogActions>
         </Dialog>
     )

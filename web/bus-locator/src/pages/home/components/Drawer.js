@@ -1,11 +1,11 @@
 import React from 'react'
 import { Drawer, Grid, makeStyles, Divider, Typography, List, ListItemIcon, ListItemText, ListItem }  from '@material-ui/core'
 import createStyle from '../style'
-import storage from '../../../services/storage'
 import { Dashboard, People } from '@material-ui/icons'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constants'
+import { useSelector } from 'react-redux'
 
 const styles = makeStyles({
     header: {
@@ -53,7 +53,7 @@ const styles = makeStyles({
 
 const CustomDrawer = props => {
 
-    
+    const user = useSelector(state => state.home.user)
     const { onClose, open, location: { pathname } } = props
     const classesLocal = createStyle()
     const classes = styles()
@@ -75,12 +75,6 @@ const CustomDrawer = props => {
     ]
     function handleRoute(route) {
         props.history.push(route)
-    }
-    console.log(props)
-    let user = storage.getUser()
-
-    if (!user) {
-        user = { name: '', email: '' }
     }
 
     function buildListItem() {
