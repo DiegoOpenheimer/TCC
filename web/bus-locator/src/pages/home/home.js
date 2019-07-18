@@ -9,7 +9,7 @@ import createStyleLocal from './style'
 import { requestTotalUsers, requestEmployeeToEnable, requestUser, logout } from '../../redux/home/actions'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
-import { Redirect, Route } from 'react-router-dom'
+import { Redirect, Route, Switch } from 'react-router-dom'
 import storage from '../../services/storage'
 import clsx from 'clsx'
 import { ROUTES } from '../../utils/constants'
@@ -96,18 +96,20 @@ const Home = props => {
                 />
 
                 <Grid item container className={clsx(classesLocal.content, { [classesLocal.contentShift]: openDrawer })}>
-                    <Route exact path={ROUTES.HOME} render={() =>
-                        <Card
-                            buttonError={() => requestTotalUsers()}
-                            error={errorLoadTotalUsers}
-                            isLoading={isLoadingTotalUsers}
-                            icon="people_outline"
-                            title="Total de usuários"
-                            content={totalUsers} />} />
-                     <Route path={ROUTES.EMPLOYEES} component={Employee} />   
+                    <Switch>
+                        <Route exact path={ROUTES.HOME} render={() =>
+                            <Card
+                                buttonError={() => requestTotalUsers()}
+                                error={errorLoadTotalUsers}
+                                isLoading={isLoadingTotalUsers}
+                                icon="people_outline"
+                                title="Total de usuários"
+                                content={totalUsers} />} />
+                        <Route path={ROUTES.EMPLOYEES} component={Employee} />   
+                        <Redirect from="*" to="/home" />
+                    </Switch>
                 </Grid>
             </Grid>
-            <Redirect from="*" to="/home" />
         </>
     )
 }
