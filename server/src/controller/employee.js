@@ -8,9 +8,11 @@ const {JsonWebTokenError} = require('jsonwebtoken')
 const html = require('../views/pagesHtml')
 
 const getActiveEmployee  = (req, res) => {
+    const { email } = jwt.decode(req.headers.authorization)
     const page = req.query.page || 1
     const limit = req.query.limit || 10
-    Employee.paginate({}, { page: Number(page), limit: Number(limit), select: ['-password'] })
+    const regex = new RegExp(email, 'g')
+    Employee.paginate({ email: { $not: regex } }, { page: Number(page), limit: Number(limit), select: ['-password'] })
     .then(result => response.handlerResponse(res, result))
     .catch(e => response.handlerUnexpectError(res, 'error to get employees ' + e))
 }

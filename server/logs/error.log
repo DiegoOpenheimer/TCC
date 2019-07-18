@@ -16,3 +16,4 @@
 {"timestamp":"2019-07-17T01:04:42.325Z","message":"error to get employees MongoError: Failed to parse: { find: \"employees\", filter: {}, projection: { password: 0 }, limit: \"2\", returnKey: false, showRecordId: false, $db: \"tcc\" }. 'limit' field must be numeric."}
 {"timestamp":"2019-07-17T01:05:15.592Z","message":"error to get employees MongoError: Failed to parse: { find: \"employees\", filter: {}, projection: { password: 0 }, limit: \"2\", returnKey: false, showRecordId: false, $db: \"tcc\" }. 'limit' field must be numeric."}
 {"timestamp":"2019-07-17T01:05:21.608Z","message":"error to get employees MongoError: Failed to parse: { find: \"employees\", filter: {}, projection: { password: 0 }, skip: 2, limit: \"2\", returnKey: false, showRecordId: false, $db: \"tcc\" }. 'limit' field must be numeric."}
+{"timestamp":"2019-07-17T21:44:25.635Z","message":"error to get employees MongoError: $not needs a regex or a document"}
