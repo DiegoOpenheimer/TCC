@@ -40,6 +40,7 @@ export default makeStyles(theme => ({
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
         }),
+        backgroundColor: '#f8fafc'
     },
     contentShift: {
         transition: theme.transitions.create('margin', {

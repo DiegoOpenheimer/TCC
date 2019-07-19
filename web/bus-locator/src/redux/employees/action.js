@@ -34,7 +34,6 @@ export const requestEmployees = (page = 1, limit = 10, error = console.log) => d
     dispatch(handleReducer(types.UPDATE_LOADING, true))
     network.get(`employee?limit=${limit}&page=${page}`)
     .then(response => {
-        console.log('ok')
         dispatch(handleReducer(types.UPDATE_LOADING, false))
         dispatch(handleReducer(types.UPDATE_EMPLOYEES, response.data))
         dispatch(handleReducer(types.UPDATE_DOCS, response.data.docs))
