@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { requestEmployees, filterIndexDocs, updatePage, clear } from '../../redux/employees/action'
+import React, { useEffect, useState } from 'react'
+import { requestEmployees, removeEmployee } from '../../redux/employees/action'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 import {
@@ -16,7 +16,7 @@ import {
     Button,
     TextField,
     InputAdornment,
-    IconButton
+    IconButton,
 } from '@material-ui/core'
 import { Search } from '@material-ui/icons'
 import { Status, Role } from './components/status'
@@ -24,6 +24,7 @@ import { EMPLOYEE_ROLE } from '../../utils/constants'
 import { Delete } from '@material-ui/icons'
 import { Subject } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
+import Dialog from '../../components/dialog'
 
 const createStyle = makeStyles(theme => ({
     root: {
@@ -39,6 +40,9 @@ const createStyle = makeStyles(theme => ({
     },
     input: {
         minWidth: '50%'
+    },
+    tableCellFooter: {
+        paddingRight: '32px !important'
     }
 }))
 
@@ -50,26 +54,48 @@ const Employee = props => {
     subject
     .pipe(debounceTime(300))
     .subscribe(value => {
-        console.log(value)
+        setText(value)
+        props.requestEmployees(1, 10, value)
     })
     
+    const [ text, setText ] = useState('')
+    const [ open, setOpen ] = useState(false)
+    const [ userToBeRemoved, setUser ] = useState({ name: '', email: ''})
+    let emailToBeRemoved = ''
+
     useEffect(() => {
         requestServer()
-        return () => {
-            props.clear()
-            subject.complete()
-        }
+        return () => subject.complete()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [  ])
 
     function requestServer(page = props.data.page) {
-        props.requestEmployees(page, props.data.limit, () => {
-            toast.error('Falha na comunicação com o servidor')
-        })
+        if (!props.isLoading) {
+            props.requestEmployees(page, props.data.limit, text, () => {
+                toast.error('Falha na comunicação com o servidor')
+            })
+
+        }
+    }
+
+    function renderFooter() {
+        return (
+            <TablePagination
+                labelDisplayedRows={({from, to, count}) => `${from}-${to} de ${count}`}
+                rowsPerPage={10}
+                rowsPerPageOptions={[]}
+                count={props.data.total}
+                page={props.data.page - 1}
+                onChangePage={(_, page) => {
+                    const newPage = page + 1
+                    requestServer(newPage)
+                }}
+            />
+        )
     }
 
     function buildItems() {
-        return props.docs.map(employee => {
+        return props.data.docs.map(employee => {
             return (
                 <TableRow key={employee._id}>
                     <TableCell>{employee.name}</TableCell>
@@ -79,7 +105,10 @@ const Employee = props => {
                     {
                         props.user.role === EMPLOYEE_ROLE.ADMIN &&
                         <TableCell component="th">
-                            <Button variant="outlined" color="secondary">
+                            <Button onClick={() => {
+                                setOpen(true)
+                                setUser(employee)
+                            }} variant="outlined" color="secondary">
                                 Remover
                                 <Delete className={classes.rightIcon} />
                             </Button>
@@ -89,6 +118,14 @@ const Employee = props => {
             )
         })
     }
+
+    function deleteUser() {
+        setOpen(false)
+        if (emailToBeRemoved !== userToBeRemoved.email) {
+            emailToBeRemoved = userToBeRemoved.email
+            props.removeEmployee(userToBeRemoved, () => props.requestEmployees(props.data.page, props.data.limit), () => toast.error('Falha ao deletar usuário'))
+        }
+    }
     return (
         <Grid className={classes.root}>
             <TextField
@@ -96,9 +133,9 @@ const Employee = props => {
                 className={classes.input}
                 variant="outlined"
                 label="Procurar"
-                placeholder="Procure por nome ou email"
+                placeholder="Digite aqui para buscar"
                 InputProps={{
-                    startAdornment: <InputAdornment position="start"><IconButton><Search /></IconButton></InputAdornment>
+                    startAdornment: <InputAdornment position="start"><IconButton onClick={() => props.requestEmployees(1, 10, text)}><Search /></IconButton></InputAdornment>
                 }}
             />
             <Paper className={classes.tableWrapper}>
@@ -120,38 +157,29 @@ const Employee = props => {
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                            <TablePagination
-                                labelDisplayedRows={({from, to, count}) => `${from}-${to} de ${count}`}
-                                rowsPerPage={10}
-                                rowsPerPageOptions={[]}
-                                count={props.data.total}
-                                page={props.data.page - 1}
-                                onChangePage={(_, page) => {
-                                    const newPage = page + 1
-                                    const size = props.data.docs.length
-                                    const value = newPage * props.data.limit
-                                    console.log(newPage, value, size)
-                                    props.updatePage(newPage)
-                                    if (value <= size) {
-                                        props.filterIndexDocs(value, props.data.limit, props.data.docs)
-                                    } else {
-                                        requestServer(newPage)
-                                    }
-                                }}
-                            />
+                           { renderFooter() }
                         </TableRow>
                     </TableFooter>
                 </Table>
             </Paper>
+            <Dialog 
+                open={open}
+                onClose={setOpen}
+                title="Atenção"
+                message={`Deseja remover o usuário ${userToBeRemoved.name}?`}
+                negativeButton="Não"
+                positiveButton="Sim"
+                negativeAction={() => setOpen(false)}
+                positiveAction={() => deleteUser()}
+            />
         </Grid>
     )
 }
 
 const mapStateToProps = state => ({
     data: state.employee.data,
-    isLoading: state.employee.isLoading,
+    isLoading: state.component.loading,
     user: state.home.user,
-    docs: state.employee.docs
 })
 
-export default connect(mapStateToProps, { requestEmployees, filterIndexDocs, updatePage, clear })(Employee)
+export default connect(mapStateToProps, { requestEmployees, removeEmployee })(Employee)

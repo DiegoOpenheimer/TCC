@@ -1,7 +1,7 @@
 import React from 'react'
 import { Drawer, Grid, makeStyles, Divider, Typography, List, ListItemIcon, ListItemText, ListItem }  from '@material-ui/core'
 import createStyle from '../style'
-import { Dashboard, People } from '@material-ui/icons'
+import { Dashboard, People, AccountBox } from '@material-ui/icons'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constants'
@@ -64,6 +64,13 @@ const CustomDrawer = props => {
             url: ROUTES.HOME,
             isActive: pathname === ROUTES.HOME,
             onClick() { pathname !== ROUTES.HOME && handleRoute(ROUTES.HOME) }
+        },
+        {
+            icon: <AccountBox/>,
+            text: 'Minha Conta',
+            url: ROUTES.ACCOUNT,
+            isActive: pathname === ROUTES.ACCOUNT,
+            onClick() { pathname !== ROUTES.ACCOUNT && handleRoute(ROUTES.ACCOUNT) }
         },
         {
             icon: <People/>,

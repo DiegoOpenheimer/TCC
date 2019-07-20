@@ -12,7 +12,7 @@ const handleTotalUsers = value => ({ type: type.TOTAL_USERS, payload: { value } 
 const handleLoadingTotalUsers = value => ({ type: type.LOADING_TOTAL_USERS, payload: { value } })
 const handleErrorTotalUsers = value => ({ type: type.ERROR_LOAD_TOTAL_USERS, payload: { value } })
 const handleTotalUsersNotAuthorized = value => ({ type: type.USERS_NOT_AUTHORIZED, payload: { value } })
-const handleUser = value => ({ type: type.UPDATE_USER, payload: { value } })
+export const handleUser = value => ({ type: type.UPDATE_USER, payload: { value } })
 
 
 export const logout = () => ({ type: type.UPDATE_USER, payload: { value: { email: '', name: '', role: '' } } })

@@ -14,6 +14,8 @@ import storage from '../../services/storage'
 import clsx from 'clsx'
 import { ROUTES } from '../../utils/constants'
 import Employee from '../employess/employees'
+import Account from '../account/account'
+import Loading from '../../components/loading'
 
 const Home = props => {
     const { isLoadingTotalUsers,
@@ -60,7 +62,7 @@ const Home = props => {
             requestUser(callback)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps 
-    }, [])
+    }, [ props.location ])
 
     if (redirect) {
         return <Redirect to="/login"/>
@@ -69,6 +71,7 @@ const Home = props => {
     return (
         <>
             <Grid className={classes.maxContainer} container item direction="column" wrap="nowrap" alignItems="center">
+                <Loading />
                 <AppBar onDrawer={onDrawer} handleClose={handleClose} usersNotAuthorized={usersNotAuthorized} onSelectedUser={handleUserToAprrove} />
                 <Dialog
                     transition="Slide"
@@ -105,8 +108,9 @@ const Home = props => {
                                 icon="people_outline"
                                 title="Total de usuários"
                                 content={totalUsers} />} />
-                        <Route path={ROUTES.EMPLOYEES} component={Employee} />   
-                        <Redirect from="*" to="/home" />
+                        <Route path={ROUTES.EMPLOYEES} component={Employee} />
+                        <Route path={ROUTES.ACCOUNT} component={Account} />
+                        <Redirect from="*" to={ROUTES.HOME} />
                     </Switch>
                 </Grid>
             </Grid>

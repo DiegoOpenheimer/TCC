@@ -10,6 +10,7 @@ export const USER_STATUS = {
 }
 
 export const ROUTES = {
-    HOME: '/home',
-    EMPLOYEES: '/home/employess'
+    HOME: '/home/dashboard',
+    EMPLOYEES: '/home/employess',
+    ACCOUNT: '/home/account'
 }
