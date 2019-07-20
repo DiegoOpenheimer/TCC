@@ -7,6 +7,8 @@ router.post('/', validation.handlerCreateUser, employeeController.createEmployee
 
 router.get('/', validationJwt, employeeController.getActiveEmployee)
 
+router.delete('/', validationJwt, employeeController.removeEmployee)
+
 router.get('/current', validationJwt, employeeController.getEmployeeByEmail)
 
 router.get('/recover-password/:id', validation.validationId, employeeController.renderPageToChangePassword)

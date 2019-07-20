@@ -12,7 +12,20 @@ const getActiveEmployee  = (req, res) => {
     const page = req.query.page || 1
     const limit = req.query.limit || 10
     const regex = new RegExp(email, 'g')
-    Employee.paginate({ email: { $not: regex } }, { page: Number(page), limit: Number(limit), select: ['-password'] })
+    const queryField = req.query.field
+    let query
+    if (queryField) {
+        const regexField = new RegExp(queryField, "gi")
+        query = {
+            $and: [
+                { email: { $not: regex} },
+                { $or: [ { email: { $regex: regexField } }, { name: { $regex: regexField } }, { cpf: { $regex: regexField } } ] }
+            ]
+        }
+    } else {
+        query = { email: { $not: regex} }
+    }
+    Employee.paginate(query, { page: Number(page), limit: Number(limit), select: ['-password'] })
     .then(result => response.handlerResponse(res, result))
     .catch(e => response.handlerUnexpectError(res, 'error to get employees ' + e))
 }
@@ -43,6 +56,13 @@ const createEmployee = (req, res) => {
 
 }
 
+const removeEmployee = (req, res) => {
+    const { email } = req.body
+    Employee.findOneAndDelete({ email })
+    .then(_ => response.handlerResponse(res, { message: 'employee removed' }))
+    .catch(e => response.handlerUnexpectError(res, 'fail to remove employee ' + e))
+}
+
 const getEmployeeByEmail = (req, res) => {
     const token = req.headers.authorization
     const { email } = jwt.decode(token)
@@ -53,9 +73,21 @@ const getEmployeeByEmail = (req, res) => {
 }
 
 const editEmployee = (req, res) => {
-    const { email } = req.body
-    Employee.findOneAndUpdate({ email }, req.body)
-    .then(_ => response.handlerResponse(res, { message: 'Employee edited' }))
+    const user = req.body
+    Employee.findOne({ email: user.email })
+    .then(employee => {
+        if (employee) {
+            for (const key in user) {
+                if (user[key] && employee[key]) {
+                    employee[key] = user[key]
+                }
+            }
+            return employee.save()
+        } else {
+            response.handlerResponse(res, new HandlerError('user not found', 401))
+        }
+    })
+    .then(employee => response.handlerResponse(res, { message: 'Employee edited', user: {...employee._doc, password: null}}))
     .catch(e => response.handlerUnexpectError(res, 'fail to edit employee ' + e))
 }
 
@@ -160,5 +192,6 @@ module.exports = {
     getEmployeeNotAuthorized,
     getActiveEmployee,
     editEmployee,
-    getEmployeeByEmail
+    getEmployeeByEmail,
+    removeEmployee
 }

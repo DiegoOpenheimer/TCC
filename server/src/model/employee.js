@@ -35,6 +35,7 @@ employeeSchema.pre('save', function(next) {
     })
 })
 
+
 employeeSchema.methods.checkPassword = function(password) {
     return new Promise((resolve, reject) => {
         bcrypt.compare(password, this.password, (err, isSame) => {

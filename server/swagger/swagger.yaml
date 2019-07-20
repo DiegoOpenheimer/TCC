@@ -230,6 +230,21 @@ paths:
           schema:
             type: number
           description: page for employees
+        - in: query
+          name: email
+          schema:
+            type: string
+          description: get with filter email
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: get with filter name
+        - in: query
+          name: cpf
+          schema:
+            type: number
+          description: get with filter cpf
       responses:
         '200':
           description: success operation
@@ -256,6 +271,46 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
         - ApiKey: []
+
+    delete:
+      tags:
+        - Employee
+      summary: delete a employee
+      description: delete a employee
+      operationId: deleteEmployee
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Employee object that needs to be registered
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+      responses:
+        '200':
+          description: Employee registered
+          schema:
+            $ref: '#/definitions/ApiResponseOk'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '401':
+          description: not authorized
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
 
   /employee/current:
     get:
