@@ -17,6 +17,8 @@ tags:
     description: How you can authenticate at server
   - name: Employee
     description: Everything about employee
+  - name: History
+    description: Everything about histories
 schemes:
   - http
 paths:
@@ -173,7 +175,6 @@ paths:
           description: unknown error
           schema:
             $ref: '#/definitions/UnknownServerError'  
-
   /employee:
     post:
       tags:
@@ -231,20 +232,10 @@ paths:
             type: number
           description: page for employees
         - in: query
-          name: email
+          name: field
           schema:
             type: string
-          description: get with filter email
-        - in: query
-          name: name
-          schema:
-            type: string
-          description: get with filter name
-        - in: query
-          name: cpf
-          schema:
-            type: number
-          description: get with filter cpf
+          description: get with filter
       responses:
         '200':
           description: success operation
@@ -584,6 +575,59 @@ paths:
           description: unknown error
           schema:
             $ref: '#/definitions/UnknownServerError'  
+  /history:
+    get:
+      tags:
+        - History
+      summary: get histories
+      description: get histories
+      operationId: getHistories
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: number
+          description: limit for employees
+        - in: query
+          name: page
+          schema:
+            type: number
+          description: page for employees
+        - in: query
+          name: field
+          schema:
+            type: string
+          description: get with filter
+      responses:
+        '200':
+          description: Histories
+          schema:
+            type: object
+            properties:
+                limit:
+                  type: number
+                page:
+                  type: number
+                total:
+                  type: number
+                docs:
+                  type: array
+                  items:
+                   $ref: '#/definitions/History'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
 securityDefinitions:
   ApiKey:
     type: apiKey
@@ -689,6 +733,16 @@ definitions:
         type: string
       cpf:
         type: string
+  History:
+    type: object
+    properties:
+      _id:
+        type: string
+      email:
+        type: string
+      reason:
+        type: string
+      createdAt: Date
 components:
   schemas:
     mResponses:

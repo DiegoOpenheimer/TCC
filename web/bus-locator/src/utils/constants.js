@@ -12,5 +12,6 @@ export const USER_STATUS = {
 export const ROUTES = {
     HOME: '/home/dashboard',
     EMPLOYEES: '/home/employess',
-    ACCOUNT: '/home/account'
+    ACCOUNT: '/home/account',
+    HISTORY: '/home/history'
 }

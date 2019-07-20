@@ -1,5 +1,5 @@
 import React from 'react'
-import { EMPLOYEE_ROLE, USER_STATUS } from '../../../utils/constants'
+import { EMPLOYEE_ROLE, USER_STATUS } from '../utils/constants'
 
 export const Status = ({ status }) => {
     

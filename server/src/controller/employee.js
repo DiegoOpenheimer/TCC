@@ -7,6 +7,9 @@ const emailService = require('../utils/senderEmail')
 const {JsonWebTokenError} = require('jsonwebtoken')
 const html = require('../views/pagesHtml')
 
+const { History } = response
+const { Translate } = constants
+
 const getActiveEmployee  = (req, res) => {
     const { email } = jwt.decode(req.headers.authorization)
     const page = req.query.page || 1
@@ -57,9 +60,15 @@ const createEmployee = (req, res) => {
 }
 
 const removeEmployee = (req, res) => {
+    const jwtDecoded = jwt.decode(req.headers.authorization)
     const { email } = req.body
     Employee.findOneAndDelete({ email })
-    .then(_ => response.handlerResponse(res, { message: 'employee removed' }))
+    .then(_ =>
+        response.handlerResponse(
+            res,
+            { message: 'employee removed' },
+            new History(`Usuário ${jwtDecoded.email} removeu usuário com email ${email}`, jwtDecoded.email)
+        ))
     .catch(e => response.handlerUnexpectError(res, 'fail to remove employee ' + e))
 }
 
@@ -74,9 +83,14 @@ const getEmployeeByEmail = (req, res) => {
 
 const editEmployee = (req, res) => {
     const user = req.body
+    let role
+    let status
+    const jwtDecoded = jwt.decode(req.headers.authorization)
     Employee.findOne({ email: user.email })
     .then(employee => {
         if (employee) {
+            role = employee.role
+            status = employee.status
             for (const key in user) {
                 if (user[key] && employee[key]) {
                     employee[key] = user[key]
@@ -87,7 +101,20 @@ const editEmployee = (req, res) => {
             response.handlerResponse(res, new HandlerError('user not found', 401))
         }
     })
-    .then(employee => response.handlerResponse(res, { message: 'Employee edited', user: {...employee._doc, password: null}}))
+    .then(employee => {
+        const histories = []
+        if (employee.role !== role) {
+            histories.push(new History(`Usuário ${jwtDecoded.email} alterou o papel do usuário ${employee.email} para ${Translate(employee.role)}`, jwtDecoded.email))
+        }
+        if (employee.status !== status) {
+            histories.push(new History(`Usuário ${jwtDecoded.email} alterou a permissão do usuário ${employee.email} para ${Translate(employee.status)}`, jwtDecoded.email))
+        }
+        response.handlerResponse(
+            res,
+            { message: 'Employee edited', user: {...employee._doc, password: null}},
+            ...histories
+        )
+    })        
     .catch(e => response.handlerUnexpectError(res, 'fail to edit employee ' + e))
 }
 

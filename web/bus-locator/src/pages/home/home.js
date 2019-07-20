@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 import createStyle from '../../style/global'
 import Dialog from '../../components/dialog'
-import AppBar from './components/AppBar'
-import CustomDialog from './components/CustomDialog'
+import AppBar from '../../components/AppBar'
+import CustomDialog from '../../components/CustomDialog'
 import Card from './components/Card'
 import createStyleLocal from './style'
 import { requestTotalUsers, requestEmployeeToEnable, requestUser, logout } from '../../redux/home/actions'
@@ -15,6 +15,7 @@ import clsx from 'clsx'
 import { ROUTES } from '../../utils/constants'
 import Employee from '../employess/employees'
 import Account from '../account/account'
+import History from '../history/history'
 import Loading from '../../components/loading'
 
 const Home = props => {
@@ -84,6 +85,8 @@ const Home = props => {
                     negativeAction={handleClose}
                     positiveAction={handleLogout}/>
                 <CustomDialog
+                    message="Deseja aprovar a entrada desse usuário no sistema?"
+                    messageCheckBox="Aprovar usuário como admin?"
                     success={() => {
                         setOpenCustomDialog(false)
                         requestEmployeeToEnable()
@@ -110,6 +113,7 @@ const Home = props => {
                                 content={totalUsers} />} />
                         <Route path={ROUTES.EMPLOYEES} component={Employee} />
                         <Route path={ROUTES.ACCOUNT} component={Account} />
+                        <Route path={ROUTES.HISTORY} component={History} />
                         <Redirect from="*" to={ROUTES.HOME} />
                     </Switch>
                 </Grid>

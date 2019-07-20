@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import createStyle from '../../../style/global'
-import createStyleLocal from '../style'
+import createStyle from '../style/global'
+import createStyleLocal from '../pages/home/style'
 import { Menu, Close } from '@material-ui/icons'
 import { Notifications, ExitToApp, ChevronRight } from '@material-ui/icons'
 import {
@@ -17,18 +17,20 @@ import {
     ListItem,
     Divider
 } from '@material-ui/core'
-import { EMPLOYEE_ROLE } from '../../../utils/constants'
+import { EMPLOYEE_ROLE } from '../utils/constants'
 import Drawer from './Drawer'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
-import { ROUTES } from '../../../utils/constants'
+import { ROUTES } from '../utils/constants'
 import { useSelector } from 'react-redux'
 
 const CustomAppBar = props => {
 
     const titles = {
         [ROUTES.HOME]: 'Painel de controle',
-        [ROUTES.EMPLOYEES]: 'Funcionários'
+        [ROUTES.EMPLOYEES]: 'Funcionários',
+        [ROUTES.ACCOUNT]: 'Minha Conta',
+        [ROUTES.HISTORY]: 'Histórico',
     }
     const user = useSelector(state => state.home.user)
     const classes = createStyle()

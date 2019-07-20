@@ -19,12 +19,13 @@ import {
     IconButton,
 } from '@material-ui/core'
 import { Search } from '@material-ui/icons'
-import { Status, Role } from './components/status'
+import { Status, Role } from '../../components/status'
 import { EMPLOYEE_ROLE } from '../../utils/constants'
 import { Delete } from '@material-ui/icons'
 import { Subject } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
 import Dialog from '../../components/dialog'
+import CustomDialog from '../../components/CustomDialog'
 
 const createStyle = makeStyles(theme => ({
     root: {
@@ -60,9 +61,10 @@ const Employee = props => {
     
     const [ text, setText ] = useState('')
     const [ open, setOpen ] = useState(false)
-    const [ userToBeRemoved, setUser ] = useState({ name: '', email: ''})
+    const [ openCustomDialog, setOpenCustomDialog ] = useState(false)
+    const [ user, setUser ] = useState({ name: '', email: ''})
     let emailToBeRemoved = ''
-
+    const isAdmin = props.user.role === EMPLOYEE_ROLE.ADMIN
     useEffect(() => {
         requestServer()
         return () => subject.complete()
@@ -97,15 +99,19 @@ const Employee = props => {
     function buildItems() {
         return props.data.docs.map(employee => {
             return (
-                <TableRow key={employee._id}>
+                <TableRow onClick={() => {
+                    setUser(employee)
+                    setOpenCustomDialog(true)
+                }} hover={isAdmin} key={employee._id}>
                     <TableCell>{employee.name}</TableCell>
                     <TableCell>{employee.email}</TableCell>
                     <TableCell><Status status={employee.status} /></TableCell>
                     <TableCell><Role role={employee.role} /></TableCell>
                     {
-                        props.user.role === EMPLOYEE_ROLE.ADMIN &&
+                        isAdmin &&
                         <TableCell component="th">
-                            <Button onClick={() => {
+                            <Button onClick={ev => {
+                                ev.stopPropagation()
                                 setOpen(true)
                                 setUser(employee)
                             }} variant="outlined" color="secondary">
@@ -121,9 +127,12 @@ const Employee = props => {
 
     function deleteUser() {
         setOpen(false)
-        if (emailToBeRemoved !== userToBeRemoved.email) {
-            emailToBeRemoved = userToBeRemoved.email
-            props.removeEmployee(userToBeRemoved, () => props.requestEmployees(props.data.page, props.data.limit), () => toast.error('Falha ao deletar usuário'))
+        if (emailToBeRemoved !== user.email) {
+            emailToBeRemoved = user.email
+            props.removeEmployee(user, () => {
+                toast.success('Usuário removido com sucesso', { autoClose: 2000 })
+                props.requestEmployees(props.data.page, props.data.limit)
+            }, () => toast.error('Falha ao deletar usuário'))
         }
     }
     return (
@@ -147,7 +156,7 @@ const Employee = props => {
                             <TableCell component="th">Status</TableCell>
                             <TableCell component="th">Papel</TableCell>
                             {
-                                props.user.role === EMPLOYEE_ROLE.ADMIN &&
+                                isAdmin &&
                                 <TableCell component="th">Remover</TableCell>
                             }
                         </TableRow>
@@ -166,11 +175,27 @@ const Employee = props => {
                 open={open}
                 onClose={setOpen}
                 title="Atenção"
-                message={`Deseja remover o usuário ${userToBeRemoved.name}?`}
+                message={`Deseja remover o usuário ${user.name}?`}
                 negativeButton="Não"
                 positiveButton="Sim"
                 negativeAction={() => setOpen(false)}
                 positiveAction={() => deleteUser()}
+            />
+            <CustomDialog
+                message="Deseja aleterar permissão desse usuário?"
+                messageCheckBox="Administrador"
+                success={() => {
+                    setOpenCustomDialog(false)
+                    requestServer()
+                    toast.success('Usuário editado', { autoClose: 2000 })
+                }}
+                error={() => {
+                    setOpenCustomDialog(false)
+                    toast.error('Falha editar usuário', { autoClose: 2000 })
+                }}
+                user={user}
+                open={openCustomDialog}
+                negativeAction={() => setOpenCustomDialog(false)}
             />
         </Grid>
     )

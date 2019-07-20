@@ -9,7 +9,18 @@ const EMPLOYEE_ROLE = {
     ADMIN: 'ADMIN'
 }
 
+function Translate(key) {
+    const value = {
+        [EMPLOYEE_ROLE.COMMON]: 'comum',
+        [EMPLOYEE_ROLE.ADMIN]: 'administrador',
+        [USER_STATUS.ENABLED]: 'habilitado',
+        [USER_STATUS.NOT_AUTHORIZED]: 'não habilitado'
+    }
+    return value[key]
+}
+
 module.exports = {
     USER_STATUS,
-    EMPLOYEE_ROLE
+    EMPLOYEE_ROLE,
+    Translate
 }

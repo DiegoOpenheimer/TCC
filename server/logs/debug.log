@@ -48,3 +48,11 @@
 {"timestamp":"2019-07-17T01:05:21.608Z","message":"error to get employees MongoError: Failed to parse: { find: \"employees\", filter: {}, projection: { password: 0 }, skip: 2, limit: \"2\", returnKey: false, showRecordId: false, $db: \"tcc\" }. 'limit' field must be numeric."}
 {"timestamp":"2019-07-17T21:44:25.635Z","message":"error to get employees MongoError: $not needs a regex or a document"}
 {"timestamp":"2019-07-20T01:04:47.789Z","message":"fail to remove employee MongoError: Cannot specify both new=true and remove=true; 'remove' always returns the deleted document"}
+{"timestamp":"2019-07-20T12:21:52.588Z","message":"fail to edit employee TypeError: Translate is not a function"}
+{"timestamp":"2019-07-20T14:36:13.902Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
+{"timestamp":"2019-07-20T14:37:04.776Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
+{"timestamp":"2019-07-20T14:40:58.317Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
+{"timestamp":"2019-07-20T14:41:31.533Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
+{"timestamp":"2019-07-20T14:41:42.743Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
+{"timestamp":"2019-07-20T14:42:00.468Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
+{"timestamp":"2019-07-20T14:42:11.440Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}

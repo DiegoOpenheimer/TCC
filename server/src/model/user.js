@@ -13,11 +13,11 @@ const userSchema = new Schema({
         enum: [constants.USER_STATUS.ENABLED, constants.USER_STATUS.PENDING],
         default: constants.USER_STATUS.PENDING
     }
-})
+}, { timestamps: true })
 
 userSchema.pre('save', function(next) {
     user = this
-    if (!user.isModified) {
+    if (!user.isModified('password')) {
         next()
     }
     bcrypt.genSalt((err, salt) => {

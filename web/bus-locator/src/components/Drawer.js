@@ -1,10 +1,10 @@
 import React from 'react'
 import { Drawer, Grid, makeStyles, Divider, Typography, List, ListItemIcon, ListItemText, ListItem }  from '@material-ui/core'
-import createStyle from '../style'
-import { Dashboard, People, AccountBox } from '@material-ui/icons'
+import createStyle from '../pages/home/style'
+import { Dashboard, People, AccountBox, History } from '@material-ui/icons'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
-import { ROUTES } from '../../../utils/constants'
+import { ROUTES, EMPLOYEE_ROLE } from '../utils/constants'
 import { useSelector } from 'react-redux'
 
 const styles = makeStyles({
@@ -57,11 +57,13 @@ const CustomDrawer = props => {
     const { onClose, open, location: { pathname } } = props
     const classesLocal = createStyle()
     const classes = styles()
+    const isAdmin = user.role === EMPLOYEE_ROLE.ADMIN
     const items = [
         {
             icon: <Dashboard/>,
             text: 'Painel de controle',
             url: ROUTES.HOME,
+            show: true,
             isActive: pathname === ROUTES.HOME,
             onClick() { pathname !== ROUTES.HOME && handleRoute(ROUTES.HOME) }
         },
@@ -69,6 +71,7 @@ const CustomDrawer = props => {
             icon: <AccountBox/>,
             text: 'Minha Conta',
             url: ROUTES.ACCOUNT,
+            show: true,
             isActive: pathname === ROUTES.ACCOUNT,
             onClick() { pathname !== ROUTES.ACCOUNT && handleRoute(ROUTES.ACCOUNT) }
         },
@@ -76,8 +79,17 @@ const CustomDrawer = props => {
             icon: <People/>,
             text: 'Funcionários',
             url: ROUTES.EMPLOYEES,
+            show: true,
             isActive: pathname === ROUTES.EMPLOYEES,
             onClick() { pathname !== ROUTES.EMPLOYEES && handleRoute(ROUTES.EMPLOYEES) }
+        },
+        {
+            icon: <History/>,
+            text: 'Histórico',
+            url: ROUTES.HISTORY,
+            show: isAdmin,
+            isActive: pathname === ROUTES.HISTORY,
+            onClick() { pathname !== ROUTES.HISTORY && handleRoute(ROUTES.HISTORY) }
         },
     ]
     function handleRoute(route) {

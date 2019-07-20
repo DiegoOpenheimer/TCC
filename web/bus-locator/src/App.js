@@ -10,7 +10,7 @@ import Login from './pages/login/login'
 import Home from './pages/home/home'
 
 function App() {
-  toast.configure()
+  toast.configure({ position: toast.POSITION.BOTTOM_RIGHT })
   return (
     <Provider store={store}>
       <Router>

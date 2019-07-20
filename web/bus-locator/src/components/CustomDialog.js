@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Grid, Typography, makeStyles, Checkbox, CircularProgress } from '@material-ui/core'
-import { EMPLOYEE_ROLE, USER_STATUS } from '../../../utils/constants'
-import network from '../../../services/network'
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button,
+    Grid,
+    Typography,
+    makeStyles,
+    Checkbox,
+    CircularProgress
+} from '@material-ui/core'
+import { EMPLOYEE_ROLE, USER_STATUS } from '../utils/constants'
+import network from '../services/network'
+import { useDispatch } from 'react-redux'
+import { updateLoading as loadingGlobal } from '../redux/components/action'
 
 const createStyle = makeStyles({
     field: {
@@ -20,19 +34,21 @@ const createStyle = makeStyles({
 
 const CustomDialog = props => {
 
-    const styles = createStyle()
-    const [ value, setValue ] = useState(false)
-    const [ loading, setLoading ] = useState(false)
-
+    const dispatch = useDispatch()
     let { user } = props
     if (!user) {
-        user = { name: '', email: '', cpf: '' }
+        user = { name: '', email: '', cpf: '', role: EMPLOYEE_ROLE.COMMON }
     }
-
+    const isAdmin = user.role === EMPLOYEE_ROLE.ADMIN
+    const styles = createStyle()
+    const [ value, setValue ] = useState()
+    const [ loading, setLoading ] = useState(false)
     useEffect(() => {
+        setValue(isAdmin)
         if (!props.open) {
             setValue(false)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ props.open ])
 
     function requestServer() {
@@ -50,8 +66,10 @@ const CustomDialog = props => {
         const callback = cb => {
             cb()
             setLoading(false)
+            dispatch(loadingGlobal(false))
         }
         setLoading(true)
+        dispatch(loadingGlobal(true))
         network.patch('employee/edit', body)
         .then(() => callback(props.success))
         .catch(e => callback(props.error))
@@ -79,7 +97,7 @@ const CustomDialog = props => {
             <DialogTitle id="alert-dialog-slide-title">Atenção</DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-slide-description">
-                    Deseja aprovar a entrada desse usuário no sistema?
+                    { props.message }
                 </DialogContentText>
                 <Grid container direction="row" wrap="nowrap">
                     <Grid container className={styles.field}  ><Typography>Nome: </Typography></Grid>
@@ -100,7 +118,7 @@ const CustomDialog = props => {
                         <Checkbox color="primary" checked={value} onChange={event => setValue(event.target.checked)} className={styles.checkBox} />
                     </Grid>
                     <Grid>
-                        <Typography >Aprovar usuário como admin?</Typography>
+                        <Typography >{ props.messageCheckBox }</Typography>
                     </Grid>
                 </Grid>
             </DialogContent>
