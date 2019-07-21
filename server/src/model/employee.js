@@ -7,9 +7,9 @@ const Schema = mongoose.Schema
 
 const employeeSchema = new Schema({
     name: String,
-    email: String,
+    email: { type: String, unique: true },
     password: String,
-    cpf: String,
+    cpf: { type: String, unique: true },
     role: {
         type: String,
         enum: [constants.EMPLOYEE_ROLE.ADMIN, constants.EMPLOYEE_ROLE.COMMON],

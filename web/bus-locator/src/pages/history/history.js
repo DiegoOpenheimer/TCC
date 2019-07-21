@@ -56,11 +56,9 @@ const History = props => {
     const [ text, setText ] = useState('')
     useEffect(() => {
         requestServer()
-        console.log('HISTORY')
         return () => subject.complete()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [  ])
-    console.log(props)
     function requestServer(page = props.page) {
         if (!props.isLoading) {
             props.requestHistories(page, props.limit, text, () => {
@@ -106,7 +104,7 @@ const History = props => {
                 label="Procurar"
                 placeholder="Digite aqui para buscar, para data: yyyy-mm-dd"
                 InputProps={{
-                    startAdornment: <InputAdornment position="start"><IconButton onClick={() => props.requestEmployees(1, 10, text)}><Search /></IconButton></InputAdornment>
+                    startAdornment: <InputAdornment position="start"><IconButton onClick={() => props.requestHistories(1, 10, text)}><Search /></IconButton></InputAdornment>
                 }}
             />
             <Paper className={classes.tableWrapper}>

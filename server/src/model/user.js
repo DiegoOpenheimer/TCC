@@ -1,12 +1,13 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const constants = require('../utils/constants')
+const Suggestion = require('./suggestion')
 
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
     name: String,
-    email: String,
+    email: { type: String, unique: true },
     password: String,
     status: {
         type: String,
@@ -17,6 +18,15 @@ const userSchema = new Schema({
 
 userSchema.pre('save', function(next) {
     user = this
+    if (user.isModified('name')) {
+        Suggestion.findOne({ author: this._id })
+        .then(suggestion => {
+            if (suggestion) {
+                suggestion.name = this.name
+                suggestion.save()
+            }
+        })
+    }
     if (!user.isModified('password')) {
         next()
     }
@@ -39,9 +49,5 @@ userSchema.methods.checkPassword = function(password) {
         })
     })
 }
-
 const User = mongoose.model('User', userSchema)
-
-
-
 module.exports = User

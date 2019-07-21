@@ -16,6 +16,7 @@ import { ROUTES } from '../../utils/constants'
 import Employee from '../employess/employees'
 import Account from '../account/account'
 import History from '../history/history'
+import Suggestion from '../suggestion/suggestion'
 import Loading from '../../components/loading'
 
 const Home = props => {
@@ -104,16 +105,19 @@ const Home = props => {
                 <Grid item container className={clsx(classesLocal.content, { [classesLocal.contentShift]: openDrawer })}>
                     <Switch>
                         <Route exact path={ROUTES.HOME} render={() =>
-                            <Card
+                            <Grid className={classesLocal.contentCard} item container>
+                                   <Card
                                 buttonError={() => requestTotalUsers()}
                                 error={errorLoadTotalUsers}
                                 isLoading={isLoadingTotalUsers}
                                 icon="people_outline"
                                 title="Total de usuários"
-                                content={totalUsers} />} />
+                                content={totalUsers} />
+                            </Grid>} />
                         <Route path={ROUTES.EMPLOYEES} component={Employee} />
                         <Route path={ROUTES.ACCOUNT} component={Account} />
                         <Route path={ROUTES.HISTORY} component={History} />
+                        <Route path={ROUTES.SUGGESTION} component={Suggestion} />
                         <Redirect from="*" to={ROUTES.HOME} />
                     </Switch>
                 </Grid>

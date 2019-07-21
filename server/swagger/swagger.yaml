@@ -19,6 +19,8 @@ tags:
     description: Everything about employee
   - name: History
     description: Everything about histories
+  - name: Suggestion
+    description: Everything about suggestions
 schemes:
   - http
 paths:
@@ -574,7 +576,199 @@ paths:
         '500':
           description: unknown error
           schema:
-            $ref: '#/definitions/UnknownServerError'  
+            $ref: '#/definitions/UnknownServerError'
+
+  /suggestion:
+    get:
+      tags:
+        - Suggestion
+      summary: get suggestions
+      description: get suggestions
+      operationId: getSuggestions
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: number
+          description: limit for employees
+        - in: query
+          name: page
+          schema:
+            type: number
+          description: page for employees
+        - in: query
+          name: field
+          schema:
+            type: string
+          description: get with filter
+      responses:
+        '200':
+          description: Histories
+          schema:
+            type: object
+            properties:
+                limit:
+                  type: number
+                page:
+                  type: number
+                total:
+                  type: number
+                docs:
+                  type: array
+                  items:
+                   $ref: '#/definitions/Suggestion'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
+    post:
+      tags:
+        - Suggestion
+      summary: register suggestions
+      description: register suggestions
+      operationId: register suggestion
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Suggestion
+          schema:
+            type: object
+            properties:
+              author:
+                type: string
+              title:
+                type: string
+              onModel:
+                type: string
+              messages:
+                type: array
+                items:
+                  properties:
+                    message:
+                      type: string
+                    by:
+                      type: string
+          description: register a new suggestion or question
+      responses:
+        '200':
+          description: response to create suggestion
+          schema:
+            type: object
+            properties:
+                message:
+                  string: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+    patch:
+      tags:
+        - Suggestion
+      summary: add message to suggestion
+      description: add suggestions
+      operationId: addMessage
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Suggestion
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              data:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  message:
+                    type: string
+          description: add a message to suggestion
+      responses:
+        '200':
+          description: response to create suggestion
+          schema:
+            type: object
+            properties:
+                message:
+                  string: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
+    delete:
+      tags:
+        - Suggestion
+      summary: delete suggestion
+      description: delete suggestions
+      operationId: deleteSuggestion
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: Suggestion
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+          description: remove suggestion
+      responses:
+        '200':
+          description: response to create suggestion
+          schema:
+            type: object
+            properties:
+                message:
+                  string: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
   /history:
     get:
       tags:
@@ -742,7 +936,32 @@ definitions:
         type: string
       reason:
         type: string
-      createdAt: Date
+      createdAt:
+        type: string
+  Suggestion:
+    type: object
+    properties:
+      _id:
+        type: string
+      author:
+        type: object
+        schema:
+          $ref: '#/definitions/User'
+      title:
+        type: string
+      createdAt:
+        type: string
+      onModel:
+        type: string
+      messages:
+        type: array
+        items:
+          properties:
+            message:
+              type: string
+            by:
+              type: string
+            
 components:
   schemas:
     mResponses:

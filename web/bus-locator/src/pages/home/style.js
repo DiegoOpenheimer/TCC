@@ -34,7 +34,6 @@ export default makeStyles(theme => ({
         color: '#66788A'
     },
     content: {
-        padding: 16,
         flexGrow: 1,
         transition: theme.transitions.create('margin', {
           easing: theme.transitions.easing.sharp,
@@ -77,6 +76,9 @@ export default makeStyles(theme => ({
     },
     removePadding: {
         padding: 0
+    },
+    contentCard: {
+        padding: 16
     },
     drawer: {
         width: drawerWidth,

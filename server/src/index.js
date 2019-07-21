@@ -3,7 +3,6 @@ const logger = require('./utils/logger')
 const app = require('./app')
 const mongoose = require('./config/mongoose')
 const PORT = process.env.PORT
-
 mongoose.connectMongoDb()
 .then(() => {
     app.listen(PORT, err => {

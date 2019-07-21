@@ -63,14 +63,14 @@ const Login = props => {
                     <LinearProgress className={classes.linearProgress} />
                 }
                 <Grid container justify="center" alignItems="center" item className={classes.contentLogo}>
-                    <h1>Bus Locator</h1>
+                    <Typography variant="h1">Bus Locator</Typography>
                 </Grid>
 
 
                 <Grid item container direction="column" justify="center" alignItems="center" className={classes.fields} >
                     <Route path={props.match.url} exact render={() => {
                         return (
-                        <Grid item container direction="column" alignItems="center" justify="center" style={{width: 336}}>
+                        <Grid item container direction="column" alignItems="center" justify="center" style={{width: '80%'}}>
                             <Tabs
                             className={classes.tabs}
                             variant="fullWidth"
@@ -82,7 +82,7 @@ const Login = props => {
                                 <Tab className={classes.textTab} label="Entrar" />
                                 <Tab className={classes.textTab} label="Nova Conta" />
                             </Tabs>
-                            <Typography variant="h6" className={classes.textPresent}>Bem vindo ao Bus locator</Typography>
+                            <Typography variant="h5" className={classes.textPresent}>Bem vindo</Typography>
                             <SwipeableViews
                             axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
                             index={state}

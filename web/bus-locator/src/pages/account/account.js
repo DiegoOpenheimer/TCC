@@ -8,6 +8,9 @@ import { updateLoading } from '../../redux/components/action'
 import { handleUser } from '../../redux/home/actions'
 
 const styles = makeStyles({
+    root: {
+        padding: 16
+    },
     contentPadding: {
         padding: 32,
     },
@@ -68,7 +71,7 @@ function Account(props) {
     }
 
     return (
-        <Grid container justify="center" alignItems="center">
+        <Grid className={classes.root} container justify="center" alignItems="center">
             <Paper className={classes.content}>
                 <Grid container direction="column">
                     <Grid className={classes.contentPadding}>

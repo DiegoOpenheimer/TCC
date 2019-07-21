@@ -25,7 +25,7 @@ module.exports = {
                 $or: filter
             }
         }
-        History.paginate(query, { page: Number(page), limit: Number(limit) })
+        History.paginate(query, { sort: { createdAt: -1 }, page: Number(page), limit: Number(limit) })
         .then(result => response.handlerResponse(res, result))
         .catch(e => response.handlerUnexpectError(res, 'error to get histories ' + e))
     }

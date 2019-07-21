@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core'
 
 const styles = makeStyles({
     root: {
-        height: '100%',
+        minHeight: '100vh',
     },
     contentLogo: {
         backgroundColor: '#536dfe',
@@ -30,7 +30,7 @@ const styles = makeStyles({
         margin: '16px 0px'
     },
     contentForgotPassword: {
-        width: 320,
+        width: '70%',
         height: '80%',
     },
     linearProgress: {

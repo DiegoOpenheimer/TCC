@@ -13,5 +13,6 @@ export const ROUTES = {
     HOME: '/home/dashboard',
     EMPLOYEES: '/home/employess',
     ACCOUNT: '/home/account',
-    HISTORY: '/home/history'
+    HISTORY: '/home/history',
+    SUGGESTION: '/home/suggestion'
 }

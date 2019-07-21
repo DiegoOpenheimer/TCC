@@ -1,7 +1,7 @@
 import React from 'react'
 import { Drawer, Grid, makeStyles, Divider, Typography, List, ListItemIcon, ListItemText, ListItem }  from '@material-ui/core'
 import createStyle from '../pages/home/style'
-import { Dashboard, People, AccountBox, History } from '@material-ui/icons'
+import { Dashboard, People, AccountBox, History, QuestionAnswer } from '@material-ui/icons'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
 import { ROUTES, EMPLOYEE_ROLE } from '../utils/constants'
@@ -91,6 +91,14 @@ const CustomDrawer = props => {
             isActive: pathname === ROUTES.HISTORY,
             onClick() { pathname !== ROUTES.HISTORY && handleRoute(ROUTES.HISTORY) }
         },
+        {
+            icon: <QuestionAnswer/>,
+            text: 'Dúvidas e sugestões',
+            url: ROUTES.SUGGESTION,
+            show: true,
+            isActive: pathname === ROUTES.SUGGESTION,
+            onClick() { pathname !== ROUTES.SUGGESTION && handleRoute(ROUTES.SUGGESTION) }
+        },
     ]
     function handleRoute(route) {
         props.history.push(route)
@@ -98,16 +106,19 @@ const CustomDrawer = props => {
 
     function buildListItem() {
         return items.map((item, index) => {
-            return (
-            <ListItem key={index.toString()} onClick={item.onClick} className={clsx(classes.listItem, { [classes.activeRoute]: item.isActive })} >
-                <ListItemIcon className={clsx(classes.icon, { [classes.iconActive]:item.isActive })}>
-                   { item.icon }
-                </ListItemIcon>
-                <ListItemText className={clsx(classes.listItemText, { [classes.listItemActive]: item.isActive })}>
-                   { item.text }
-                </ListItemText>
-            </ListItem>
-            )
+            if (item.show) {
+                return (
+                    <ListItem key={index.toString()} onClick={item.onClick} className={clsx(classes.listItem, { [classes.activeRoute]: item.isActive })} >
+                        <ListItemIcon className={clsx(classes.icon, { [classes.iconActive]:item.isActive })}>
+                        { item.icon }
+                        </ListItemIcon>
+                        <ListItemText className={clsx(classes.listItemText, { [classes.listItemActive]: item.isActive })}>
+                        { item.text }
+                        </ListItemText>
+                    </ListItem>
+                )
+            }
+            return null
         })
     }
 
