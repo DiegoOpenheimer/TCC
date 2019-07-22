@@ -59,10 +59,12 @@ const Suggestion = props => {
     
     const [ text, setText ] = useState('')
     useEffect(() => {
-        requestServer()
+        if (props.location.pathname === ROUTES.SUGGESTION) {
+            requestServer()
+        }
         return () => subject.complete()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [  ])
+    }, [ props.location.pathname ])
     function requestServer(page = props.page) {
         if (!props.isLoading) {
             props.requestSuggestions(page, props.limit, text, () => {

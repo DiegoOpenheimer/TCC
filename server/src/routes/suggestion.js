@@ -13,4 +13,6 @@ router.patch('/', validationJwt, suggestionController.addMessage)
 
 router.delete('/', validationJwt, suggestionController.removeSuggestion)
 
+router.delete('/message', validationJwt, suggestionController.removeMessage)
+
 module.exports = router

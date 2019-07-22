@@ -811,6 +811,46 @@ paths:
       security:
       - ApiKey: []
 
+  /suggestion/message:
+    delete:
+      tags:
+        - Suggestion
+      summary: remove message in suggestion by id
+      description: remove message in suggestion by id
+      operationId: removeMessageInSuggestionById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: id
+          type: object
+          properties:
+            suggestion:
+              type: string
+            message:
+              type: string
+          description: object with suggestion id and message id
+      responses:
+        '200':
+          description: suggestion
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
   /history:
     get:
       tags:

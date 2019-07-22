@@ -115,5 +115,15 @@ module.exports = {
                 response.handlerUnexpectError(res, `fail to add message ${e}`)
             }
         })
+    },
+
+    removeMessage(req, res) {
+        const { suggestion, message } = req.body
+        Suggestion.updateOne(
+            { _id: suggestion },
+            { $pull: { messages: { _id: message } } }
+        )
+        .then(_ => response.handlerResponse(res, { message: 'message removed' }))
+        .catch(e => response.handlerUnexpectError(res, `fail to remove a message ${e}`))
     }
 }

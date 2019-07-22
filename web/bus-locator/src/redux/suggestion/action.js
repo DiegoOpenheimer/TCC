@@ -37,3 +37,18 @@ export const getSuggestionById = (id, error = console.log) => dispatch => {
         error(e)
     })
 }
+
+export const removeMessage = (suggestion, message, success = console.log, error = console.log) => dispatch => {
+    dispatch(handleReducer(typesLoading.UPDATE_COMPONENT_LOADING, true))
+    network.delete('suggestion/message', { data: { suggestion, message } })
+    .then(response => {
+        dispatch(handleReducer(typesLoading.UPDATE_COMPONENT_LOADING, false))
+        success(response)
+    })
+    .catch(e => {
+        dispatch(handleReducer(typesLoading.UPDATE_COMPONENT_LOADING, false))
+        error(e)
+    })
+
+
+} 

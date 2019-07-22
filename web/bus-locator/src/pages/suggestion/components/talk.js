@@ -4,18 +4,18 @@ import { Send, Delete } from '@material-ui/icons'
 import styles from './styles'
 import { withRouter } from 'react-router-dom'
 import { connect, useDispatch } from 'react-redux'
-import { getSuggestionById } from '../../../redux/suggestion/action'
+import { getSuggestionById, removeMessage } from '../../../redux/suggestion/action'
 import { updateLoading } from '../../../redux/components/action'
 import network from '../../../services/network'
 import storage from '../../../services/storage'
 import { toast } from 'react-toastify'
 import clsx from 'clsx'
 
-const mapStateToProps = state => ({ suggestion: state.suggestion.suggestion, user: state.home.user })
+const mapStateToProps = state => ({ suggestion: state.suggestion.suggestion, user: state.home.user, loading: state.component.loading })
 
 export default connect(
     mapStateToProps,
-    { getSuggestionById }
+    { getSuggestionById, removeMessage }
 )(withRouter(function Talk(props) {
 
     const { suggestion } = props
@@ -43,7 +43,7 @@ export default connect(
                                     <p className={classes.date}>{ new Date(content.createdAt).toLocaleString() }</p>
                                     {
                                         props.user._id === content.by._id &&
-                                        <IconButton>
+                                        <IconButton onClick={() => removeMessage(content)}>
                                             <Delete />
                                         </IconButton>
                                     }
@@ -80,6 +80,17 @@ export default connect(
                 dispatch(updateLoading(false))
                 toast.error('Falha ao enviar mensagem')
             }
+        }
+    }
+
+    function removeMessage(message) {
+        if (!props.loading) {
+            props.removeMessage(
+                suggestion._id, 
+                message._id,
+                () => props.getSuggestionById(params.id),
+                () => toast.error('Houve um erro ao remover mensagem', {autoClose: 3000})
+            )
         }
     }
 
