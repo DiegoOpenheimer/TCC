@@ -58,7 +58,6 @@ const Suggestion = props => {
     })
     
     const [ text, setText ] = useState('')
-    const [ suggestion, setSuggestion ] = useState('')
     useEffect(() => {
         requestServer()
         return () => subject.complete()
@@ -92,10 +91,7 @@ const Suggestion = props => {
     function buildItems() {
         return props.docs.map(suggestion => {
             return (
-                <TableRow onClick={() => {
-                    setSuggestion(suggestion)
-                    props.history.push('/home/suggestion/talk')
-                }} hover key={suggestion._id}>
+                <TableRow onClick={() => props.history.push('/home/suggestion/' + suggestion._id)} hover key={suggestion._id}>
                     <TableCell align="center">{suggestion.name}</TableCell>
                     <TableCell align="center">{suggestion.title}</TableCell>
                     <TableCell align="center">{new Date(suggestion.createdAt).toLocaleString()}</TableCell>
@@ -143,7 +139,7 @@ const Suggestion = props => {
                         </Grid>
                     )
                 }} />
-                <Route exact path={ROUTES.SUGGESTION.concat('/talk')} render={() => <Talk suggestion={suggestion} />} />
+                <Route exact path={ROUTES.SUGGESTION.concat('/:id')} render={() => <Talk />} />
                 <Redirect from="*" to={ROUTES.HOME} />
             </Switch>
         </Grid>

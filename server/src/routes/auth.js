@@ -4,6 +4,6 @@ const authController = require('../controller/auth')
 const User = require('../model/user')
 const Employee = require('../model/employee')
 
-router.post('/user', validation.validateFields, authController.authenticate(User))
-router.post('/employee', validation.validateFields, authController.authenticate(Employee))
+router.post('/user', validation.validateFields, authController.authenticate(User, 'User'))
+router.post('/employee', validation.validateFields, authController.authenticate(Employee, 'Employee'))
 module.exports = router

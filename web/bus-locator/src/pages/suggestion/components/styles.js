@@ -3,12 +3,23 @@ import { makeStyles } from '@material-ui/core'
 export default makeStyles(theme => ({
     title: {
         margin: 0,
-        fontWeight: 'normal'
+        fontWeight: 'normal',
+    },
+    contentTitle: {
+        display: 'flex',
+        margin: '5px 32px',
+        alignItems: 'center',
+        '& h3': {
+            marginLeft: 16,
+            marginTop: 3
+        }
+    },
+    contentTalk: {
+        maxHeight: 'calc(100vh - 65px)'
     },
     contentMessages: {
         flex: 1,
-        padding: 32,
-        overflowY: 'auto'
+        overflowY: 'auto',
     },
     input: {
         flex: 1,
@@ -19,16 +30,19 @@ export default makeStyles(theme => ({
         backgroundColor: '#FFF',
         borderRadius: 2,
         display: 'flex',
-        marginTop: 20,
-        padding: 16,
-        flex: 1
+        flex: 1,
+        padding: 5
     },
     icon: {
         marginLeft: theme.spacing(1)
     },
+    footer: {
+        flex: .3,
+        padding: 16
+    },
     contentField: {
-        width: '50%',
-        minHeight: '50%',
+        width: '100%',
+        minHeight: '20vh',
         display: 'flex',
         flexDirection: 'column'
     },
@@ -37,7 +51,10 @@ export default makeStyles(theme => ({
         justifyContent: 'flex-end'
     },
     contentList: {
-        display: 'flex'
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'auto',
+        padding: '0px 32px 5px 32px'
     },
     card: {
         boxShadow: '0 1px 15px rgba(0,0,0,.04), 0 1px 6px rgba(0,0,0,.04)',
@@ -46,7 +63,9 @@ export default makeStyles(theme => ({
         backgroundColor: '#FFF',
         padding: 16,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        width: 'max-content',
+        maxWidth: '70%'
     },
     cardMessage: {
         display: 'flex',
@@ -57,7 +76,12 @@ export default makeStyles(theme => ({
         }
     },
     contentCard: {
-        marginTop: 16
+        marginTop: 16,
+        width: '100%'
+    },
+    contentRight: {
+        display: 'flex',
+        justifyContent: 'flex-end'
     },
     date: {
         marginLeft: '16px !important',
@@ -65,5 +89,9 @@ export default makeStyles(theme => ({
     },
     name: {
         fontStyle: 'italic'
+    },
+    contentTime: {
+        display: 'flex',
+        alignItems: 'center'
     }
 }))

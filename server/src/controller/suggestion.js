@@ -1,6 +1,10 @@
 const Suggestion = require('../model/suggestion')
 const response = require('./handlerResponse')
+const HandleError = require('./handlerError')
 const moment = require('moment')
+const jwt = require('../utils/jwt')
+
+const { History } = response
 
 Date.prototype.isValid = function () {
     return this.getTime() === this.getTime()
@@ -25,16 +29,47 @@ module.exports = {
                 $or: filter
             }
         }
-        Suggestion.paginate(query, { sort: { createdAt: -1 }, page: Number(page), limit: Number(limit), populate: { path: 'messages.by', select: '-password -status -_id -createdAt -updatedAt' } })
-        .then(result => response.handlerResponse(res, result))
+        Suggestion.paginate(query, { sort: { createdAt: -1 }, page: Number(page), limit: Number(limit), populate: { path: 'messages.by' } })
+        .then(result => {
+            if (result && result.docs) {
+                result.docs.forEach(doc => doc.messages.forEach(message => {
+                    if (message && message.by) {
+                        message.by.password = undefined
+                        message.by.createdAt = undefined
+                        message.by.updatedAt = undefined
+                        message.by.status = undefined
+                    }
+                }))
+            }
+            response.handlerResponse(res, result)
+        })
         .catch(e => response.handlerUnexpectError(res, 'error to get histories ' + e))
+    },
+
+    getSuggestionById(req, res) {
+        Suggestion.findById(req.params.id)
+        .populate('messages.by')
+        .then(suggestion => {
+            if (suggestion && suggestion.messages) {
+                suggestion.messages.forEach(message => {
+                    if (message && message.by) {
+                        message.by.password = undefined
+                        message.by.createdAt = undefined
+                        message.by.updatedAt = undefined
+                        message.by.status = undefined
+                    }
+                })
+            }
+            response.handlerResponse(res, suggestion || {})
+        })
+        .catch(e => response.handlerUnexpectError(res, `fail to get suggestion by id ${e}`))
     },
 
     registerSuggestion(req, res) {
         const suggestion = req.body
         Suggestion.create(suggestion)
         .then(_ => response.handlerResponse(res, 'Suggestion added'))
-        .catch(e => response.handlerUnexpectError(`fail to add suggestion ${e}`))
+        .catch(e => response.handlerUnexpectError(res, `fail to add suggestion ${e}`))
     },
 
     removeSuggestion(req, res) {
@@ -45,17 +80,40 @@ module.exports = {
     },
 
     addMessage(req, res) {
-        const { message, id } = req.body
+        const { data, id } = req.body
+        let nameUser
+        let title
+        const { email } = jwt.decode(req.headers.authorization)
         Suggestion.findById(id)
         .then(suggestion => {
             if (suggestion) {
-                suggestion.messages.push(message)
+                nameUser = suggestion.name
+                title = suggestion.title
+                data.createdAt = new Date()
+                suggestion.messages.push(data)
                 return suggestion.save()
             } else {
-                response.handlerResponse(res, { message: 'Suggestion no found', status: 404 })
+                return Promise.reject(new HandleError('Suggestion no found', 404))
             }
         })
-        .then(_ => response.handlerResponse(res, 'Message added'))
-        .catch(e => response.handlerUnexpectError(res, `fail to add message ${e}`))
+        .then(_ => {
+            response.handlerResponse(
+                res,
+                'Message added',
+                new History(
+                    `Usuário com email ${email},
+                    respondeu uma discussão com o título de ${title} ao usuário ${nameUser},
+                    com a seguinte mensagem: ${data.message}`,
+                    email
+                )
+            )
+        })
+        .catch(e => {
+            if (e instanceof HandleError) {
+                response.handlerResponse(res, e)
+            } else {
+                response.handlerUnexpectError(res, `fail to add message ${e}`)
+            }
+        })
     }
 }

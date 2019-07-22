@@ -3,6 +3,20 @@ const moongoosePaginate = require('mongoose-paginate')
 
 const Schema = mongoose.Schema
 
+const Comment = new Schema({
+    message: String,
+    by: {
+        type: mongoose.Schema.Types.ObjectId,
+        refPath: 'messages.onModel'
+    },
+    onModel: {
+        type: String,
+        required: true,
+        enum: ['User', 'Employee']
+    },
+    createdAt: Date
+})
+
 const SuggestionSchema = new Schema({
     author: {
         type: mongoose.Schema.Types.ObjectId,
@@ -10,18 +24,7 @@ const SuggestionSchema = new Schema({
     },
     title: String,
     name: String,
-    messages: [{
-        message: String,
-        by: {
-            type: mongoose.Schema.Types.ObjectId,
-            refPath: 'onModel'
-        }
-    }],
-    onModel: {
-        type: String,
-        required: true,
-        enum: ['User', 'Employee']
-    }
+    messages: [Comment],
 }, {
     timestamps: true
 })

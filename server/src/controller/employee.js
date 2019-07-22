@@ -98,7 +98,7 @@ const editEmployee = (req, res) => {
             }
             return employee.save()
         } else {
-            response.handlerResponse(res, new HandlerError('user not found', 401))
+            return Promise.reject(new HandlerError('user not found', 404))
         }
     })
     .then(employee => {
@@ -115,7 +115,13 @@ const editEmployee = (req, res) => {
             ...histories
         )
     })        
-    .catch(e => response.handlerUnexpectError(res, 'fail to edit employee ' + e))
+    .catch(e => {
+        if (e instanceof HandleError) {
+            response.handlerResponse(res, e)
+        } else {
+            response.handlerUnexpectError(res, 'fail to edit employee ' + e)
+        }
+    })
 }
 
 const enableAccount = (req, res) => {

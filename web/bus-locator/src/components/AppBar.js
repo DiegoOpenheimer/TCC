@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import createStyle from '../style/global'
 import createStyleLocal from '../pages/home/style'
 import { Menu, Close } from '@material-ui/icons'
@@ -38,7 +38,6 @@ const CustomAppBar = props => {
     const classesLocal = createStyleLocal()
     const [ open, setOpen ] = useState(false)
     const [ openDrawer, setDrawer ] = useState(false)
-    const [ title, setTitle ] = useState('')
     const [anchorEl, setAnchorEl] = React.useState(null)
     const size = props.usersNotAuthorized.length
 
@@ -47,14 +46,6 @@ const CustomAppBar = props => {
         props.onDrawer(!openDrawer)
         setDrawer(!openDrawer)
     }
-
-    useEffect(() => {
-        const value = titles[props.location.pathname]
-        if (value) {
-            setTitle(value)
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.location.pathname])
 
     function handleClick(event) {
         if (size) {
@@ -66,7 +57,6 @@ const CustomAppBar = props => {
             setOpen(!open)
         }
     }
-
     function verifyNotification() {
         if (size) {
             return (
@@ -112,7 +102,7 @@ const CustomAppBar = props => {
                     }
                     </IconButton>
                     <Typography variant="h6" className={classesLocal.title}>
-                        { title }
+                        { titles[props.location.pathname] || 'Painel de controle' }
                     </Typography>
                     {   (user && user.role === EMPLOYEE_ROLE.ADMIN) &&
                         <IconButton onClick={handleClick}>

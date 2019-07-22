@@ -56,3 +56,12 @@
 {"timestamp":"2019-07-20T14:41:42.743Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
 {"timestamp":"2019-07-20T14:42:00.468Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
 {"timestamp":"2019-07-20T14:42:11.440Z","message":"error to get histories CastError: Cast to date failed for value \"Invalid Date\" at path \"createdAt\" for model \"History\""}
+{"timestamp":"2019-07-21T20:18:40.221Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"{suggestionId}\" at path \"_id\" for model \"Suggestion\""}
+{"timestamp":"2019-07-21T20:19:23.681Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"{suggestionId}\" at path \"_id\" for model \"Suggestion\""}
+{"timestamp":"2019-07-21T20:20:17.144Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"{suggestionId}\" at path \"_id\" for model \"Suggestion\""}
+{"timestamp":"2019-07-21T20:20:40.396Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"12\" at path \"_id\" for model \"Suggestion\""}
+{"timestamp":"2019-07-21T20:37:09.332Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"[object Object]\" at path \"_id\" for model \"Suggestion\""}
+{"timestamp":"2019-07-21T20:37:15.292Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"[object Object]\" at path \"_id\" for model \"Suggestion\""}
+{"timestamp":"2019-07-21T20:37:47.287Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"[object Object]\" at path \"_id\" for model \"Suggestion\""}
+{"timestamp":"2019-07-21T20:38:18.572Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"undefined\" at path \"_id\" for model \"Suggestion\""}
+{"timestamp":"2019-07-21T22:20:42.076Z","message":"error to get histories TypeError: result.forEach is not a function"}

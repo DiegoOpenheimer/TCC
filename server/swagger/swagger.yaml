@@ -125,7 +125,7 @@ paths:
         '404':
           description: case user there is not
           schema:
-            $ref: '#/definitions/UserNotFound'
+            $ref: '#/definitions/NotFound'
         '500':
           description: unknown error
           schema:
@@ -172,7 +172,7 @@ paths:
         '404':
           description: case user there is not
           schema:
-            $ref: '#/definitions/UserNotFound'
+            $ref: '#/definitions/NotFound'
         '500':
           description: unknown error
           schema:
@@ -369,7 +369,7 @@ paths:
         '404':
           description: case user there is not
           schema:
-            $ref: '#/definitions/UserNotFound'
+            $ref: '#/definitions/NotFound'
         '500':
           description: unknown error
           schema:
@@ -463,7 +463,7 @@ paths:
         '404':
           description: case user there is not
           schema:
-            $ref: '#/definitions/UserNotFound'
+            $ref: '#/definitions/NotFound'
         '500':
           description: unknown error
           schema:
@@ -531,7 +531,7 @@ paths:
         '404':
           description: case user there is not
           schema:
-            $ref: '#/definitions/UserNotFound'
+            $ref: '#/definitions/NotFound'
         '500':
           description: unknown error
           schema:
@@ -572,7 +572,7 @@ paths:
         '404':
           description: case user there is not
           schema:
-            $ref: '#/definitions/UserNotFound'
+            $ref: '#/definitions/NotFound'
         '500':
           description: unknown error
           schema:
@@ -607,7 +607,7 @@ paths:
           description: get with filter
       responses:
         '200':
-          description: Histories
+          description: Suggestions
           schema:
             type: object
             properties:
@@ -703,10 +703,13 @@ paths:
               data:
                 type: object
                 properties:
-                  id:
+                  by:
                     type: string
                   message:
                     type: string
+                  onModel:
+                    type: string
+                    enum: ["User", "Employee"]
           description: add a message to suggestion
       responses:
         '200':
@@ -754,6 +757,45 @@ paths:
             properties:
                 message:
                   string: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
+  /suggestion/{id}:
+    get:
+      tags:
+        - Suggestion
+      summary: get suggestion by id
+      description: get suggestion by id
+      operationId: getSuggestionById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          description: suggestion id
+      responses:
+        '200':
+          description: suggestion
+          schema:
+            type: object
+            properties:
+              schema:
+                $ref: '#/definitions/Suggestion'        
         '401':
           description: Not Authorzied
           schema:
@@ -880,12 +922,12 @@ definitions:
     properties:
       email:
         type: string
-  UserNotFound:
+  NotFound:
     type: object
     properties:
       message:
         type: string
-        example: user not found
+        example: entity not found
       status:
         type: integer
         example: 404
@@ -951,8 +993,6 @@ definitions:
         type: string
       createdAt:
         type: string
-      onModel:
-        type: string
       messages:
         type: array
         items:
@@ -960,6 +1000,8 @@ definitions:
             message:
               type: string
             by:
+              type: string
+            onModel:
               type: string
             
 components:
@@ -972,7 +1014,7 @@ components:
       '404':
         description: case user there is not
         schema:
-          $ref: '#/definitions/UserNotFound'
+          $ref: '#/definitions/NotFound'
       '500':
         description: unknown error
         schema:

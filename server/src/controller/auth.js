@@ -4,7 +4,7 @@ const response = require('./handlerResponse')
 const logger = require('../utils/logger')
 const constants = require('../utils/constants')
 
-const authenticate = Entity => (req, res) => {
+const authenticate = (Entity, nameEntity) => (req, res) => {
     const user = req.body
     let role
     let name
@@ -28,6 +28,7 @@ const authenticate = Entity => (req, res) => {
             if (role) {
                 jwtOb.role = role
             }
+            jwtOb.entity = nameEntity
             const token = jwt.signJwt(jwtOb)
             response.handlerResponse(res, { message: 'authorized', token, status: 200 })
         } else {
