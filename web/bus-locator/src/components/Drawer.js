@@ -1,7 +1,7 @@
 import React from 'react'
 import { Drawer, Grid, makeStyles, Divider, Typography, List, ListItemIcon, ListItemText, ListItem }  from '@material-ui/core'
 import createStyle from '../pages/home/style'
-import { Dashboard, People, AccountBox, History, QuestionAnswer } from '@material-ui/icons'
+import { Dashboard, People, AccountBox, History, QuestionAnswer, LocationOn } from '@material-ui/icons'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
 import { ROUTES, EMPLOYEE_ROLE } from '../utils/constants'
@@ -64,7 +64,7 @@ const CustomDrawer = props => {
             text: 'Painel de controle',
             url: ROUTES.HOME,
             show: true,
-            isActive: pathname === ROUTES.HOME,
+            isActive: pathname.includes(ROUTES.HOME),
             onClick() { pathname !== ROUTES.HOME && handleRoute(ROUTES.HOME) }
         },
         {
@@ -72,7 +72,7 @@ const CustomDrawer = props => {
             text: 'Minha Conta',
             url: ROUTES.ACCOUNT,
             show: true,
-            isActive: pathname === ROUTES.ACCOUNT,
+            isActive: pathname.includes(ROUTES.ACCOUNT),
             onClick() { pathname !== ROUTES.ACCOUNT && handleRoute(ROUTES.ACCOUNT) }
         },
         {
@@ -80,7 +80,7 @@ const CustomDrawer = props => {
             text: 'Funcionários',
             url: ROUTES.EMPLOYEES,
             show: true,
-            isActive: pathname === ROUTES.EMPLOYEES,
+            isActive: pathname.includes(ROUTES.EMPLOYEES),
             onClick() { pathname !== ROUTES.EMPLOYEES && handleRoute(ROUTES.EMPLOYEES) }
         },
         {
@@ -88,7 +88,7 @@ const CustomDrawer = props => {
             text: 'Histórico',
             url: ROUTES.HISTORY,
             show: isAdmin,
-            isActive: pathname === ROUTES.HISTORY,
+            isActive: pathname.includes(ROUTES.HISTORY),
             onClick() { pathname !== ROUTES.HISTORY && handleRoute(ROUTES.HISTORY) }
         },
         {
@@ -96,8 +96,16 @@ const CustomDrawer = props => {
             text: 'Dúvidas e sugestões',
             url: ROUTES.SUGGESTION,
             show: true,
-            isActive: pathname === ROUTES.SUGGESTION,
+            isActive: pathname.includes(ROUTES.SUGGESTION),
             onClick() { pathname !== ROUTES.SUGGESTION && handleRoute(ROUTES.SUGGESTION) }
+        },
+        {
+            icon: <LocationOn/>,
+            text: 'Dispositivos',
+            url: ROUTES.DEVICES,
+            show: true,
+            isActive: pathname.includes(ROUTES.DEVICES),
+            onClick() { pathname !== ROUTES.DEVICES && handleRoute(ROUTES.DEVICES) }
         },
     ]
     function handleRoute(route) {

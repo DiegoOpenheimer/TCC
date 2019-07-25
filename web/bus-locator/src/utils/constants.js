@@ -14,5 +14,7 @@ export const ROUTES = {
     EMPLOYEES: '/home/employess',
     ACCOUNT: '/home/account',
     HISTORY: '/home/history',
-    SUGGESTION: '/home/suggestion'
+    SUGGESTION: '/home/suggestion',
+    DEVICES: '/home/devices',
+    ADD_DEVICES: '/home/devices/add',
 }
