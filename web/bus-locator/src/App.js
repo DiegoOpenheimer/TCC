@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import Login from './pages/login/login'
 import Home from './pages/home/home'
+import './services/mqtt'
 
 function App() {
   toast.configure({ position: toast.POSITION.BOTTOM_RIGHT })

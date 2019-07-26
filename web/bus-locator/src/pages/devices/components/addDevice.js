@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Stepper, Step, StepLabel, makeStyles, TextField, Fab, colors } from '@material-ui/core'
 import { updateLoading } from '../../../redux/components/action'
 import { useSelector, useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import clsx from 'clsx'
+import client from '../../../services/mqtt'
+import { timer } from 'rxjs'
 
 const styles = makeStyles({
     content: {
@@ -30,31 +32,58 @@ const styles = makeStyles({
 })
 
 const CONNECTED = 'Conectado'
-const DESCONNECTED = 'Desconectado'
+const DISCONNECTED = 'Desconectado'
 const CONNECTING = 'Conectando...'
 const steps = [ 'Conectar no dispositivo', 'Definir rotas', 'Definir linha e descrição' ]
+let subscription
 
 export default function AddDevice(props) {
     
     const [ step, setActiveStep ] = useState(0)
     const [ status, setStatus ] = useState('Status')
-    const [ device, setDevice ] = useState('')
+    const [ device, setDevice ] = useState({ text: '', topic: '' })
     const classes = styles()
     const dispatch = useDispatch()
     const loading = useSelector(state => state.component.loading)
+
+    useEffect(() => {
+        return () => {
+            client.removeListener('message', onMessage)
+            client.unsubscribe(device.topic)
+            dispatch(updateLoading(false))
+            if (subscription) {
+                subscription.unsubscribe()
+            }
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [  ])
    
     function tryConnection() {
-        if (!props.loading) {
+        if (!loading) {
             if (device) {
+                client.subscribe(device.topic)
+                client.publish(device.text.concat('/ping'), 'ping')
+                client.addListener('message', onMessage)
+                subscription = timer(10000).subscribe(() => {
+                    client.unsubscribe(device.topic)
+                    dispatch(updateLoading(false))
+                    setStatus(DISCONNECTED)
+                })
                 dispatch(updateLoading(true))
                 setStatus(CONNECTING)
-                setTimeout(() => {
-                    dispatch(updateLoading(false))
-                    setStatus(CONNECTED)        
-                }, 3000)
+                
             } else {
                 toast.info('Informe o identificador do dispositivo')
             }
+        }
+    }
+
+    function onMessage(topic, message) {
+        if (topic === device.topic && message.toString() === 'pong') {
+            client.unsubscribe(device.topic)
+            dispatch(updateLoading(false))
+            setStatus(CONNECTED)
+            subscription.unsubscribe()
         }
     }
 
@@ -62,10 +91,11 @@ export default function AddDevice(props) {
         if (step === 0) {
             return (
                 <Grid container alignItems="center" justify="center" direction="column" className={clsx(classes.padding, classes.content)}>
-                    <h2 className={clsx({ [classes.colorPositive]: status === CONNECTED, [classes.colorNegative]: status === DESCONNECTED })}>{status}</h2>
+                    <h2 className={clsx({ [classes.colorPositive]: status === CONNECTED, [classes.colorNegative]: status === DISCONNECTED })}>{status}</h2>
                     <TextField
-                        value={device}
-                        onChange={ev => setDevice(ev.target.value)}
+                        disabled={loading}
+                        value={device.text}
+                        onChange={ev => setDevice({...device, text: ev.target.value, topic: ev.target.value + '/pong'})}
                         className={classes.input}
                         variant="outlined"
                         placeholder="Informe identificador do dispositivo"

@@ -66,7 +66,10 @@ const Employee = props => {
     let emailToBeRemoved = ''
     const isAdmin = props.user.role === EMPLOYEE_ROLE.ADMIN
     useEffect(() => {
-        requestServer()
+        props.requestEmployees(props.page, props.data.limit, text, () => {
+            toast.error('Falha na comunicação com o servidor')
+        })
+
         return () => subject.complete()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [  ])

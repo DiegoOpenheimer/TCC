@@ -55,7 +55,9 @@ const History = props => {
     
     const [ text, setText ] = useState('')
     useEffect(() => {
-        requestServer()
+        props.requestHistories(props.page, props.limit, text, () => {
+            toast.error('Falha na comunicação com o servidor')
+        })
         return () => subject.complete()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [  ])

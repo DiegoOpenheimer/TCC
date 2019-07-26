@@ -55,7 +55,7 @@ const Home = props => {
         } else {
             let show = true
             const callback = () => {
-                if (show) {
+                if (show && props.location.pathname === ROUTES.HOME) {
                     toast.error('Erro de comunicação com servidor, verique sua conexão')
                 }
                 show = false

@@ -60,7 +60,9 @@ const Suggestion = props => {
     const [ text, setText ] = useState('')
     useEffect(() => {
         if (props.location.pathname === ROUTES.SUGGESTION) {
-            requestServer()
+            props.requestSuggestions(props.page, props.limit, text, () => {
+                toast.error('Falha na comunicação com o servidor')
+            })
         }
         return () => subject.complete()
     // eslint-disable-next-line react-hooks/exhaustive-deps
