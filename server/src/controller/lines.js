@@ -20,7 +20,7 @@ function getLines(req, res) {
     }
     Line.paginate(query, { page: Number(page), limit: Number(limit) })
     .then(result => response.handlerResponse(res, result))
-    .catch(e => response.handlerUnexpectError(res, 'error to get employees ' + e))
+    .catch(e => response.handlerUnexpectError(res, 'error to get lines ' + e))
 }
 
 function getLineById(req, res) {

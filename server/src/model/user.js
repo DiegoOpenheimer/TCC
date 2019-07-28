@@ -19,11 +19,13 @@ const userSchema = new Schema({
 userSchema.pre('save', function(next) {
     user = this
     if (user.isModified('name')) {
-        Suggestion.findOne({ author: this._id })
-        .then(suggestion => {
-            if (suggestion) {
-                suggestion.name = this.name
-                suggestion.save()
+        Suggestion.find({ author: this._id })
+        .then(suggestions => {
+            if (suggestions) {
+                suggestions.forEach(suggestion => {
+                    suggestion.name = this.name
+                    suggestion.save()
+                })
             }
         })
     }

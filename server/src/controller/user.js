@@ -121,9 +121,35 @@ const changePassword = (req, res) => {
 const userAmount = (_, res) => {
     User.countDocuments()
     .then(count => response.handlerResponse(res, { count }))
-    .catch(_ => response.handlerUnexpectError(res, 'Fail to get users amount'))
+    .catch(e => response.handlerUnexpectError(res, `Fail to get users amount ${e}`))
 }
 
+const getUserLogged = (req, res) => {
+    const token = req.headers.authorization
+    const { email } = jwt.decode(token)
+    User.findOne({ email })
+    .select(['-password'])
+    .then(result => response.handlerResponse(res, result))
+    .catch(e => response.handlerUnexpectError(res, `fail to get user logged ${e}`))
+}
+
+const editUser = (req, res) => {
+    const user = req.body
+    User.findById(user._id)
+    .then(userFound => {
+        if (userFound) {
+            for (const key in user) {
+                if (userFound[key]) {
+                    userFound[key] = user[key]
+                }
+            }
+            return userFound.save()
+        }
+        return Promise.reject(new HandlerError('Not found', 404))
+    })
+    .then(_ => response.handlerResponse(res, { message: 'user edited' }))
+    .catch(e => response.handlerUnexpectError(res, `Fail to edit user ${e}`))
+}
 
 module.exports = {
     createUser,
@@ -131,5 +157,7 @@ module.exports = {
     recoverPassword,
     changePassword,
     renderPageToChangePassword,
-    userAmount
+    userAmount,
+    getUserLogged,
+    editUser
 }

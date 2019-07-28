@@ -38,3 +38,8 @@
 {"timestamp":"2019-07-28T15:14:02.306Z","message":"error to get employees CastError: Cast to Can't use $regex with Number. failed for value \"undefined\" at path \"undefined\" for model \"Lines\""}
 {"timestamp":"2019-07-28T15:14:42.415Z","message":"error to get employees CastError: Cast to number failed for value \"/1/gi\" at path \"number\" for model \"Lines\""}
 {"timestamp":"2019-07-28T15:16:07.685Z","message":"error to get employees CastError: Cast to number failed for value \"Diego\" at path \"number\" for model \"Lines\""}
+{"timestamp":"2019-07-28T17:22:35.486Z","message":"Error to edit device ValidationError: line: Cast to ObjectID failed for value \"{ _id: 'string' }\" at path \"line\""}
+{"timestamp":"2019-07-28T17:26:50.889Z","message":"Error to edit device MongoError: E11000 duplicate key error collection: tcc.devices index: uuid_1 dup key: { : \"1234\" }"}
+{"timestamp":"2019-07-28T18:28:20.115Z","message":"fail to edit userTypeError: this.isModified is not a function"}
+{"timestamp":"2019-07-28T18:30:05.072Z","message":"fail to enable account TypeError: this.isModified is not a function"}
+{"timestamp":"2019-07-28T18:32:44.751Z","message":"fail to edit user[object Object]"}

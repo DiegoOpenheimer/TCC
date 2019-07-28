@@ -7,6 +7,10 @@ router.post('/', validation.handlerCreateUser, userController.createUser)
 
 router.get('/count', validationJwt, userController.userAmount)
 
+router.get('/logged', validationJwt, userController.getUserLogged)
+
+router.put('/', validationJwt, userController.editUser)
+
 router.post('/recover-password', validation.handleField('email'), userController.recoverPassword)
 
 router.get('/recover-password/:id', validation.validationId, userController.renderPageToChangePassword)

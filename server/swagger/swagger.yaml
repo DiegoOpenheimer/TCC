@@ -23,6 +23,8 @@ tags:
     description: Everything about suggestions
   - name: Line
     description: Everything about lines
+  - name: Device
+    description: Everything about device
 schemes:
   - http
 paths:
@@ -61,6 +63,43 @@ paths:
           description: unknown error
           schema:
             $ref: '#/definitions/UnknownServerError'
+    put:
+      tags:
+        - User
+      summary: edit a user
+      description: edit a user
+      operationId: editUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: User object that needs to be edited
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: User edited
+          schema:
+            $ref: '#/definitions/ApiResponseOk'
+        '400':
+          description: Bad request
+          schema:
+            $ref: '#/definitions/ApiResponseBadRequest'
+        '409':
+          description: Conflict with user
+          schema:
+            $ref: '#/definitions/ApiResponseConflict'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+            
   /user/count:
     get:
       tags:
@@ -90,6 +129,34 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
+
+  /user/logged:
+    get:
+      tags:
+        - User
+      summary: get user logged
+      description: get user logged
+      operationId: getUserLogged
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: User logged
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+      
   /user/recover-password:
     post:
       tags:
@@ -179,6 +246,8 @@ paths:
           description: unknown error
           schema:
             $ref: '#/definitions/UnknownServerError'  
+      security:
+      - ApiKey: []
   /employee:
     post:
       tags:
@@ -978,7 +1047,7 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
-  
+
   /line:
     put:
       tags:
@@ -1115,6 +1184,222 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
+      
+  /device/{id}:
+    delete:
+      tags:
+        - Device
+      summary: remove a device
+      description: remove a device
+      operationId: removeDeviceById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          description: device id to be removed
+          required: true
+      responses:
+        '200':
+          description: device
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+    get:
+      tags:
+        - Device
+      summary: get a device by id
+      description: get a device
+      operationId: getDeviceById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          description: device id
+          required: true
+      responses:
+        '200':
+          description: device
+          schema:
+            type: object
+            properties:
+              schema:
+                $ref: '#/definitions/Device'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+  /device:
+    put:
+      tags:
+        - Device
+      summary: edit a device
+      description: edit a device
+      operationId: editDevice
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: device
+          schema:
+            $ref: '#/definitions/Device'
+          description: device object
+      responses:
+        '200':
+          description: device
+          schema:
+            type: object
+            properties:
+              message:
+                type: string        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '409':
+          description: conflict
+          schema:
+            $ref: '#/definitions/ApiResponseConflict'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
+    post:
+      tags:
+        - Device
+      summary: create a device
+      description: create a device
+      operationId: createDevice
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: device
+          schema:
+            $ref: '#/definitions/Device'
+          description: device object
+      responses:
+        '200':
+          description: device
+          schema:
+            type: object
+            properties:
+              message:
+                type: string        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '409':
+          description: conflict
+          schema:
+            $ref: '#/definitions/ApiResponseConflict'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+    get:
+      tags:
+        - Device
+      summary: get device
+      description: get device
+      operationId: getDevice
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          type: number
+          description: limit for device
+        - in: query
+          name: page
+          type: number
+          description: page for device
+        - in: query
+          name: field
+          type: string
+          description: get with filter
+      responses:
+        '200':
+            description: success operation
+            schema:
+              type: object
+              properties:
+                limit:
+                  type: number
+                page:
+                  type: number
+                total:
+                  type: number
+                docs:
+                  type: array
+                  items:
+                    $ref: '#/definitions/Line'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
 
 securityDefinitions:
   ApiKey:
@@ -1125,6 +1410,8 @@ definitions:
   User:
     type: object
     properties:
+      _id:
+        type: string
       name:
         type: string
       email:
@@ -1272,3 +1559,16 @@ definitions:
       directions:
           type: object
 
+  Device:
+    type: object
+    properties:
+      _id:
+        type: string
+      uuid:
+        type: string
+      latitude:
+        type: number
+      longitude:
+        type: number
+      line:
+        $ref: '#/definitions/Line'
