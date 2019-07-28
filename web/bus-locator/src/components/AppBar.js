@@ -32,6 +32,10 @@ const CustomAppBar = props => {
         [ROUTES.ACCOUNT]: 'Minha Conta',
         [ROUTES.HISTORY]: 'Histórico',
         [ROUTES.SUGGESTION]: 'Dúvidas e sugestões',
+        [ROUTES.DEVICES]: 'Dipositivos',
+        [ROUTES.ADD_DEVICES]: 'Adicionar dispositivo',
+        [ROUTES.LINES]: 'Linhas',
+        [ROUTES.ADD_LINES]: 'Adicionar linha',
     }
     const user = useSelector(state => state.home.user)
     const classes = createStyle()

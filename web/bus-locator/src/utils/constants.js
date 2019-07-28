@@ -17,4 +17,6 @@ export const ROUTES = {
     SUGGESTION: '/home/suggestion',
     DEVICES: '/home/devices',
     ADD_DEVICES: '/home/devices/add',
+    LINES: '/home/lines',
+    ADD_LINES: '/home/lines/add',
 }

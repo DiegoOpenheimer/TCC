@@ -18,6 +18,7 @@ import Account from '../account/account'
 import History from '../history/history'
 import Suggestion from '../suggestion/suggestion'
 import Devices from '../devices/devices'
+import Lines from '../lines/lines'
 import Loading from '../../components/loading'
 
 const Home = props => {
@@ -120,6 +121,7 @@ const Home = props => {
                         <Route path={ROUTES.HISTORY} component={History} />
                         <Route path={ROUTES.SUGGESTION} component={Suggestion} />
                         <Route path={ROUTES.DEVICES} component={Devices} />
+                        <Route path={ROUTES.LINES} component={Lines} />
                         <Redirect from="*" to={ROUTES.HOME} />
                     </Switch>
                 </Grid>

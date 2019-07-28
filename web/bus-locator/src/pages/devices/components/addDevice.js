@@ -34,7 +34,7 @@ const styles = makeStyles({
 const CONNECTED = 'Conectado'
 const DISCONNECTED = 'Desconectado'
 const CONNECTING = 'Conectando...'
-const steps = [ 'Conectar no dispositivo', 'Definir rotas', 'Definir linha e descrição' ]
+const steps = [ 'Conectar no dispositivo', 'Associar com uma linha' ]
 let subscription
 
 export default function AddDevice(props) {

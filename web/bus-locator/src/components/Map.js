@@ -16,11 +16,11 @@ export default compose(
 
 function HandleMap(props) {
 
-    const { directions, children } = props
+    const { children } = props
     
     return (
         <GoogleMap defaultZoom={15} defaultCenter={props.center} >
-            { (directions && children) && children }
+            { children && children }
         </GoogleMap>
     )
 }

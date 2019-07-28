@@ -1,7 +1,7 @@
 import React from 'react'
 import { Drawer, Grid, makeStyles, Divider, Typography, List, ListItemIcon, ListItemText, ListItem }  from '@material-ui/core'
 import createStyle from '../pages/home/style'
-import { Dashboard, People, AccountBox, History, QuestionAnswer, LocationOn } from '@material-ui/icons'
+import { Dashboard, People, AccountBox, History, QuestionAnswer, LocationOn, Directions } from '@material-ui/icons'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
 import { ROUTES, EMPLOYEE_ROLE } from '../utils/constants'
@@ -106,6 +106,14 @@ const CustomDrawer = props => {
             show: true,
             isActive: pathname.includes(ROUTES.DEVICES),
             onClick() { pathname !== ROUTES.DEVICES && handleRoute(ROUTES.DEVICES) }
+        },
+        {
+            icon: <Directions/>,
+            text: 'Linhas',
+            url: ROUTES.LINES,
+            show: true,
+            isActive: pathname.includes(ROUTES.LINES),
+            onClick() { pathname !== ROUTES.LINES && handleRoute(ROUTES.LINES) }
         },
     ]
     function handleRoute(route) {

@@ -10,5 +10,14 @@ export default makeStyles({
         left: 0,
         width: '100%',
         zIndex: 10000
+    },
+    container: {
+        padding: 16
+    },
+    maxWidth: {
+        width: '100%'
+    },
+    maxHeight: {
+        height: '100%'
     }
 })
