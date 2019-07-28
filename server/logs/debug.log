@@ -65,3 +65,6 @@
 {"timestamp":"2019-07-21T20:37:47.287Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"[object Object]\" at path \"_id\" for model \"Suggestion\""}
 {"timestamp":"2019-07-21T20:38:18.572Z","message":"fail to get suggestion by id CastError: Cast to ObjectId failed for value \"undefined\" at path \"_id\" for model \"Suggestion\""}
 {"timestamp":"2019-07-21T22:20:42.076Z","message":"error to get histories TypeError: result.forEach is not a function"}
+{"timestamp":"2019-07-28T15:14:02.306Z","message":"error to get employees CastError: Cast to Can't use $regex with Number. failed for value \"undefined\" at path \"undefined\" for model \"Lines\""}
+{"timestamp":"2019-07-28T15:14:42.415Z","message":"error to get employees CastError: Cast to number failed for value \"/1/gi\" at path \"number\" for model \"Lines\""}
+{"timestamp":"2019-07-28T15:16:07.685Z","message":"error to get employees CastError: Cast to number failed for value \"Diego\" at path \"number\" for model \"Lines\""}

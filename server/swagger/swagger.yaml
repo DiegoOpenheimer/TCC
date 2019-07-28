@@ -21,6 +21,8 @@ tags:
     description: Everything about histories
   - name: Suggestion
     description: Everything about suggestions
+  - name: Line
+    description: Everything about lines
 schemes:
   - http
 paths:
@@ -54,7 +56,7 @@ paths:
         '409':
           description: Conflict with user
           schema:
-            $ref: '#/definitions/ApiResponseConflictUser'
+            $ref: '#/definitions/ApiResponseConflict'
         '500':
           description: unknown error
           schema:
@@ -207,7 +209,7 @@ paths:
         '409':
           description: Conflict with employee
           schema:
-            $ref: '#/definitions/ApiResponseConflictUser'
+            $ref: '#/definitions/ApiResponseConflict'
         '500':
           description: unknown error
           schema:
@@ -225,18 +227,15 @@ paths:
       parameters:
         - in: query
           name: limit
-          schema:
-            type: number
+          type: number
           description: limit for employees
         - in: query
           name: page
-          schema:
-            type: number
+          type: number
           description: page for employees
         - in: query
           name: field
-          schema:
-            type: string
+          type: string
           description: get with filter
       responses:
         '200':
@@ -338,7 +337,7 @@ paths:
         - Employee
       summary: End point to render page to change password to employee
       description: Recover password
-      operationId: requestToRecoverPassword
+      operationId: requestToRecoverPasswordEmployee
       consumes:
         - application/json
       produces:
@@ -429,7 +428,7 @@ paths:
         - Employee
       summary: End point to recover password to employee
       description: Recover password
-      operationId: recoverPassword
+      operationId: recoverPasswordEmployee
       consumes:
         - application/json
       produces:
@@ -592,18 +591,15 @@ paths:
       parameters:
         - in: query
           name: limit
-          schema:
-            type: number
+          type: number
           description: limit for employees
         - in: query
           name: page
-          schema:
-            type: number
+          type: number
           description: page for employees
         - in: query
           name: field
-          schema:
-            type: string
+          type: string
           description: get with filter
       responses:
         '200':
@@ -670,7 +666,7 @@ paths:
             type: object
             properties:
                 message:
-                  string: string
+                  type: string
         '401':
           description: Not Authorzied
           schema:
@@ -717,8 +713,8 @@ paths:
           schema:
             type: object
             properties:
-                message:
-                  string: string
+              message:
+                type: string
         '401':
           description: Not Authorzied
           schema:
@@ -755,8 +751,8 @@ paths:
           schema:
             type: object
             properties:
-                message:
-                  string: string
+              message:
+                type: string
         '401':
           description: Not Authorzied
           schema:
@@ -787,6 +783,7 @@ paths:
         - in: path
           name: id
           type: string
+          required: true
           description: suggestion id
       responses:
         '200':
@@ -825,12 +822,13 @@ paths:
       parameters:
         - in: body
           name: id
-          type: object
-          properties:
-            suggestion:
-              type: string
-            message:
-              type: string
+          schema:
+            type: object
+            properties:
+              suggestion:
+                type: string
+              message:
+                type: string
           description: object with suggestion id and message id
       responses:
         '200':
@@ -865,18 +863,15 @@ paths:
       parameters:
         - in: query
           name: limit
-          schema:
-            type: number
+          type: number
           description: limit for employees
         - in: query
           name: page
-          schema:
-            type: number
+          type: number
           description: page for employees
         - in: query
           name: field
-          schema:
-            type: string
+          type: string
           description: get with filter
       responses:
         '200':
@@ -904,6 +899,223 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
+
+  /line/{id}:
+    delete:
+      tags:
+        - Line
+      summary: remove a line
+      description: remove a line
+      operationId: removeLineById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          description: line id to be removed
+          required: true
+      responses:
+        '200':
+          description: line
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+    get:
+      tags:
+        - Line
+      summary: get a line by id
+      description: get a line
+      operationId: getLineById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          description: line id
+          required: true
+      responses:
+        '200':
+          description: line
+          schema:
+            type: object
+            properties:
+              schema:
+                $ref: '#/definitions/Line'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+  /line:
+    put:
+      tags:
+        - Line
+      summary: edit a line
+      description: edit a line
+      operationId: editLineById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: line
+          schema:
+            $ref: '#/definitions/Line'
+          description: line object
+      responses:
+        '200':
+          description: line
+          schema:
+            type: object
+            properties:
+              message:
+                type: string        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '409':
+          description: conflict
+          schema:
+            $ref: '#/definitions/ApiResponseConflict'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
+    post:
+      tags:
+        - Line
+      summary: create a line
+      description: create a line
+      operationId: createLineById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: line
+          schema:
+            $ref: '#/definitions/Line'
+          description: line object
+      responses:
+        '200':
+          description: line
+          schema:
+            type: object
+            properties:
+              message:
+                type: string        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '409':
+          description: conflict
+          schema:
+            $ref: '#/definitions/ApiResponseConflict'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+    get:
+      tags:
+        - Line
+      summary: get lines
+      description: get lines
+      operationId: getLinesById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          type: number
+          description: limit for lines
+        - in: query
+          name: page
+          type: number
+          description: page for lines
+        - in: query
+          name: field
+          type: string
+          description: get with filter
+      responses:
+        '200':
+            description: success operation
+            schema:
+              type: object
+              properties:
+                limit:
+                  type: number
+                page:
+                  type: number
+                total:
+                  type: number
+                docs:
+                  type: array
+                  items:
+                    $ref: '#/definitions/Line'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
 securityDefinitions:
   ApiKey:
     type: apiKey
@@ -939,12 +1151,12 @@ definitions:
       status:
         type: integer
         example: 200
-  ApiResponseConflictUser:
+  ApiResponseConflict:
     type: object
     properties:
       message:
         type: string
-        example: user already registered
+        example: entity used
       status:
         type: integer
         example: 409
@@ -1026,9 +1238,7 @@ definitions:
       _id:
         type: string
       author:
-        type: object
-        schema:
-          $ref: '#/definitions/User'
+        $ref: '#/definitions/User'
       title:
         type: string
       createdAt:
@@ -1043,19 +1253,22 @@ definitions:
               type: string
             onModel:
               type: string
-            
-components:
-  schemas:
-    mResponses:
-      '400':
-        description: bad request
-        schema:
-          $ref: '#/definitions/ApiResponseBadRequest'
-      '404':
-        description: case user there is not
-        schema:
-          $ref: '#/definitions/NotFound'
-      '500':
-        description: unknown error
-        schema:
-          $ref: '#/definitions/UnknownServerError'  
+  Line:
+    type: object
+    properties:
+      _id:
+        type: string
+      number:
+        type: number
+      description:
+        type: string
+      routes:
+        type: array
+        items:
+          type: object
+          properties:
+            route:
+                type: string
+      directions:
+          type: object
+
