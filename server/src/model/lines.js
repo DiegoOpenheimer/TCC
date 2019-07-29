@@ -8,11 +8,18 @@ const RouteSchema = new Schema({
     route: String
 })
 
+const PointSchema = new Schema({
+    name: String,
+    lng: Number,
+    lat: Number
+})
+
 const LineSchema = new Schema({
     number: { type: Number, unique: true },
     description: String,
     routes: [RouteSchema],
-    directions: Object
+    directions: Object,
+    points: [PointSchema]
 }, { timestamps: true })
 
 LineSchema.plugin(mongoosePaginate)

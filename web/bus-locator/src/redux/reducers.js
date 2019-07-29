@@ -7,6 +7,7 @@ import employee from './employees/reducer'
 import component from './components/reducer'
 import history from './history/reducer'
 import suggestion from './suggestion/reducer'
+import line from './lines/reducer'
 
 const reducers = combineReducers({
     login,
@@ -14,7 +15,8 @@ const reducers = combineReducers({
     employee,
     component,
     history,
-    suggestion
+    suggestion,
+    line
 })
 
 export default reducers

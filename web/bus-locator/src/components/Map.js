@@ -16,10 +16,10 @@ export default compose(
 
 function HandleMap(props) {
 
-    const { children } = props
+    const { children, onClick } = props
     
     return (
-        <GoogleMap defaultZoom={15} defaultCenter={props.center} >
+        <GoogleMap defaultZoom={15} onClick={ev => onClick && onClick(ev)} defaultCenter={props.center} >
             { children && children }
         </GoogleMap>
     )

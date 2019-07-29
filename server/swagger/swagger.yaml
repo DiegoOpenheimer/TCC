@@ -1558,6 +1558,16 @@ definitions:
                 type: string
       directions:
           type: object
+      points:
+        type: array
+        items:
+          properties:
+            name:
+              type: string
+            longitude:
+              type: number
+            latitude:
+              type: number
 
   Device:
     type: object

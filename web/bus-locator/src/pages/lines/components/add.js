@@ -1,21 +1,47 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Grid, TextField, IconButton, InputAdornment, Paper, Button } from '@material-ui/core'
 import globalStyle from '../../../style/global'
 import { Clear, AddCircle, Search, Save } from '@material-ui/icons'
 import clsx from 'clsx'
 import Maps from '../../../components/Map'
-import { DirectionsRenderer } from 'react-google-maps'
+import { DirectionsRenderer, Marker, OverlayView } from 'react-google-maps'
 import { toast } from 'react-toastify'
 import localStyles from '../styles'
+import DialogInput from '../../../components/dialogInput'
+import { connect } from 'react-redux'
+import { createLine, getLineById } from '../../../redux/lines/action'
 
-export default () => {
+const AddLine = props => {
 
     const classes = globalStyle()
     const styles = localStyles()
     const refDirections = useRef(null)
+    const { id } = props.match.params
     const [ directions, setDirections ] = useState()
     const [ information, setInformation ] = useState({ line: '', description: '', errorLine: '', errorDescription: '' })
     const [ routes, setRoutes ] = useState([ { route: '' }, { route: '' } ])
+    const [ markers, setMarkers ] = useState([])
+    const [ dialog, setDialog ] = useState({ index: null, text: '', open: false })
+
+    useEffect(() => {
+        if (id) {
+            props.getLineById(id, () => {
+                toast.error('Falha ao buscar dados da linha, tente novamente')
+                props.history.goBack()
+            })
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ ])
+
+    useEffect(() => {
+        if (props.line && Object.keys(props.line).length) {
+            setRoutes([ ...props.line.routes ])
+            setMarkers([ ...props.line.points ])
+            setDirections(props.line.directions)
+            setInformation({ line: props.line.number, description: props.line.description })
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ props.line ])
 
     function buildInputRoutes() {
         return routes.map((content, index) => {
@@ -71,7 +97,6 @@ export default () => {
                 } else if (status === google.maps.DirectionsStatus.NOT_FOUND) {
                     toast.error('Rota não encontrada, verifique os caminhos inseridos')
                 } else {
-                    console.log('error fetching direction ', result)
                     toast.error('Falha ao requisitar rota')
                 }
             })
@@ -81,24 +106,86 @@ export default () => {
     function saveLine() {
         let formOk = true
         const info = { ...information }
-        if (!info.line) {
-            info.errorLine = 'Campo vazio'
-            formOk = false
-        }
-        if (!info.description) {
-            info.errorDescription = 'Campo vazio'
-            formOk = false
-        }
-        if (!formOk) {
-            setInformation(info)
-            return
-        } else {
-            if (refDirections.current) {
-                console.log(refDirections.current.getDirections())
+        if (!props.loading) {
+            if (!info.line) {
+                info.errorLine = 'Campo vazio'
+                formOk = false
+            }
+            if (!info.description) {
+                info.errorDescription = 'Campo vazio'
+                formOk = false
+            }
+            if (!formOk) {
+                setInformation(info)
+                return
+            } else {
+                if (refDirections.current) {
+                    const body = {
+                        number: information.line,
+                        description: information.description,
+                        routes,
+                        directions: refDirections.current.getDirections(),
+                        points: markers
+                    }
+                    props.createLine(body, () => {
+                        toast.success('Linha cadastrada com sucesso')
+                        props.history.goBack()
+                    }, () => toast.error('Falha ao criar linha'))
+                } else {
+                    toast.info('Busque pela rota adicionada para renderizar no mapa')
+                }
             }
         }
     }
 
+    function onConfirm() {
+        if (!dialog.text) {
+            toast.info('Informe o nome do marcador')
+        } else {
+            if (dialog.index !== null) {
+                setMarkers(old => {
+                    const newMarkers = [...old]
+                    newMarkers[dialog.index].name = dialog.text
+                    return newMarkers
+                })
+            }
+            setDialog({ ...dialog, text: '', open: false, index: null })
+        }
+    }
+
+    function buildMarkers() {
+        const callbackCloseOverlay = index => _ => {
+            setMarkers(old => {
+                const newMarkers = [...old]
+                newMarkers[index].showOverlayView = !newMarkers[index].showOverlayView
+                return newMarkers
+            })
+         }
+        return markers.map((marker, index) => {
+            return (
+                <React.Fragment key={index.toString()}>
+                    <Marker onClick={callbackCloseOverlay(index)} title={marker.name} clickable={true} draggable={true} position={{ lat: marker.lat, lng: marker.lng }} />
+                    {
+                        marker.showOverlayView &&
+                        <OverlayView mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}  position={{ lat: marker.lat, lng: marker.lng }}>
+                            <Paper className={classes.container}>
+                                <Grid container direction="column">
+                                    <h4>Nome do ponto: {marker.name}</h4>
+                                    <Button onClick={callbackCloseOverlay(index)}>Fechar</Button>
+                                    <Button onClick={() => {
+                                        setDialog({ ...dialog, index, text: marker.name, open: true })
+                                        callbackCloseOverlay(index)()
+                                    }}>Editar</Button>
+                                    <Button onClick={() => setMarkers([ ...markers.filter((_, i) => index !== i) ])}>Remover</Button>
+                                </Grid>
+                            </Paper>
+                        </OverlayView>
+
+                    }
+                </React.Fragment>
+            )
+        })
+    }
     return (
         <Grid container className={classes.container} wrap="nowrap" direction="column">
             <Grid alignItems="center" container>
@@ -140,13 +227,35 @@ export default () => {
                             </IconButton>
                         </Grid>
                         <Grid className={styles.contentMap} container>
-                            <Maps>
+                            <Maps onClick={({latLng}) => {
+                                if (!markers.some(marker => marker.showOverlayView)) {
+                                    setMarkers([ ...markers, { lat: latLng.lat(), lng: latLng.lng(), showOverlayView: false, name: '' } ])
+                                    setDialog({ ...dialog, index: markers.length, open: true })
+                                }
+                            }}>
                                 { directions && <DirectionsRenderer ref={refDirections} options={{draggable: true}} directions={directions} /> }
+                                { buildMarkers() }
                             </Maps>
                         </Grid>
                     </Grid>
                 </Paper>
             </Grid>
+            <DialogInput
+                open={dialog.open}
+                title="Atenção"
+                message="Informe o nome do marcador"
+                label="Nome"
+                onChange={ev => setDialog({ ...dialog, text: ev.target.value })}
+                onConfirm={onConfirm}
+                textButton="Salvar"
+                text={dialog.text}
+                textCancel="Cancelar"
+                onCancel={() => setDialog({ ...dialog, text: '', index: null, open: false })}
+            />
         </Grid>
     )
 }
+
+const mapStateToProps = state => ({ loading: state.component.loading, line: state.line.lineEdited })
+
+export default connect(mapStateToProps, { createLine, getLineById })(AddLine)

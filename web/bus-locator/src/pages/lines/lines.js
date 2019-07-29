@@ -9,6 +9,7 @@ export default () => {
         <Switch>
             <Route path={ROUTES.LINES} exact component={List} />
             <Route path={ROUTES.ADD_LINES} exact component={Add} />
+            <Route path={ROUTES.ADD_LINES.concat('/:id')} exact component={Add} />
             <Redirect from="*" to={ROUTES.LINES} />
         </Switch>
     )
