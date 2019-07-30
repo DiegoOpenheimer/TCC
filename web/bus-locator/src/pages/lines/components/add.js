@@ -9,7 +9,7 @@ import { toast } from 'react-toastify'
 import localStyles from '../styles'
 import DialogInput from '../../../components/dialogInput'
 import { connect } from 'react-redux'
-import { createLine, getLineById } from '../../../redux/lines/action'
+import { createLine, getLineById, editLine } from '../../../redux/lines/action'
 
 const AddLine = props => {
 
@@ -22,8 +22,10 @@ const AddLine = props => {
     const [ routes, setRoutes ] = useState([ { route: '' }, { route: '' } ])
     const [ markers, setMarkers ] = useState([])
     const [ dialog, setDialog ] = useState({ index: null, text: '', open: false })
+    const [ load, setLoad ] = useState()
 
     useEffect(() => {
+        window.initMap = setLoad
         if (id) {
             props.getLineById(id, () => {
                 toast.error('Falha ao buscar dados da linha, tente novamente')
@@ -34,14 +36,49 @@ const AddLine = props => {
     }, [ ])
 
     useEffect(() => {
-        if (props.line && Object.keys(props.line).length) {
+        if (props.line && Object.keys(props.line).length && window.google) {
             setRoutes([ ...props.line.routes ])
             setMarkers([ ...props.line.points ])
-            setDirections(props.line.directions)
+            const { google } = window
+            const DirectionService = new google.maps.DirectionsService()
+            const routes = []
+            routes.push(props.line.directions.request.origin)
+            routes.push(...props.line.directions.request.waypoints)
+            routes.push(props.line.directions.request.destination)
+            const origin = routes[0]
+            const destination = routes[routes.length - 1]
+            const options = {
+                origin: filterRoute(origin),
+                destination: filterRoute(destination),
+                waypoints: routes.filter((_, index) => index !== 0 && index !== routes.length - 1)
+                .map(filterRoute),
+                optimizeWaypoints: true,
+                travelMode: google.maps.TravelMode.DRIVING,
+                avoidTolls: true
+            }
+            DirectionService.route(options, (result, status) => {
+                if (status === google.maps.DirectionsStatus.OK) {
+                    setDirections({ ...directions, ...result })
+                } else if (status === google.maps.DirectionsStatus.NOT_FOUND) {
+                    toast.error('Rota não encontrada, verifique os caminhos inseridos')
+                } else {
+                    toast.error('Falha ao requisitar rota')
+                }
+            })
             setInformation({ line: props.line.number, description: props.line.description })
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ props.line ])
+    }, [ props.line, load ])
+
+    function filterRoute(route) {
+        const { google } = window
+        if ('location' in route) {
+            return route
+        } else if ('query' in route) {
+            return route.query
+        }
+        return new google.maps.LatLng(route.lat, route.lng)
+    }
 
     function buildInputRoutes() {
         return routes.map((content, index) => {
@@ -127,10 +164,25 @@ const AddLine = props => {
                         directions: refDirections.current.getDirections(),
                         points: markers
                     }
-                    props.createLine(body, () => {
-                        toast.success('Linha cadastrada com sucesso')
-                        props.history.goBack()
-                    }, () => toast.error('Falha ao criar linha'))
+                    const callbackError = message => ({ response }) => {
+                        if (response && response.status === 409) {
+                            toast.error('Já existe uma linha cadastrada com esse número')
+                        } else {
+                            toast.error(message)
+                        }
+                    }
+                    if (id) {
+                        body._id = props.line._id
+                        props.editLine(body, () => {
+                            toast.success('Linha editada com sucesso')
+                            props.history.goBack()
+                        }, callbackError('Falha ao editar linha'))
+                    } else {
+                        props.createLine(body, () => {
+                            toast.success('Linha cadastrada com sucesso')
+                            props.history.goBack()
+                        }, callbackError('Falha ao criar linha'))
+                    }
                 } else {
                     toast.info('Busque pela rota adicionada para renderizar no mapa')
                 }
@@ -258,4 +310,4 @@ const AddLine = props => {
 
 const mapStateToProps = state => ({ loading: state.component.loading, line: state.line.lineEdited })
 
-export default connect(mapStateToProps, { createLine, getLineById })(AddLine)
+export default connect(mapStateToProps, { createLine, getLineById, editLine })(AddLine)

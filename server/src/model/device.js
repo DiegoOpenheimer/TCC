@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 
 
 const deviceSchema = new Schema({
+    name: String,
     uuid: { type: String, unique: true },
     longitude: Number,
     latitude: Number,

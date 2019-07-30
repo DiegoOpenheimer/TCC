@@ -38,6 +38,19 @@ export const createLine = (body, success = console.log, error = console.log) => 
     })
 }
 
+export const editLine = (body, success = console.log, error = console.log) => dispatch => {
+    dispatch(handleReducer(typesLoading.UPDATE_COMPONENT_LOADING, true))
+    network.put(`line`, body)
+    .then(response => {
+        dispatch(handleReducer(typesLoading.UPDATE_COMPONENT_LOADING, false))
+        success(response)
+    })
+    .catch(e => {
+        dispatch(handleReducer(typesLoading.UPDATE_COMPONENT_LOADING, false))
+        error(e)
+    })
+}
+
 export const getLineById = (id, error = console.log) => dispatch => {
     dispatch(handleReducer(typesLoading.UPDATE_COMPONENT_LOADING, true))
     network.get(`line/${id}`)

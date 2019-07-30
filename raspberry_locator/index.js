@@ -29,10 +29,10 @@
 
 const si = require('systeminformation')
 
-si.system(result => {
+si.uuid(result => {
   const mqtt = require('mqtt')
-  const TOPIC_PING = result.uuid + '/ping'
-  const TOPIC_PONG = result.uuid + '/pong'
+  const TOPIC_PING = result.os + '/ping'
+  const TOPIC_PONG = result.os + '/pong'
   const CLIENT_ID = 'mqtt_rasp' + Math.random().toString(16).substr(2, 8)
 
   const client = mqtt.connect('mqtt://localhost:1883', { username: 'TCC', password: 'TCC', clientId: CLIENT_ID })
@@ -49,3 +49,6 @@ si.system(result => {
     }
   })
 })
+
+const macAddress = require('macaddress')
+macAddress.one(console.log)

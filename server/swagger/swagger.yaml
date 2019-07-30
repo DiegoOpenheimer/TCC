@@ -1574,6 +1574,8 @@ definitions:
     properties:
       _id:
         type: string
+      name:
+        type: string
       uuid:
         type: string
       latitude:
