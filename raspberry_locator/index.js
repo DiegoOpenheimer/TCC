@@ -4,10 +4,16 @@ let send = true
 
 const port = new SerialPort('/dev/ttyAMA0', {
   baudRate: 9200,
+  autoOpen: false
 })
 
 const gps = new GPS
 
+port.open(err => {
+  if (err) {
+    console.log('Fail to open port')
+  }
+})
  
 gps.on('data', data => {
   publishLocation(data)
@@ -42,13 +48,9 @@ si.uuid(result => {
   client.on('disconnect', () => console.log('disconnected'))
   client.on('error', (e) => console.log('error', e))
   client.on('offline', () => console.log('offline'))
-
   client.on('message', (topic, message) => {
     if (topic === TOPIC_PING && message.toString() === 'ping') {
       client.publish(TOPIC_PONG, 'pong')
     }
   })
 })
-
-const macAddress = require('macaddress')
-macAddress.one(console.log)
