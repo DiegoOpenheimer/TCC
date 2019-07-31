@@ -110,4 +110,10 @@ function removeLine(req, res) {
     })
 }
 
-module.exports = { getLines, getLineById, editLine, removeLine, createLine }
+function getLinesToAssociate(_, res) {
+    Line.find().select(['-routes', '-directions', '-points', '-__v', '-createdAt', '-updatedAt'])
+    .then(result => response.handlerResponse(res, result))
+    .catch(e => response.handlerUnexpectError(`Fail to get lines to associate ${e}`))
+}
+
+module.exports = { getLines, getLineById, editLine, removeLine, createLine, getLinesToAssociate }

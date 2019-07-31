@@ -74,3 +74,4 @@
 {"timestamp":"2019-07-28T18:29:33.326Z","message":"email sent to diegoop.pa@hotmail.com with subject Confirmação de conta"}
 {"timestamp":"2019-07-28T18:30:05.072Z","message":"fail to enable account TypeError: this.isModified is not a function"}
 {"timestamp":"2019-07-28T18:32:44.751Z","message":"fail to edit user[object Object]"}
+{"timestamp":"2019-07-30T23:17:32.861Z","message":"Error to get line by id CastError: Cast to ObjectId failed for value \"associate\" at path \"_id\" for model \"Lines\""}

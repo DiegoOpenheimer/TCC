@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "gps": "^0.5.1",
-    "macaddress": "^0.2.9",
     "mqtt": "^3.0.0",
     "node-sass": "^4.12.0",
     "serialport": "^7.1.4",

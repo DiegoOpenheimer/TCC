@@ -1184,6 +1184,44 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
+
+  /line/associate:
+    get:
+      tags:
+        - Line
+      summary: get lines
+      description: get lines
+      operationId: get lines to associate with device
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+            description: success operation
+            schema:
+              type: object
+              properties:
+                _id:
+                  type: string
+                number:
+                  type: number
+                description:
+                  type: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
       
   /device/{id}:
     delete:
