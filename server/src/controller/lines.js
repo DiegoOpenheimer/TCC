@@ -85,7 +85,7 @@ async function createLine(req, res) {
 
 function removeLine(req, res) {
     const { id } = req.params
-    const { email } = jwt.decode(req.headers.authorization).email
+    const { email } = jwt.decode(req.headers.authorization)
     let lineNumber
     Line.findById(id)
     .then(line => {

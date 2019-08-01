@@ -21,5 +21,8 @@ export default makeStyles({
     },
     colorNegative: {
         color: `${colors.red.A700} !important`
+    },
+    textResult: {
+        marginLeft: 16
     }
 })

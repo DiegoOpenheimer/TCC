@@ -13,13 +13,13 @@ function getDevices(req, res) {
     if (queryField) {
         const regexField = new RegExp(queryField, "gi")
         query = {
-            $or: [ { uuid: { $regex: regexField } }, { 'lineDescription': { $regex: regexField } } ]
+            $or: [ { name: { $regex: regexField } }, { uuid: { $regex: regexField } }, { 'lineDescription': { $regex: regexField } } ]
         }
         if (!isNaN(Number(queryField))) {
             query.$or.push({ 'lineNumber': queryField })
         }
     }
-    Device.paginate(query, { page: Number(page), limit: Number(limit), populate: 'line' })
+    Device.paginate(query, { page: Number(page), limit: Number(limit) })
     .then(result => response.handlerResponse(res, result))
     .catch(e => response.handlerUnexpectError(res, 'error to get devices ' + e))
 }
@@ -52,6 +52,10 @@ async function editDevice(req, res) {
 async function createDevice(req, res) {
     const device = req.body
     try {
+        const findDevice = await Device.find({ uuid: device.uuid })
+        if (findDevice.length) {
+            throw new HandleError('Device already registered', 409)
+        }
         const deviceCreated = await Device.create(device)
         const line = await Line.findById(device.line)
         deviceCreated.lineNumber = line.number

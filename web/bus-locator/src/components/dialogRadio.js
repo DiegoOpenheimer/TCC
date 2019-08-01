@@ -9,7 +9,7 @@ import Radio from '@material-ui/core/Radio'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 
-export function ConfirmationDialogRaw(props) {
+export default function(props) {
   const {
       onClose,
       value: valueProp,
@@ -63,11 +63,11 @@ export function ConfirmationDialogRaw(props) {
           ref={radioGroupRef}
           aria-label="ringtone"
           name="ringtone"
-          value={value}
+          value={value || ''}
           onChange={handleChange}
         >
           {options.map((option, index) => (
-            <FormControlLabel value={option} key={index.toString()} control={<Radio />} label={option} />
+            <FormControlLabel value={option._id} key={index.toString()} control={<Radio />} label={`${option.number} - ${option.description}`} />
           ))}
         </RadioGroup>
       </DialogContent>

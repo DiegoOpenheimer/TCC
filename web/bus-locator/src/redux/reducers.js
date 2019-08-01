@@ -8,6 +8,7 @@ import component from './components/reducer'
 import history from './history/reducer'
 import suggestion from './suggestion/reducer'
 import line from './lines/reducer'
+import device from './devices/reducer'
 
 const reducers = combineReducers({
     login,
@@ -16,7 +17,8 @@ const reducers = combineReducers({
     component,
     history,
     suggestion,
-    line
+    line,
+    device
 })
 
 export default reducers
