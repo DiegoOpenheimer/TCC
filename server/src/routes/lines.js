@@ -8,6 +8,10 @@ router.get('/associate', jwt, lineController.getLinesToAssociate)
 
 router.get('/', jwt, lineController.getLines)
 
+router.get('/count', jwt, lineController.lineAmount)
+
+router.get('/score', jwt, lineController.getScoreLine)
+
 router.put('/', jwt, validationFields, lineController.editLine)
 
 router.post('/', jwt, validationFields, lineController.createLine)

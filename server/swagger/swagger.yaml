@@ -969,6 +969,71 @@ paths:
       security:
       - ApiKey: []
 
+  /line/count:
+    get:
+      tags:
+        - Line
+      summary: get amount line
+      description: get amount line
+      operationId: getAmountline
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: line
+          schema:
+            type: object
+            properties:
+              count:
+                type: number        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
+  /line/score:
+    get:
+      tags:
+        - Line
+      summary: get score line
+      description: get score line
+      operationId: getScoreline
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: filter
+          type: string
+          description: filter line or get all score
+          required: true
+      responses:
+        '200':
+          description: line
+          schema:
+            type: array
+            items:
+              type: integer
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
   /line/{id}:
     delete:
       tags:
@@ -1301,6 +1366,36 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
+
+  /device/count:
+    get:
+      tags:
+        - Device
+      summary: get amount device
+      description: get amount device
+      operationId: getAmountDevice
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: device
+          schema:
+            type: object
+            properties:
+              count:
+                type: number        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
   
   /device:
     put:
@@ -1606,6 +1701,16 @@ definitions:
               type: number
             latitude:
               type: number
+      score:
+        type: array
+        items:
+          properties:
+            _id:
+              type: string
+            description:
+              type: string
+            star:
+              type: string
 
   Device:
     type: object

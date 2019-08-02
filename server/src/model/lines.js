@@ -14,12 +14,19 @@ const PointSchema = new Schema({
     lat: Number
 })
 
+const ScoreSchema = new Schema({
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
+    description: String,
+    star: Number
+})
+
 const LineSchema = new Schema({
     number: { type: Number, unique: true },
     description: String,
     routes: [RouteSchema],
     directions: Object,
-    points: [PointSchema]
+    points: [PointSchema],
+    score: [ScoreSchema]
 }, { timestamps: true })
 
 LineSchema.plugin(mongoosePaginate)
@@ -37,6 +44,21 @@ LineSchema.pre('save', function(next) {
             }
         })
     }
+    next()
+})
+
+LineSchema.pre('remove', function(next) {
+    Device.find({ line: { _id: this._id } })
+    .then(devices => {
+        if (devices) {
+            devices.forEach(device => {
+                device.line = null
+                device.lineNumber = null
+                device.lineDescription = null
+                device.save()
+            })
+        }
+    })
     next()
 })
 

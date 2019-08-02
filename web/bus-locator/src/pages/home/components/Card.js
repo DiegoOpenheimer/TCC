@@ -5,33 +5,33 @@ import { Replay } from '@material-ui/icons'
 
 const Card = props => {
 
-    const { title, content, icon, isLoading, error, buttonError } = props
+    const { title, content, icon, isLoading, error, buttonError, styleIcon, textColors, styleCard } = props
     const classesLocal = createStyleLocal()
     const checkLoading = () => {
         if (isLoading) {
-            return <CircularProgress />
+            return <CircularProgress style={textColors && {color: textColors}} />
         } else if (error) {
             return (
                 <div>
                     <IconButton onClick={buttonError} >
-                        <Replay />
+                        <Replay style={textColors && {color: textColors}} />
                     </IconButton>
                 </div>
             )
         }
-        return <Typography className={classesLocal.result} variant="h4">{content}</Typography>
+        return <Typography style={textColors && {color: textColors}} className={classesLocal.result} variant="h4">{content}</Typography>
     }
 
     return (
-        <Grid item xs={12} sm={6} md={6} lg={3} xl={3}>
-            <Paper className={classesLocal.paper}>
+        <Grid className={classesLocal.card} item xs={12} sm={4} md={4} lg={3} xl={3}>
+            <Paper style={styleCard} className={classesLocal.paper}>
                 <Grid container direction="row" wrap="nowrap" justify="center" alignItems="center">
                     <Grid className={classesLocal.contentInformation} item container direction="column">
-                        <p>{title}</p>
+                        <p style={textColors && {color: textColors}}>{title}</p>
                         { checkLoading() }
                     </Grid>
                     <Grid className={classesLocal.contentIcon} container>
-                        <Icon className={classesLocal.icon}>{icon}</Icon>
+                        <Icon className={classesLocal.icon} style={styleIcon}>{icon}</Icon>
                     </Grid>
                 </Grid>                      
             </Paper>

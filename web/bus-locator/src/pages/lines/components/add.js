@@ -157,11 +157,15 @@ const AddLine = props => {
                 return
             } else {
                 if (refDirections.current) {
+                    const directions = refDirections.current.getDirections()
                     const body = {
                         number: information.line,
                         description: information.description,
                         routes,
-                        directions: refDirections.current.getDirections(),
+                        directions: {
+                            request: directions.request,
+                            routes: directions.routes[0].overview_path
+                        },
                         points: markers
                     }
                     const callbackError = message => ({ response }) => {

@@ -38,6 +38,12 @@ function getDeviceById(req, res) {
 async function editDevice(req, res) {
     const device = req.body
     try {
+        const line = await Line.findOne({ number: device.lineNumber })
+        if (!line) {
+            throw new HandleError('Line does not found', 404)
+        }
+        device.line = line._id
+        device.lineDescription = line.description
         await Device.findByIdAndUpdate(device._id, device)
         response.handlerResponse(res, { message: 'Device edited' })
     } catch (e) {
@@ -98,4 +104,10 @@ function removeDevice(req, res) {
     })
 }
 
-module.exports = { getDevices, getDeviceById, editDevice, removeDevice, createDevice }
+function deviceAmount(_, res) {
+    Device.countDocuments()
+    .then(count => response.handlerResponse(res, { count }))
+    .catch(e => response.handlerUnexpectError(res, `Fail to get devices amount ${e}`))
+}
+
+module.exports = { getDevices, getDeviceById, editDevice, removeDevice, createDevice, deviceAmount }

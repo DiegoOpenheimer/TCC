@@ -47,7 +47,7 @@ function SecondStep(props) {
             props.history.goBack()
         }, ({response}) => {
             if (response && response.status === 409) {
-                toast.error('Já existe um dispositivo cadastrado com esse identificador')
+                toast.error('Dispositivo já cadastrado')
             } else {
                 toast.error('Falha ao cadastrar dispositivo')
             }

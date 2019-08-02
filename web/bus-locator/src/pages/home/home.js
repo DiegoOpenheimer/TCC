@@ -4,9 +4,8 @@ import createStyle from '../../style/global'
 import Dialog from '../../components/dialog'
 import AppBar from '../../components/AppBar'
 import CustomDialog from '../../components/CustomDialog'
-import Card from './components/Card'
 import createStyleLocal from './style'
-import { requestTotalUsers, requestEmployeeToEnable, requestUser, logout } from '../../redux/home/actions'
+import { requestEmployeeToEnable, requestUser, logout } from '../../redux/home/actions'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 import { Redirect, Route, Switch } from 'react-router-dom'
@@ -20,12 +19,10 @@ import Suggestion from '../suggestion/suggestion'
 import Devices from '../devices/devices'
 import Lines from '../lines/lines'
 import Loading from '../../components/loading'
+import Dashboard from './components/Dashboard'
 
 const Home = props => {
-    const { isLoadingTotalUsers,
-        totalUsers,
-        requestTotalUsers,
-        errorLoadTotalUsers,
+    const {
         requestEmployeeToEnable,
         usersNotAuthorized,
         requestUser,
@@ -61,7 +58,6 @@ const Home = props => {
                 }
                 show = false
             }
-            requestTotalUsers(callback)
             requestEmployeeToEnable(callback)
             requestUser(callback)
         }
@@ -106,16 +102,7 @@ const Home = props => {
 
                 <Grid item container className={clsx(classesLocal.content, { [classesLocal.contentShift]: openDrawer })}>
                     <Switch>
-                        <Route exact path={ROUTES.HOME} render={() =>
-                            <Grid className={classesLocal.contentCard} item container>
-                                   <Card
-                                buttonError={() => requestTotalUsers()}
-                                error={errorLoadTotalUsers}
-                                isLoading={isLoadingTotalUsers}
-                                icon="people_outline"
-                                title="Total de usuários"
-                                content={totalUsers} />
-                            </Grid>} />
+                        <Route exact path={ROUTES.HOME} component={Dashboard} />
                         <Route path={ROUTES.EMPLOYEES} component={Employee} />
                         <Route path={ROUTES.ACCOUNT} component={Account} />
                         <Route path={ROUTES.HISTORY} component={History} />
@@ -132,11 +119,8 @@ const Home = props => {
 
 const mapStateToProps = state => {
     return {
-        isLoadingTotalUsers: state.home.isLoadingTotalUsers,
-        totalUsers: state.home.totalUsers,
-        errorLoadTotalUsers: state.home.errorLoadTotalUsers,
         usersNotAuthorized: state.home.usersNotAuthorized
     }
 }
 
-export default connect(mapStateToProps, { requestTotalUsers, requestEmployeeToEnable, requestUser, logout })(Home)
+export default connect(mapStateToProps, { requestEmployeeToEnable, requestUser, logout })(Home)

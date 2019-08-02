@@ -138,23 +138,27 @@ const Devices = props => {
                             columns={[
                                 { title: 'Nome', field: 'name' },
                                 { title: 'Identificador', field: 'uuid', editable: 'never' },
-                                { title: 'Linha', field: 'lineNumber', type: 'numeric' },
+                                { title: 'Linha', field: 'lineNumber', type: 'numeric', min: 0 },
                                 { title: 'Descrição da linha', field: 'lineDescription', editable: 'never' },
                             ]}
                             title="Dispositivos"
                             onRowClick={console.log}
                             data={props.docs}
                             editable={{
-                                onRowUpdate: (newData, oldData) =>
+                                onRowUpdate: (newData) =>
                                     new Promise((resolve) => {
                                         updateDevice(newData, () => {
                                             props.requestDevices(props.page, props.limit, text, resolve, () => {
                                                 toast.error('Falha na comunicação com o servidor')
                                             })
                                             toast.success('Dispositivo editado com sucesso')
-                                        }, () => {
+                                        }, ({ response }) => {
                                             resolve()
-                                            toast.error('Falha ao editar dispositivo')
+                                            if (response && response.status === 404) {
+                                                toast.error('A linha para associação não foi encontrada')
+                                            } else {
+                                                toast.error('Falha ao editar dispositivo')
+                                            }
                                         })
                                     }),
                                 onRowDelete: oldData =>

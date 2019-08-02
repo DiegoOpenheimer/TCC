@@ -78,7 +78,11 @@ export default makeStyles(theme => ({
         padding: 0
     },
     contentCard: {
-        padding: 16
+        padding: 8,
+    },
+    card: {
+        marginLeft: 8,
+        marginTop: 8
     },
     drawer: {
         width: drawerWidth,
