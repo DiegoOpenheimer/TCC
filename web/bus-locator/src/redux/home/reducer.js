@@ -11,7 +11,10 @@ const INITIAL_STATE = {
   isLoadingTotalLines: false,
   errorLoadTotalLines: false,
   usersNotAuthorized: [],
-  user: { name: "", email: "", role: "" }
+  user: { name: "", email: "", role: "" },
+  score: [],
+  isLoadingScore: false,
+  errorToLoadScore: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -38,6 +41,12 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, usersNotAuthorized: [...action.payload.value] };
     case type.UPDATE_USER:
       return { ...state, user: { ...action.payload.value } };
+    case type.UPDATE_SCORE:
+        return { ...state, score: action.payload.value }
+    case type.LOADING_SCORE:
+        return { ...state, isLoadingScore: action.payload.value }
+    case type.ERROR_LOAD_SCORE:
+        return { ...state, errorToLoadScore: action.payload.value }
     default:
       return { ...state };
   }

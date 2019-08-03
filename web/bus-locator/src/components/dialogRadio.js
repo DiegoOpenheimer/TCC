@@ -67,7 +67,7 @@ export default function(props) {
           onChange={handleChange}
         >
           {options.map((option, index) => (
-            <FormControlLabel value={option._id} key={index.toString()} control={<Radio />} label={`${option.number} - ${option.description}`} />
+            <FormControlLabel value={option._id} key={index.toString()} control={<Radio />} label={`${option.number || ''} - ${option.description}`} />
           ))}
         </RadioGroup>
       </DialogContent>

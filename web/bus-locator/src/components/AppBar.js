@@ -36,6 +36,7 @@ const CustomAppBar = props => {
         [ROUTES.ADD_DEVICES]: 'Adicionar dispositivo',
         [ROUTES.LINES]: 'Linhas',
         [ROUTES.ADD_LINES]: 'Adicionar linha',
+        [ROUTES.MAP]: 'Mapa',
     }
     const user = useSelector(state => state.home.user)
     const classes = createStyle()

@@ -12,6 +12,9 @@ export const type = {
     LOADING_TOTAL_LINES: 'LOADING_TOTAL_LINES',
     USERS_NOT_AUTHORIZED: 'USERS_NOT_AUTHORIZED',
     UPDATE_USER: 'UPDATE_USER',
+    UPDATE_SCORE: 'UPDATE_SCORE',
+    LOADING_SCORE: 'LOADING_SCORE',
+    ERROR_LOAD_SCORE: 'ERROR_LOAD_SCORE',
 }
 
 const handleTotalUsers = value => ({ type: type.TOTAL_USERS, payload: { value } })
@@ -24,6 +27,9 @@ const handleTotalLines = value => ({ type: type.TOTAL_LINES, payload: { value } 
 const handleLoadingTotalLines = value => ({ type: type.LOADING_TOTAL_LINES, payload: { value } })
 const handleErrorTotalLines = value => ({ type: type.ERROR_LOAD_TOTAL_LINES, payload: { value } })
 const handleTotalUsersNotAuthorized = value => ({ type: type.USERS_NOT_AUTHORIZED, payload: { value } })
+const handleScore = value => ({ type: type.UPDATE_SCORE, payload: { value } })
+const handleLoadingScore = value => ({ type: type.LOADING_SCORE, payload: { value } })
+const handleErrorScore = value => ({ type: type.ERROR_LOAD_SCORE, payload: { value } })
 export const handleUser = value => ({ type: type.UPDATE_USER, payload: { value } })
 
 
@@ -67,7 +73,6 @@ export const requestTotalLines = (error = console.log) => dispatch => {
   network
     .get("line/count")
     .then(response => {
-      dispatch(handleErrorTotalLines(false));
       dispatch(handleLoadingTotalLines(false));
       dispatch(handleTotalLines(response.data.count));
     })
@@ -77,6 +82,23 @@ export const requestTotalLines = (error = console.log) => dispatch => {
       dispatch(handleErrorTotalLines(true));
     });
 };
+
+export const requestScore = (filter = 'all', success = console.log, error = console.log) => dispatch => {
+  dispatch(handleErrorScore(false))
+  dispatch(handleLoadingScore(true))
+  network
+    .get(`line/score?filter=${filter}`)
+    .then(response => {
+      dispatch(handleLoadingScore(false))
+      dispatch(handleScore(response.data))
+      success()
+    })
+    .catch(e => {
+      error(e)
+      dispatch(handleLoadingScore(false))
+      dispatch(handleErrorScore(true))
+    })
+}
 
 export const requestEmployeeToEnable = (error = console.log) => dispatch => {
     network.get('employee/not_authorized')

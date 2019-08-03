@@ -3,6 +3,7 @@ import { updateLoading } from '../components/action'
 
 export const types = {
     UPDATE_DEVICE_LINES: 'UPDATE_DEVICE_LINES',
+    ERROR_LOAD_LINES: 'ERROR_LOAD_LINES',
     UPDATE_DEVICE_NAME: 'UPDATE_DEVICE_NAME',
     UPDATE_DEVICE_DIALOG: 'UPDATE_DEVICE_DIALOG',
     UPDATE_LINE_VALUE: 'UPDATE_LINE_VALUE',
@@ -18,18 +19,22 @@ export const updateLines = value => ({ type: types.UPDATE_DEVICE_LINES, payload:
 
 export const updateDevices = value => ({ type: types.UPDATE_DEVICES, payload: { value }})
 
+export const updateErrorLines = value => ({ type: types.ERROR_LOAD_LINES, payload: { value }})
+
 export const onClose = value => ({ type: types.UPDATE_LINE_VALUE, payload: { value } })
 
 export const clear = () => ({ type: types.DEVICE_CLEAR })
 
 export const requestLines = (error = console.log) => dispatch => {
     dispatch(updateLoading(true))
+    dispatch(updateErrorLines(false))
     network.get('line/associate')
     .then(response => {
         dispatch(updateLoading(false))
         dispatch(updateLines(response.data))
     })
     .catch(e => {
+        dispatch(updateErrorLines(true))
         dispatch(updateLoading(false))
         error(e)
     })

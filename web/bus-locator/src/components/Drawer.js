@@ -1,7 +1,7 @@
 import React from 'react'
 import { Drawer, Grid, makeStyles, Divider, Typography, List, ListItemIcon, ListItemText, ListItem }  from '@material-ui/core'
 import createStyle from '../pages/home/style'
-import { Dashboard, People, AccountBox, History, QuestionAnswer, LocationOn, Directions } from '@material-ui/icons'
+import { Dashboard, People, AccountBox, History, QuestionAnswer, LocationOn, Directions, Map } from '@material-ui/icons'
 import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
 import { ROUTES, EMPLOYEE_ROLE } from '../utils/constants'
@@ -63,9 +63,17 @@ const CustomDrawer = props => {
             icon: <Dashboard/>,
             text: 'Painel de controle',
             url: ROUTES.HOME,
-            show: true,
+            show: isAdmin,
             isActive: pathname.includes(ROUTES.HOME),
             onClick() { pathname !== ROUTES.HOME && handleRoute(ROUTES.HOME) }
+        },
+        {
+            icon: <Map/>,
+            text: 'Mapa',
+            url: ROUTES.MAP,
+            show: true,
+            isActive: pathname.includes(ROUTES.MAP),
+            onClick() { pathname !== ROUTES.MAP && handleRoute(ROUTES.MAP) }
         },
         {
             icon: <AccountBox/>,

@@ -22,10 +22,10 @@ const AddLine = props => {
     const [ routes, setRoutes ] = useState([ { route: '' }, { route: '' } ])
     const [ markers, setMarkers ] = useState([])
     const [ dialog, setDialog ] = useState({ index: null, text: '', open: false })
-    const [ load, setLoad ] = useState()
+    const [ load, setLoad ] = useState(false)
 
     useEffect(() => {
-        window.initMap = setLoad
+        window.initMap = () => setLoad(true)
         if (id) {
             props.getLineById(id, () => {
                 toast.error('Falha ao buscar dados da linha, tente novamente')
@@ -140,7 +140,7 @@ const AddLine = props => {
         }
     }
 
-    function saveLine() {
+    function validateForms() {
         let formOk = true
         const info = { ...information }
         if (!props.loading) {
@@ -156,41 +156,45 @@ const AddLine = props => {
                 setInformation(info)
                 return
             } else {
-                if (refDirections.current) {
-                    const directions = refDirections.current.getDirections()
-                    const body = {
-                        number: information.line,
-                        description: information.description,
-                        routes,
-                        directions: {
-                            request: directions.request,
-                            routes: directions.routes[0].overview_path
-                        },
-                        points: markers
-                    }
-                    const callbackError = message => ({ response }) => {
-                        if (response && response.status === 409) {
-                            toast.error('Já existe uma linha cadastrada com esse número')
-                        } else {
-                            toast.error(message)
-                        }
-                    }
-                    if (id) {
-                        body._id = props.line._id
-                        props.editLine(body, () => {
-                            toast.success('Linha editada com sucesso')
-                            props.history.goBack()
-                        }, callbackError('Falha ao editar linha'))
-                    } else {
-                        props.createLine(body, () => {
-                            toast.success('Linha cadastrada com sucesso')
-                            props.history.goBack()
-                        }, callbackError('Falha ao criar linha'))
-                    }
+                saveLine()
+            }
+        }
+    }
+
+    function saveLine() {
+        if (refDirections.current) {
+            const directions = refDirections.current.getDirections()
+            const body = {
+                number: information.line,
+                description: information.description,
+                routes,
+                directions: {
+                    request: directions.request,
+                    routes: directions.routes[0].overview_path
+                },
+                points: markers
+            }
+            const callbackError = message => ({ response }) => {
+                if (response && response.status === 409) {
+                    toast.error('Já existe uma linha cadastrada com esse número')
                 } else {
-                    toast.info('Busque pela rota adicionada para renderizar no mapa')
+                    toast.error(message)
                 }
             }
+            if (id) {
+                body._id = props.line._id
+                props.editLine(body, () => {
+                    toast.success('Linha editada com sucesso')
+                    props.history.goBack()
+                }, callbackError('Falha ao editar linha'))
+            } else {
+                props.createLine(body, () => {
+                    toast.success('Linha cadastrada com sucesso')
+                    props.history.goBack()
+                }, callbackError('Falha ao criar linha'))
+            }
+        } else {
+            toast.info('Busque pela rota adicionada para renderizar no mapa')
         }
     }
 
@@ -268,7 +272,7 @@ const AddLine = props => {
                     error={!!information.errorDescription}
                     helperText={information.errorDescription}
                 />
-                <Button onClick={saveLine} variant="contained" className={styles.buttonSave} color="primary">
+                <Button onClick={validateForms} variant="contained" className={styles.buttonSave} color="primary">
                     <Save />
                     <span>SALVAR</span>
                 </Button>

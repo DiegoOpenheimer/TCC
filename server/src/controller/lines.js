@@ -18,7 +18,7 @@ function getLines(req, res) {
             query.$or.push({ number: queryField })
         }
     }
-    Line.paginate(query, { page: Number(page), limit: Number(limit), select: '-score' })
+    Line.paginate(query, { page: Number(page), limit: Number(limit), select: '-score -directions -points -routes' })
     .then(result => response.handlerResponse(res, result))
     .catch(e => response.handlerUnexpectError(res, 'error to get lines ' + e))
 }
@@ -112,7 +112,7 @@ function removeLine(req, res) {
 }
 
 function getLinesToAssociate(_, res) {
-    Line.find().select(['-routes', '-directions', '-points', '-__v', '-createdAt', '-updatedAt'])
+    Line.find().select(['-routes', '-directions', '-points', '-__v', '-createdAt', '-updatedAt', '-score'])
     .then(result => response.handlerResponse(res, result))
     .catch(e => response.handlerUnexpectError(`Fail to get lines to associate ${e}`))
 }

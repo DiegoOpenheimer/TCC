@@ -7,8 +7,9 @@ import { connect } from "react-redux"
 import {
   requestTotalUsers,
   requestTotalDevices,
-  requestTotalLines
+  requestTotalLines,
 } from "../../../redux/home/actions"
+import InformationLine from './InformationLine'
 
 function Dashboard(props) {
   const classes = createStyle()
@@ -23,7 +24,7 @@ function Dashboard(props) {
 
   return (
     <Grid className={globalClasses.maxWidth}>
-        <Grid className={classes.contentCard} container>
+        <Grid className={classes.contentCard} justify="space-between" container>
             <Card
                 buttonError={() => props.requestTotalDevices()}
                 error={props.errorLoadTotalDevices}
@@ -53,6 +54,7 @@ function Dashboard(props) {
                 content={props.totalUsers}
             />
         </Grid>
+        <InformationLine />
     </Grid>
 
   )

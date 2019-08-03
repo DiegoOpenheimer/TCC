@@ -4,6 +4,7 @@ const INITIAL_STATE = {
     name: '',
     open: false,
     lines: [],
+    errorToLoadLines: false,
     value: '',
     data: {
         docs: [],
@@ -24,6 +25,8 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, data: action.payload.value }
         case types.UPDATE_DEVICE_DIALOG:
             return { ...state, open: action.payload.value }
+        case types.ERROR_LOAD_LINES:
+            return { ...state, errorToLoadLines: action.payload.value }
         case types.UPDATE_LINE_VALUE:
             return { ...state, open: false, value: action.payload.value || state.value }
         case types.DEVICE_CLEAR:
