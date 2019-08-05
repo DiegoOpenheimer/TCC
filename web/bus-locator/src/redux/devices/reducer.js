@@ -13,6 +13,7 @@ const INITIAL_STATE = {
         page: 1,
         pages: 1
     },
+    devices: []
 }
 
 export default (state = INITIAL_STATE, action) => {
@@ -21,8 +22,10 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, name: action.payload.value }
         case types.UPDATE_DEVICE_LINES:
             return { ...state, lines: action.payload.value }
-        case types.UPDATE_DEVICES:
+        case types.UPDATE_DEVICES_DOCS:
             return { ...state, data: action.payload.value }
+        case types.UPDATE_DEVICES:
+            return { ...state, devices: action.payload.value }
         case types.UPDATE_DEVICE_DIALOG:
             return { ...state, open: action.payload.value }
         case types.ERROR_LOAD_LINES:

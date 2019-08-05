@@ -5,10 +5,11 @@ const HandleError = require('./handlerError')
 const jwt = require('../utils/jwt')
 const { History } = response
 
-function getDevices(req, res) {
+async function getDevices(req, res) {
     const page = req.query.page || 1
     const limit = req.query.limit || 10
     const queryField = req.query.field
+    const all = req.query.all
     let query = {}
     if (queryField) {
         const regexField = new RegExp(queryField, "gi")
@@ -19,9 +20,18 @@ function getDevices(req, res) {
             query.$or.push({ 'lineNumber': queryField })
         }
     }
-    Device.paginate(query, { page: Number(page), limit: Number(limit) })
-    .then(result => response.handlerResponse(res, result))
-    .catch(e => response.handlerUnexpectError(res, 'error to get devices ' + e))
+    let result
+    try {
+        if (all) {
+            result = await Device.find()
+            response.handlerResponse(res, result)
+        } else {
+            result = await Device.paginate(query, { page: Number(page), limit: Number(limit) })
+            response.handlerResponse(res, result)
+        }
+    } catch (error) {
+        response.handlerUnexpectError(res, 'error to get devices ' + error)
+    }
 }
 
 function getDeviceById(req, res) {
@@ -79,7 +89,7 @@ async function createDevice(req, res) {
 
 function removeDevice(req, res) {
     const { id } = req.params
-    const { email } = jwt.decode(req.headers.authorization).email
+    const { email } = jwt.decode(req.headers.authorization)
     let uuid
     Device.findById(id)
     .then(device => {

@@ -52,9 +52,9 @@ LineSchema.pre('remove', function(next) {
     .then(devices => {
         if (devices) {
             devices.forEach(device => {
-                device.line = null
+                device.line = ''
                 device.lineNumber = null
-                device.lineDescription = null
+                device.lineDescription = ''
                 device.save()
             })
         }

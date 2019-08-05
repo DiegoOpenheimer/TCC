@@ -8,6 +8,7 @@ export const types = {
     UPDATE_DEVICE_DIALOG: 'UPDATE_DEVICE_DIALOG',
     UPDATE_LINE_VALUE: 'UPDATE_LINE_VALUE',
     DEVICE_CLEAR: 'DEVICE_CLEAR',
+    UPDATE_DEVICES_DOCS: 'UPDATE_DEVICES_DOCS',
     UPDATE_DEVICES: 'UPDATE_DEVICES'
 }
 
@@ -17,7 +18,9 @@ export const openDialog = value => ({ type: types.UPDATE_DEVICE_DIALOG, payload:
 
 export const updateLines = value => ({ type: types.UPDATE_DEVICE_LINES, payload: { value }})
 
-export const updateDevices = value => ({ type: types.UPDATE_DEVICES, payload: { value }})
+export const updateDevicesDocs = value => ({ type: types.UPDATE_DEVICES_DOCS, payload: { value }})
+
+export const updateDevices= value => ({ type: types.UPDATE_DEVICES, payload: { value }})
 
 export const updateErrorLines = value => ({ type: types.ERROR_LOAD_LINES, payload: { value }})
 
@@ -46,6 +49,23 @@ export const requestDevices = (page = 1, limit = 10, field, success, error = con
     if (field) {
         URI = URI.concat(`&field=${field}`)
     }
+    network.get(URI)
+    .then(response => {
+        dispatch(updateLoading(false))
+        dispatch(updateDevicesDocs(response.data))
+        if (success) {
+            success()
+        }
+    })
+    .catch(e => {
+        dispatch(updateLoading(false))
+        error(e)
+    })
+}
+
+export const requestAllDevices = (success, error = console.log) => dispatch => {
+    dispatch(updateLoading(true))
+    let URI = `device?all=all`
     network.get(URI)
     .then(response => {
         dispatch(updateLoading(false))

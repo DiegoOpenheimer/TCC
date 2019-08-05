@@ -1503,6 +1503,10 @@ paths:
           name: field
           type: string
           description: get with filter
+        - in: query
+          name: all
+          type: string
+          description: get all devices
       responses:
         '200':
             description: success operation

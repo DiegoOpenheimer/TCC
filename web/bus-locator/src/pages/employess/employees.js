@@ -63,7 +63,6 @@ const Employee = props => {
     const [ open, setOpen ] = useState(false)
     const [ openCustomDialog, setOpenCustomDialog ] = useState(false)
     const [ user, setUser ] = useState({ name: '', email: ''})
-    let emailToBeRemoved = ''
     const isAdmin = props.user.role === EMPLOYEE_ROLE.ADMIN
     useEffect(() => {
         props.requestEmployees(props.page, props.data.limit, text, () => {
@@ -103,8 +102,10 @@ const Employee = props => {
         return props.data.docs.map(employee => {
             return (
                 <TableRow onClick={() => {
-                    setUser(employee)
-                    setOpenCustomDialog(true)
+                    if (isAdmin) {
+                        setUser(employee)
+                        setOpenCustomDialog(true)
+                    }
                 }} hover={isAdmin} key={employee._id}>
                     <TableCell>{employee.name}</TableCell>
                     <TableCell>{employee.email}</TableCell>
@@ -130,8 +131,7 @@ const Employee = props => {
 
     function deleteUser() {
         setOpen(false)
-        if (emailToBeRemoved !== user.email) {
-            emailToBeRemoved = user.email
+        if (user.email) {
             props.removeEmployee(user, () => {
                 toast.success('Usuário removido com sucesso', { autoClose: 2000 })
                 props.requestEmployees(props.data.page, props.data.limit)

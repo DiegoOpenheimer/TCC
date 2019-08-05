@@ -20,6 +20,7 @@ import {
 import { Search } from '@material-ui/icons'
 import { Subject } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
+import Auth from '../auth/auth'
 
 const createStyle = makeStyles(theme => ({
     root: {
@@ -98,37 +99,39 @@ const History = props => {
         })
     }
     return (
-        <Grid className={classes.root}>
-            <TextField
-                onChange={ev => subject.next(ev.target.value)}
-                className={classes.input}
-                variant="outlined"
-                label="Procurar"
-                placeholder="Digite aqui para buscar, para data: yyyy-mm-dd"
-                InputProps={{
-                    startAdornment: <InputAdornment position="start"><IconButton onClick={() => props.requestHistories(1, 10, text)}><Search /></IconButton></InputAdornment>
-                }}
-            />
-            <Paper className={classes.tableWrapper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell component="th" >Usuário</TableCell>
-                            <TableCell component="th">Mensagem</TableCell>
-                            <TableCell component="th">Criado em</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        { buildItems() }
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                           { renderFooter() }
-                        </TableRow>
-                    </TableFooter>
-                </Table>
-            </Paper>
-        </Grid>
+        <Auth>
+            <Grid className={classes.root}>
+                <TextField
+                    onChange={ev => subject.next(ev.target.value)}
+                    className={classes.input}
+                    variant="outlined"
+                    label="Procurar"
+                    placeholder="Digite aqui para buscar, para data: yyyy-mm-dd"
+                    InputProps={{
+                        startAdornment: <InputAdornment position="start"><IconButton onClick={() => props.requestHistories(1, 10, text)}><Search /></IconButton></InputAdornment>
+                    }}
+                />
+                <Paper className={classes.tableWrapper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell component="th" >Usuário</TableCell>
+                                <TableCell component="th">Mensagem</TableCell>
+                                <TableCell component="th">Criado em</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            { buildItems() }
+                        </TableBody>
+                        <TableFooter>
+                            <TableRow>
+                            { renderFooter() }
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
+                </Paper>
+            </Grid>
+        </Auth>
     )
 }
 

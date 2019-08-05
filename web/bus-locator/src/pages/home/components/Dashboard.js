@@ -10,6 +10,7 @@ import {
   requestTotalLines,
 } from "../../../redux/home/actions"
 import InformationLine from './InformationLine'
+import Auth from '../../auth/auth'
 
 function Dashboard(props) {
   const classes = createStyle()
@@ -23,7 +24,8 @@ function Dashboard(props) {
   }, []);
 
   return (
-    <Grid className={globalClasses.maxWidth}>
+    <Auth>
+      <Grid className={globalClasses.maxWidth}>
         <Grid className={classes.contentCard} justify="space-between" container>
             <Card
                 buttonError={() => props.requestTotalDevices()}
@@ -55,7 +57,8 @@ function Dashboard(props) {
             />
         </Grid>
         <InformationLine />
-    </Grid>
+      </Grid>
+    </Auth>
 
   )
 }

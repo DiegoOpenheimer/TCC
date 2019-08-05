@@ -19,5 +19,6 @@ export const ROUTES = {
     ADD_DEVICES: '/home/devices/add',
     LINES: '/home/lines',
     ADD_LINES: '/home/lines/add',
-    MAP: '/home/maps'
+    MAP: '/home/maps',
+    LOGIN: '/login'
 }

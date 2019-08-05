@@ -15,11 +15,13 @@ import { ROUTES } from '../../utils/constants'
 import Employee from '../employess/employees'
 import Account from '../account/account'
 import History from '../history/history'
+import Maps from '../maps/maps'
 import Suggestion from '../suggestion/suggestion'
 import Devices from '../devices/devices'
 import Lines from '../lines/lines'
 import Loading from '../../components/loading'
 import Dashboard from './components/Dashboard'
+import Auth from '../auth/auth'
 
 const Home = props => {
     const {
@@ -65,11 +67,11 @@ const Home = props => {
     }, [ props.location ])
 
     if (redirect) {
-        return <Redirect to="/login"/>
-    }
+        return <Redirect to={ROUTES.LOGIN}/>
+    } 
 
     return (
-        <>
+        <Auth onlyToken>
             <Grid className={classes.maxContainer} container item direction="column" wrap="nowrap" alignItems="center">
                 <Loading />
                 <AppBar onDrawer={onDrawer} handleClose={handleClose} usersNotAuthorized={usersNotAuthorized} onSelectedUser={handleUserToAprrove} />
@@ -103,6 +105,7 @@ const Home = props => {
                 <Grid item container className={clsx(classesLocal.content, { [classesLocal.contentShift]: openDrawer })}>
                     <Switch>
                         <Route exact path={ROUTES.HOME} component={Dashboard} />
+                        <Route exact path={ROUTES.MAP} component={Maps} />
                         <Route path={ROUTES.EMPLOYEES} component={Employee} />
                         <Route path={ROUTES.ACCOUNT} component={Account} />
                         <Route path={ROUTES.HISTORY} component={History} />
@@ -113,13 +116,14 @@ const Home = props => {
                     </Switch>
                 </Grid>
             </Grid>
-        </>
+        </Auth>
     )
 }
 
 const mapStateToProps = state => {
     return {
-        usersNotAuthorized: state.home.usersNotAuthorized
+        usersNotAuthorized: state.home.usersNotAuthorized,
+        user: state.home.user
     }
 }
 

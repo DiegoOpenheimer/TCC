@@ -8,6 +8,7 @@ const authenticate = (Entity, nameEntity) => (req, res) => {
     const user = req.body
     let role
     let name
+    let _id
     const email = user.email
     Entity.findOne({ email: user.email })
     .then(uResult => {
@@ -20,6 +21,7 @@ const authenticate = (Entity, nameEntity) => (req, res) => {
             role = uResult.role
         }
         name = uResult.name
+        _id = uResult._id
         return uResult.checkPassword(user.password)
     })
     .then((value) => {
@@ -29,6 +31,7 @@ const authenticate = (Entity, nameEntity) => (req, res) => {
                 jwtOb.role = role
             }
             jwtOb.entity = nameEntity
+            jwtOb._id = _id
             const token = jwt.signJwt(jwtOb)
             response.handlerResponse(res, { message: 'authorized', token, status: 200 })
         } else {
