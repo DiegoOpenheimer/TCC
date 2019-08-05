@@ -1348,10 +1348,7 @@ paths:
         '200':
           description: device
           schema:
-            type: object
-            properties:
-              schema:
-                $ref: '#/definitions/Device'        
+            $ref: '#/definitions/Device'        
         '401':
           description: Not Authorzied
           schema:

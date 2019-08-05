@@ -9,7 +9,8 @@ export const types = {
     UPDATE_LINE_VALUE: 'UPDATE_LINE_VALUE',
     DEVICE_CLEAR: 'DEVICE_CLEAR',
     UPDATE_DEVICES_DOCS: 'UPDATE_DEVICES_DOCS',
-    UPDATE_DEVICES: 'UPDATE_DEVICES'
+    UPDATE_DEVICES: 'UPDATE_DEVICES',
+    UPDATE_CURRENT_DEVICE: 'UPDATE_CURRENT_DEVICE'
 }
 
 export const updateName = value => ({ type: types.UPDATE_DEVICE_NAME, payload: { value }})
@@ -21,6 +22,8 @@ export const updateLines = value => ({ type: types.UPDATE_DEVICE_LINES, payload:
 export const updateDevicesDocs = value => ({ type: types.UPDATE_DEVICES_DOCS, payload: { value }})
 
 export const updateDevices= value => ({ type: types.UPDATE_DEVICES, payload: { value }})
+
+export const updateCurrentDevice = value => ({ type: types.UPDATE_CURRENT_DEVICE, payload: { value }})
 
 export const updateErrorLines = value => ({ type: types.ERROR_LOAD_LINES, payload: { value }})
 
@@ -73,6 +76,20 @@ export const requestAllDevices = (success, error = console.log) => dispatch => {
         if (success) {
             success()
         }
+    })
+    .catch(e => {
+        dispatch(updateLoading(false))
+        error(e)
+    })
+}
+
+export const requestDeviceById = (id, error = console.log) => dispatch => {
+    dispatch(updateLoading(true))
+    let URI = `device/${id}`
+    network.get(URI)
+    .then(response => {
+        dispatch(updateLoading(false))
+        dispatch(updateCurrentDevice(response.data))
     })
     .catch(e => {
         dispatch(updateLoading(false))

@@ -14,6 +14,9 @@ export default makeStyles({
     container: {
         padding: 16
     },
+    marginVertical: {
+        margin: props => `${props.marginVertical} 0px`
+    },
     maxWidth: {
         width: '100%'
     },

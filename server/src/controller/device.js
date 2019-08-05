@@ -40,6 +40,7 @@ function getDeviceById(req, res) {
         response.handlerResponse(res, { message: 'Not found', status: 404 })
     } else {
         Device.findById(id)
+        .populate('line')
         .then(result => response.handlerResponse(res, result))
         .catch(e => response.handlerUnexpectError(res, `Error to get device by id ${e}`))
     }
