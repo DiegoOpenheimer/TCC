@@ -76,3 +76,5 @@ export const removeNews = (id, success = console.log, error = console.log) => di
         error(e)
     })
 }
+
+export const clearNewsEdit = () => handleReducer(types.UPDATE_NEWS_EDITED, null)

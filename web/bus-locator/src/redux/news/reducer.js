@@ -14,7 +14,7 @@ const INIT_STATE = {
 export default (state = INIT_STATE, action) => {
     switch(action.type) {
         case types.UPDATE_NEWS:
-            return { ...state, data: { ...action.payload.value }, lineEdited: null }
+            return { ...state, data: { ...action.payload.value }, newsEdit: null }
         case types.UPDATE_NEWS_EDITED:
             return { ...state, newsEdit: { ...action.payload.value } }
         default:

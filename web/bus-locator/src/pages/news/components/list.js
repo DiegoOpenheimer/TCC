@@ -3,7 +3,6 @@ import { requestNews, removeNews } from '../../../redux/news/action'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 import {
-    makeStyles,
     Table,
     TableRow,
     TableCell,
@@ -25,32 +24,8 @@ import { debounceTime } from 'rxjs/operators'
 import { withRouter } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constants'
 import { compose } from 'recompose'
-
-const createStyle = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        padding: 32,
-    },
-    tableWrapper: {
-        overflowX: 'auto',
-        marginTop: 32,
-        width: '100%'
-    },
-    rightIcon: {
-        marginLeft: theme.spacing(1),
-    },
-    input: {
-        minWidth: '50%'
-    },
-    tableCellFooter: {
-        paddingRight: '32px !important'
-    },
-    fab: {
-        position: 'absolute',
-        bottom: theme.spacing(2),
-        right: theme.spacing(2)
-    }
-}))
+import createStyle from '../styles'
+import parser from 'html-react-parser'
 
 const News = props => {
 
@@ -104,7 +79,7 @@ const News = props => {
                 <TableRow onClick={() => props.history.push(ROUTES.ADD_NEWS.concat(`/${news._id}`))} hover key={news._id}>
                     <TableCell align="center">{news.author ? news.author.name : ''}</TableCell>
                     <TableCell align="center">{news.title}</TableCell>
-                    <TableCell align="center">{news.message}</TableCell>
+                    <TableCell align="center">{parser(news.message)}</TableCell>
                     <TableCell align="center">{new Date(news.createdAt).toLocaleString()}</TableCell>
                     <TableCell align="center">
                         <Button onClick={ev => {
@@ -127,7 +102,7 @@ const News = props => {
             <Grid className={classes.root}>
                     <TextField
                         onChange={ev => subject.next(ev.target.value)}
-                        className={classes.input}
+                        className={classes.inputSearch}
                         variant="outlined"
                         label="Procurar"
                         placeholder="Digite aqui para filtrar"
@@ -139,7 +114,7 @@ const News = props => {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell align="center" component="th" >Nome do autor</TableCell>
+                                    <TableCell align="center" component="th" >Autor</TableCell>
                                     <TableCell align="center" component="th">Título</TableCell>
                                     <TableCell align="center" component="th">Mensagem</TableCell>
                                     <TableCell align="center" component="th">Criado em</TableCell>

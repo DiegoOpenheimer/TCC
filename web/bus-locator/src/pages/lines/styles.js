@@ -40,5 +40,6 @@ export default makeStyles({
         '& svg': {
             marginRight: 10
         }
-    }
+    },
+    
 })

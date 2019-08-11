@@ -1,321 +1,92 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { Grid, TextField, IconButton, InputAdornment, Paper, Button } from '@material-ui/core'
-import globalStyle from '../../../style/global'
-import { Clear, AddCircle, Search, Save } from '@material-ui/icons'
-import clsx from 'clsx'
-import Maps from '../../../components/Map'
-import { DirectionsRenderer, Marker, OverlayView } from 'react-google-maps'
-import { toast } from 'react-toastify'
-import localStyles from '../styles'
-import DialogInput from '../../../components/dialogInput'
+import React, { useState, useEffect } from 'react'
+import { Grid, TextField, Typography, Fab } from '@material-ui/core'
+import createStyle from '../../../style/global'
+import createLocalStyle from '../styles'
+import { EditorState, convertToRaw, ContentState } from 'draft-js'
+import { Editor } from 'react-draft-wysiwyg'
+import draftToHtml from 'draftjs-to-html'
+import htmlToDraft from 'html-to-draftjs'
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { createNews, editNews, getNewsById, clearNewsEdit } from '../../../redux/news/action'
 import { connect } from 'react-redux'
-import { createLine, getLineById, editLine } from '../../../redux/lines/action'
+import { toast } from 'react-toastify'
 
-const AddLine = props => {
+const AddNews = props => {
 
-    const classes = globalStyle()
-    const styles = localStyles()
-    const refDirections = useRef(null)
+    const classes = createStyle()
+    const localClasses = createLocalStyle()
+    const [ editorState, setEditorState ] = useState(EditorState.createEmpty())
+    const [ title, setTitle ] = useState('')
     const { id } = props.match.params
-    const [ directions, setDirections ] = useState()
-    const [ information, setInformation ] = useState({ line: '', description: '', errorLine: '', errorDescription: '' })
-    const [ routes, setRoutes ] = useState([ { route: '' }, { route: '' } ])
-    const [ markers, setMarkers ] = useState([])
-    const [ dialog, setDialog ] = useState({ index: null, text: '', open: false })
-    const [ load, setLoad ] = useState(false)
 
     useEffect(() => {
-        window.initMap = () => setLoad(true)
         if (id) {
-            props.getLineById(id, () => {
-                toast.error('Falha ao buscar dados da linha, tente novamente')
-                props.history.goBack()
-            })
+            props.getNewsById(id, () => toast.error('Falha na comunicação com o servidor, tente novamente'))
         }
+        return () => props.clearNewsEdit()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ ])
+    }, [  ])
 
     useEffect(() => {
-        if (props.line && Object.keys(props.line).length && window.google) {
-            setRoutes([ ...props.line.routes ])
-            setMarkers([ ...props.line.points ])
-            const { google } = window
-            const DirectionService = new google.maps.DirectionsService()
-            const routes = []
-            routes.push(props.line.directions.request.origin)
-            routes.push(...props.line.directions.request.waypoints)
-            routes.push(props.line.directions.request.destination)
-            const origin = routes[0]
-            const destination = routes[routes.length - 1]
-            const options = {
-                origin: filterRoute(origin),
-                destination: filterRoute(destination),
-                waypoints: routes.filter((_, index) => index !== 0 && index !== routes.length - 1)
-                .map(filterRoute),
-                optimizeWaypoints: true,
-                travelMode: google.maps.TravelMode.DRIVING,
-                avoidTolls: true
-            }
-            DirectionService.route(options, (result, status) => {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    setDirections({ ...directions, ...result })
-                } else if (status === google.maps.DirectionsStatus.NOT_FOUND) {
-                    toast.error('Rota não encontrada, verifique os caminhos inseridos')
-                } else {
-                    toast.error('Falha ao requisitar rota')
-                }
-            })
-            setInformation({ line: props.line.number, description: props.line.description })
+        if (props.newsEdit) {
+            const { message, title } = props.newsEdit
+            setTitle(title)
+            const blocksFromHtml = htmlToDraft(message)
+            const { contentBlocks, entityMap } = blocksFromHtml
+            const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap)
+            setEditorState(EditorState.createWithContent(contentState))
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ props.line, load ])
+    }, [ props.newsEdit ])
 
-    function filterRoute(route) {
-        const { google } = window
-        if ('location' in route) {
-            return route
-        } else if ('query' in route) {
-            return route.query
-        }
-        return new google.maps.LatLng(route.lat, route.lng)
-    }
-
-    function buildInputRoutes() {
-        return routes.map((content, index) => {
-            return (
-                <Grid alignItems="center" className={clsx(styles.addIconField, { [styles.iconRemove]: routes.length > 2 })} container key={index.toString()} wrap="nowrap">
-                    <TextField
-                        className={classes.maxWidth}
-                        value={content.route}
-                        onChange={ev => {
-                            const value = ev.target.value
-                            setRoutes(old => {
-                                const newRoutes = [...old]
-                                newRoutes[index].route = value
-                                return newRoutes
-                            })
-                        }}
-                        placeholder={index === 0 ? 'Informe início da rota' : index === routes.length - 1 ? "Informe destino final" : 'Informe caminho'}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position="end">
-                                    <IconButton onClick={buildRoutes} edge="end">
-                                        <Search />
-                                    </IconButton>
-                                </InputAdornment>
-                            )
-                        }}
-                    />
-                    <IconButton onClick={() => {
-                        setRoutes([...routes.filter((_, i) => index !== i)])
-                    }} className={styles.iconHiddenRemove}><Clear /></IconButton>
-                </Grid>
-            )
-        })
-    }
-
-    function buildRoutes() {
-        if (!routes.every(content => !!content.route)) {
-            toast.error('Existe campo de rota sem preenchimento')
-        } else {
-            const { google } = window
-            const DirectionService = new google.maps.DirectionsService()
-            const options = {
-                origin: routes[0].route,
-                destination: routes[routes.length - 1].route,
-                waypoints: routes.filter((_, index) => index !== 0 && index !== routes.length - 1).map(content => ({location: content.route, stopover: true})),
-                optimizeWaypoints: true,
-                travelMode: google.maps.TravelMode.DRIVING,
-                avoidTolls: true
-            }
-            DirectionService.route(options, (result, status) => {
-                if (status === google.maps.DirectionsStatus.OK) {
-                    setDirections({ ...directions, ...result })
-                } else if (status === google.maps.DirectionsStatus.NOT_FOUND) {
-                    toast.error('Rota não encontrada, verifique os caminhos inseridos')
-                } else {
-                    toast.error('Falha ao requisitar rota')
-                }
-            })
-        }
-    }
-
-    function validateForms() {
-        let formOk = true
-        const info = { ...information }
-        if (!props.loading) {
-            if (!info.line) {
-                info.errorLine = 'Campo vazio'
-                formOk = false
-            }
-            if (!info.description) {
-                info.errorDescription = 'Campo vazio'
-                formOk = false
-            }
-            if (!formOk) {
-                setInformation(info)
-                return
-            } else {
-                saveLine()
-            }
-        }
-    }
-
-    function saveLine() {
-        if (refDirections.current) {
-            const directions = refDirections.current.getDirections()
+    function saveNews() {
+        const message = draftToHtml(convertToRaw(editorState.getCurrentContent()))
+        if (title && message) {
             const body = {
-                number: information.line,
-                description: information.description,
-                routes,
-                directions: {
-                    request: directions.request,
-                    routes: directions.routes[0].overview_path
-                },
-                points: markers
+                title,
+                message, 
+                author: props.user._id,
             }
-            const callbackError = message => ({ response }) => {
-                if (response && response.status === 409) {
-                    toast.error('Já existe uma linha cadastrada com esse número')
-                } else {
-                    toast.error(message)
-                }
+            const callbackSuccess = message => () => {
+                toast.success(message)
+                props.history.goBack()
             }
+            const callbackError = message => () => toast.error(message)
             if (id) {
-                body._id = props.line._id
-                props.editLine(body, () => {
-                    toast.success('Linha editada com sucesso')
-                    props.history.goBack()
-                }, callbackError('Falha ao editar linha'))
+                body._id = id
+                props.editNews(body, callbackSuccess('Notícia editada com sucesso'), callbackError('Falha ao editar notícia'))
             } else {
-                props.createLine(body, () => {
-                    toast.success('Linha cadastrada com sucesso')
-                    props.history.goBack()
-                }, callbackError('Falha ao criar linha'))
+                props.createNews(body, callbackSuccess('Notícia registrada com sucesso'), callbackError('Falha ao registrar notícia'))
             }
-        } else {
-            toast.info('Busque pela rota adicionada para renderizar no mapa')
-        }
+        } else
+            toast.info('Verifique os campos')
     }
 
-    function onConfirm() {
-        if (!dialog.text) {
-            toast.info('Informe o nome do marcador')
-        } else {
-            if (dialog.index !== null) {
-                setMarkers(old => {
-                    const newMarkers = [...old]
-                    newMarkers[dialog.index].name = dialog.text
-                    return newMarkers
-                })
-            }
-            setDialog({ ...dialog, text: '', open: false, index: null })
-        }
-    }
-
-    function buildMarkers() {
-        const callbackCloseOverlay = index => _ => {
-            setMarkers(old => {
-                const newMarkers = [...old]
-                newMarkers[index].showOverlayView = !newMarkers[index].showOverlayView
-                return newMarkers
-            })
-         }
-        return markers.map((marker, index) => {
-            return (
-                <React.Fragment key={index.toString()}>
-                    <Marker onClick={callbackCloseOverlay(index)} title={marker.name} clickable={true} draggable={true} position={{ lat: marker.lat, lng: marker.lng }} />
-                    {
-                        marker.showOverlayView &&
-                        <OverlayView mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}  position={{ lat: marker.lat, lng: marker.lng }}>
-                            <Paper className={classes.container}>
-                                <Grid container direction="column">
-                                    <h4>Nome do ponto: {marker.name}</h4>
-                                    <Button onClick={callbackCloseOverlay(index)}>Fechar</Button>
-                                    <Button onClick={() => {
-                                        setDialog({ ...dialog, index, text: marker.name, open: true })
-                                        callbackCloseOverlay(index)()
-                                    }}>Editar</Button>
-                                    <Button onClick={() => setMarkers([ ...markers.filter((_, i) => index !== i) ])}>Remover</Button>
-                                </Grid>
-                            </Paper>
-                        </OverlayView>
-
-                    }
-                </React.Fragment>
-            )
-        })
-    }
-    return (
-        <Grid container className={classes.container} wrap="nowrap" direction="column">
-            <Grid alignItems="center" container>
-                <h2>Informação: </h2>
-                <TextField
-                    className={styles.inputLine}
-                    value={information.line}
-                    onChange={ev => setInformation({ ...information, line: ev.target.value, errorLine: '' })}
-                    variant="outlined"
-                    type="number"
-                    label="Linha"
-                    InputProps={{inputProps:{min: 0}}}
-                    placeholder="Número da linha"
-                    error={!!information.errorLine}
-                    helperText={information.errorLine}
-                />
-                <TextField
-                    value={information.description}
-                    onChange={ev => setInformation({ ...information, description: ev.target.value, errorDescription: '' })}
-                    className={styles.input}
-                    variant="outlined"
-                    label="Descrição"
-                    placeholder="Informe a descrição"
-                    error={!!information.errorDescription}
-                    helperText={information.errorDescription}
-                />
-                <Button onClick={validateForms} variant="contained" className={styles.buttonSave} color="primary">
-                    <Save />
-                    <span>SALVAR</span>
-                </Button>
-            </Grid>
-            <Grid className={styles.contentBlockMap} container>
-                <Paper className={classes.maxWidth}>
-                    <Grid container wrap="nowrap" className={styles.contentContainerMap}>
-                        <Grid className={styles.contentFields} container>
-                            { buildInputRoutes() }
-                            <IconButton className={styles.addIconField} onClick={() => setRoutes([...routes, { route: '' }])}>
-                                <AddCircle />
-                            </IconButton>
-                        </Grid>
-                        <Grid className={styles.contentMap} container>
-                            <Maps onClick={({latLng}) => {
-                                if (!markers.some(marker => marker.showOverlayView)) {
-                                    setMarkers([ ...markers, { lat: latLng.lat(), lng: latLng.lng(), showOverlayView: false, name: '' } ])
-                                    setDialog({ ...dialog, index: markers.length, open: true })
-                                }
-                            }}>
-                                { directions && <DirectionsRenderer ref={refDirections} options={{draggable: true}} directions={directions} /> }
-                                { buildMarkers() }
-                            </Maps>
-                        </Grid>
-                    </Grid>
-                </Paper>
-            </Grid>
-            <DialogInput
-                open={dialog.open}
-                title="Atenção"
-                message="Informe o nome do marcador"
-                label="Nome"
-                onChange={ev => setDialog({ ...dialog, text: ev.target.value })}
-                onConfirm={onConfirm}
-                textButton="Salvar"
-                text={dialog.text}
-                textCancel="Cancelar"
-                onCancel={() => setDialog({ ...dialog, text: '', index: null, open: false })}
+    return(
+        <Grid className={classes.container} container direction="column" wrap="nowrap">
+            <Typography variant="h4">Notícia:</Typography>
+            <TextField
+                value={title}
+                onChange={ev => setTitle(ev.target.value)}
+                className={localClasses.inputRegisterNews}
+                placeholder="Informe título"
+                label="Título"
+                inputProps={{
+                    maxLength: 100
+                }}
             />
+            <Typography className={localClasses.textMessage} variant="h5">Mensagem:</Typography>
+            <Grid style={{backgroundColor: '#FFF', minHeight: 400}}>
+                <Editor editorClassName="editor" editorState={editorState} onEditorStateChange={state => setEditorState(state)} />
+            </Grid>
+            <Fab onClick={saveNews} variant="extended" color="primary" className={localClasses.fab}>
+                <span>Salvar</span>
+            </Fab>
         </Grid>
     )
+
 }
 
-const mapStateToProps = state => ({ loading: state.component.loading, line: state.line.lineEdited })
+const mapStateToProps = state => ({ newsEdit: state.news.newsEdit, user: state.home.user })
 
-export default connect(mapStateToProps, { createLine, getLineById, editLine })(AddLine)
+export default connect(mapStateToProps, { createNews, editNews, getNewsById, clearNewsEdit })(AddNews)
