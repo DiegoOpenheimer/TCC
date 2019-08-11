@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Paper, Divider, Typography, Button, IconButton, CircularProgress } from '@material-ui/core'
+import { Grid, Paper, Divider, Typography, Button, IconButton } from '@material-ui/core'
 import { Replay } from '@material-ui/icons'
 import createStyle from '../../../style/global'
 import { Doughnut } from 'react-chartjs-2'
@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { requestScore } from '../../../redux/home/actions'
 import { requestLines } from '../../../redux/devices/action'
 import { toast } from 'react-toastify'
+import Skeleton from 'react-loading-skeleton'
 
 function InformationLine(props) {
 
@@ -44,7 +45,7 @@ function InformationLine(props) {
           </IconButton>
         )
       } else if (props.isLoadingScore) {
-        return <CircularProgress />
+        return <Skeleton height={200} width={400} />
       } else if (props.score.every(value => !value)) {
         return <Typography variant="h5">Sem registro de score</Typography>
       } else {

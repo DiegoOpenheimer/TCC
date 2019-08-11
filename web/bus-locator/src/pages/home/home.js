@@ -19,6 +19,7 @@ import Maps from '../maps/maps'
 import Suggestion from '../suggestion/suggestion'
 import Devices from '../devices/devices'
 import Lines from '../lines/lines'
+import News from '../news/news'
 import Loading from '../../components/loading'
 import Dashboard from './components/Dashboard'
 import Auth from '../auth/auth'
@@ -112,6 +113,7 @@ const Home = props => {
                         <Route path={ROUTES.SUGGESTION} component={Suggestion} />
                         <Route path={ROUTES.DEVICES} component={Devices} />
                         <Route path={ROUTES.LINES} component={Lines} />
+                        <Route path={ROUTES.NEWS} component={News} />
                         <Redirect from="*" to={ROUTES.HOME} />
                     </Switch>
                 </Grid>

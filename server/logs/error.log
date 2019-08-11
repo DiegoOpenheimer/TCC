@@ -46,3 +46,4 @@
 {"timestamp":"2019-07-30T23:17:32.861Z","message":"Error to get line by id CastError: Cast to ObjectId failed for value \"associate\" at path \"_id\" for model \"Lines\""}
 {"timestamp":"2019-08-02T01:45:50.238Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"hfhgh\" at path \"_id\" for model \"Lines\""}
 {"timestamp":"2019-08-02T01:46:11.524Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"123123\" at path \"_id\" for model \"Lines\""}
+{"timestamp":"2019-08-11T00:29:34.148Z","message":"Error to get news by id MissingSchemaError: Schema hasn't been registered for model \"Employees\".\nUse mongoose.model(name, schema)"}

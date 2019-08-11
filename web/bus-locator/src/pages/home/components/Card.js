@@ -1,6 +1,7 @@
 import React from 'react'
 import createStyleLocal from '../style' 
-import { Paper, Typography, Icon, Grid, CircularProgress, IconButton } from '@material-ui/core'
+import { Paper, Typography, Icon, Grid, IconButton } from '@material-ui/core'
+import Skeleton from 'react-loading-skeleton'
 import { Replay } from '@material-ui/icons'
 
 const Card = props => {
@@ -9,7 +10,7 @@ const Card = props => {
     const classesLocal = createStyleLocal()
     const checkLoading = () => {
         if (isLoading) {
-            return <CircularProgress style={textColors && {color: textColors}} />
+            return <Skeleton circle={true} height={50} width={50} />
         } else if (error) {
             return (
                 <div>

@@ -6,6 +6,7 @@ const historyRouter = require('./history')
 const suggestionRouter = require('./suggestion')
 const lineRouter = require('./lines')
 const deviceRouter = require('./device')
+const newsRouter = require('./news')
 
 router.use('/user', useRouter)
 router.use('/auth', authRouter)
@@ -14,6 +15,7 @@ router.use('/history', historyRouter)
 router.use('/suggestion', suggestionRouter)
 router.use('/line', lineRouter)
 router.use('/device', deviceRouter)
+router.use('/news', newsRouter)
 router.use('*', (_, res) => res.status(404).render('html404'))
 
 module.exports = router
