@@ -11,7 +11,9 @@ router.get('/', jwt, lineController.getLines)
 
 router.get('/count', jwt, lineController.lineAmount)
 
-router.get('/score', jwt, validationEmployee.verifyIfEmployeeIsAdmin,lineController.getScoreLine)
+router.get('/score', jwt, validationEmployee.verifyIfEmployeeIsAdmin, lineController.getScoreLine)
+
+router.get('/score/:id', jwt, validationEmployee.verifyIfEmployeeIsAdmin, lineController.getScore)
 
 router.put('/', jwt, validationFields, lineController.editLine)
 

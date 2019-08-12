@@ -47,3 +47,9 @@
 {"timestamp":"2019-08-02T01:45:50.238Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"hfhgh\" at path \"_id\" for model \"Lines\""}
 {"timestamp":"2019-08-02T01:46:11.524Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"123123\" at path \"_id\" for model \"Lines\""}
 {"timestamp":"2019-08-11T00:29:34.148Z","message":"Error to get news by id MissingSchemaError: Schema hasn't been registered for model \"Employees\".\nUse mongoose.model(name, schema)"}
+{"timestamp":"2019-08-12T01:14:05.663Z","message":"Error to get score MongoError: path option to $unwind stage should be prefixed with a '$': score"}
+{"timestamp":"2019-08-12T01:14:24.889Z","message":"Error to get score MongoError: unknown top level operator: $score.star"}
+{"timestamp":"2019-08-12T01:14:38.161Z","message":"Error to get score MongoError: Argument to $skip must be a number not a string"}
+{"timestamp":"2019-08-12T01:30:37.722Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"{ user: '5d3de989de5bc211988cbb8d',\n  description: 'bom, mas lota em alguns dias da semana',\n  star: 3 }\" at path \"_id\" for model \"Lines\""}
+{"timestamp":"2019-08-12T01:31:42.478Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"{ user: '5d3de989de5bc211988cbb8d',\n  description: 'bom, mas lota em alguns dias da semana',\n  star: 3 }\" at path \"_id\" for model \"Lines\""}
+{"timestamp":"2019-08-12T01:35:14.106Z","message":"Error to get score MongoError: unknown top level operator: $score.star"}

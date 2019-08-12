@@ -77,11 +77,11 @@ const News = props => {
         return props.docs.map(news => {
             return (
                 <TableRow onClick={() => props.history.push(ROUTES.ADD_NEWS.concat(`/${news._id}`))} hover key={news._id}>
-                    <TableCell align="center">{news.author ? news.author.name : ''}</TableCell>
-                    <TableCell align="center">{news.title}</TableCell>
-                    <TableCell align="center">{parser(news.message)}</TableCell>
-                    <TableCell align="center">{new Date(news.createdAt).toLocaleString()}</TableCell>
-                    <TableCell align="center">
+                    <TableCell>{news.author ? news.author.name : ''}</TableCell>
+                    <TableCell>{news.title}</TableCell>
+                    <TableCell>{parser(news.message)}</TableCell>
+                    <TableCell>{new Date(news.createdAt).toLocaleString()}</TableCell>
+                    <TableCell>
                         <Button onClick={ev => {
                             ev.stopPropagation()
                             props.removeNews(news._id, () => {

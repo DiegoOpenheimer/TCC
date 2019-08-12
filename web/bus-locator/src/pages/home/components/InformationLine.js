@@ -9,12 +9,14 @@ import { requestScore } from '../../../redux/home/actions'
 import { requestLines } from '../../../redux/devices/action'
 import { toast } from 'react-toastify'
 import Skeleton from 'react-loading-skeleton'
+import Comments from './Comments'
 
 function InformationLine(props) {
 
     const DEFAULT_VALUE = { _id: 'all', description: 'Todas as linhas', number: null }
     const classes = createStyle()
     const [ open, setOpenDialog ] = useState(false)
+    const [ comments, setComments ] = useState({ open: false, id: '' })
     const [ value, setValueFilter ] = useState(DEFAULT_VALUE)
 
     useEffect(() => {
@@ -83,6 +85,8 @@ function InformationLine(props) {
           >
             <Typography variant="h5">Pontuação das linhas</Typography>
             <Grid>
+              { (value._id !== 'all' && props.score.some(value => value)) &&
+              <Button color="primary" variant="outlined" onClick={() => setComments({ open: true, id: value._id })}>Ver comentários</Button>}
               <Button onClick={() => setOpenDialog(true)}>Filtro: {value.number} - {value.description}</Button>
               <IconButton onClick={() => getScore()}>
                 <Replay />
@@ -102,6 +106,11 @@ function InformationLine(props) {
             textConfirm="Ok"
             value={value._id}
             onClose={onClose}
+        />
+        <Comments
+          idLine={comments.id}
+          open={comments.open}
+          onClose={() => setComments({ open: false, id: '' })}
         />
       </Grid>
     );

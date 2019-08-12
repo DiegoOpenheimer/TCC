@@ -170,4 +170,23 @@ function getScoreLine(req, res) {
     }
 }
 
-module.exports = { getLines, getLineById, editLine, removeLine, createLine, getLinesToAssociate, lineAmount, getScoreLine }
+function getScore(req, res) {
+    const { id } = req.params
+    const { skip = 0, limit = 10, star = 5 } = req.query
+    if (id) {
+        let score
+        if (star === undefined || star === null) {
+            score = 'score'
+        } else {
+            score = { score: {$elemMatch: { star: Number(star) }} }
+        }
+        console.log(skip, limit, score)
+        Line.findById(id).slice('score', [ skip, limit ]).select([ 'score', 'description', 'number' ])
+        .then(result => response.handlerResponse(res, result))
+        .catch(e => response.handlerUnexpectError(res, `Error to get score ${e}`))
+    } else {
+        response.handlerResponse(res, new HandleError('Missed id', 409))
+    }
+}
+
+module.exports = { getLines, getLineById, editLine, removeLine, createLine, getLinesToAssociate, lineAmount, getScoreLine, getScore }

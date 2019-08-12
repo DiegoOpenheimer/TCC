@@ -70,7 +70,6 @@ const Home = props => {
     if (redirect) {
         return <Redirect to={ROUTES.LOGIN}/>
     } 
-
     return (
         <Auth onlyToken>
             <Grid className={classes.maxContainer} container item direction="column" wrap="nowrap" alignItems="center">
