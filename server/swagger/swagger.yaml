@@ -1917,17 +1917,6 @@ definitions:
               type: number
             latitude:
               type: number
-      score:
-        type: array
-        items:
-          properties:
-            _id:
-              type: string
-            description:
-              type: string
-            star:
-              type: string
-
   Device:
     type: object
     properties:

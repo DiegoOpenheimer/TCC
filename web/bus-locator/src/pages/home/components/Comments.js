@@ -3,9 +3,8 @@ import { Dialog, IconButton, Grid, Paper, Tabs, Tab, makeStyles, Typography, Cir
 import { Close } from '@material-ui/icons'
 import network from '../../../services/network'
 import { updateLoading } from '../../../redux/components/action'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import InfiniteScroll from 'react-infinite-scroller'
 
 const createStyle = makeStyles({
     root: {
@@ -27,32 +26,57 @@ const Comments = props => {
     const dispatch = useDispatch()
     const classes = createStyle()
     const [tab, setTab] = useState(4)
-    const [ comment, setComment ] = useState({ score: [] })
-    const [ paginate, setPaginate ] = useState({ skip: 0, limit: 20 })
+    const [ comment, setComment ] = useState({ docs: [], page: 1, pages: 2, limit: 20, total: 0, isFetching: false })
+
+    useEffect(() => {
+        window.addEventListener('scroll', load)
+        return () => window.removeEventListener('scroll', load)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [  ])
 
     useEffect(() => {
         if (props.idLine) {
-            dispatch(updateLoading(true))
-            network.get(`line/score/${props.idLine}?skip=${paginate.skip}&limit=${paginate.limit}`)
-            .then(response => {
-                console.log(response.data)
-                dispatch(updateLoading(false))
-                setComment({ ...comment, ...response.data })
-            })
-            .catch(_ => {
-                dispatch(updateLoading(false))
-                toast.error('Falha de comunicação com o servidor')
-            })
+            requestServer()
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ props.idLine ])
 
-    function load(ev) {
-        console.log('nice', ev)
+    useEffect(() => {
+        if (comment.isFetching) {
+            requestServer(comment.page + 1)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ comment.isFetching ])
+
+    function requestServer(page = comment.page) {
+        dispatch(updateLoading(true))
+        network.get(`line/score/${props.idLine}?page=${page}&limit=${comment.limit}`)
+        .then(response => {
+            console.log(response.data)
+            dispatch(updateLoading(false))
+            setComment({ ...comment, ...response.data, docs: [...comment.docs, ...response.data.docs] })
+        })
+        .catch(_ => {
+            dispatch(updateLoading(false))
+            toast.error('Falha de comunicação com o servidor')
+        })
+    }
+
+    function load() {
+        console.log('ok')
+        if (
+            window.innerHeight + document.documentElement.scrollTo !== document.documentElement.offsetHeight ||
+            comment.isFetching ||
+            comment.page === comment.pages
+        ) {
+            return
+        }
+        console.log('ok')
+        setComment({ ...comment, isFetching: true })
     }
 
     function buildItems() {
-        return comment.score.map((sc, index) => {
+        return comment.docs.map((sc, index) => {
             return (
                 <div key={index.toString()}>{ sc.description }</div>
             )
@@ -77,13 +101,8 @@ const Comments = props => {
                     <Tab label="5 estrela" />
                     </Tabs>
                 </Paper>
-                <InfiniteScroll
-                    pageStart={0}
-                    loadMore={load}
-                    loader={<CircularProgress />}
-                >
-                    { buildItems() }
-                </InfiniteScroll>
+                { buildItems() }
+                { comment.isFetching && <CircularProgress /> }
             </Grid>
         </Dialog>
     )

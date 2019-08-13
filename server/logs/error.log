@@ -53,3 +53,8 @@
 {"timestamp":"2019-08-12T01:30:37.722Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"{ user: '5d3de989de5bc211988cbb8d',\n  description: 'bom, mas lota em alguns dias da semana',\n  star: 3 }\" at path \"_id\" for model \"Lines\""}
 {"timestamp":"2019-08-12T01:31:42.478Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"{ user: '5d3de989de5bc211988cbb8d',\n  description: 'bom, mas lota em alguns dias da semana',\n  star: 3 }\" at path \"_id\" for model \"Lines\""}
 {"timestamp":"2019-08-12T01:35:14.106Z","message":"Error to get score MongoError: unknown top level operator: $score.star"}
+{"timestamp":"2019-08-12T20:21:41.674Z","message":"Error to get score MissingSchemaError: Schema hasn't been registered for model \"Line\".\nUse mongoose.model(name, schema)"}
+{"timestamp":"2019-08-12T20:22:32.846Z","message":"Error to get score MissingSchemaError: Schema hasn't been registered for model \"Line\".\nUse mongoose.model(name, schema)"}
+{"timestamp":"2019-08-12T20:34:39.716Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"5\" at path \"_id\" for model \"Score\""}
+{"timestamp":"2019-08-12T20:35:27.751Z","message":"Error to get score CastError: Cast to number failed for value \"5d438af5aa49a20ed07d6544\" at path \"star\" for model \"Score\""}
+{"timestamp":"2019-08-12T20:40:04.091Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"5\" at path \"_id\" for model \"Score\""}

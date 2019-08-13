@@ -1,4 +1,5 @@
 const Line = require('../model/lines')
+const Score = require('../model/score')
 const response = require('./handlerResponse')
 const HandleError = require('./handlerError')
 const jwt = require('../utils/jwt')
@@ -127,13 +128,11 @@ function getScoreLine(req, res) {
     const filter = req.query.filter
     if (filter) {
         if (filter === 'all') {
-            Line.find()
-            .select(['score'])
-            .then(lines => {
-                if (lines.length) {
-                    const all = []
-                    lines.forEach(line => all.push(...line.score))
-                    const result = all.reduce((a, b) => {
+            Score.find()
+            .select('star')
+            .then(scores => {
+                if (scores.length) {
+                    const result = scores.reduce((a, b) => {
                         a[ b.star - 1 ] = a[ b.star - 1 ] + 1
                         return a
                     }, [ 0, 0, 0, 0, 0 ])
@@ -142,19 +141,19 @@ function getScoreLine(req, res) {
                     response.handlerResponse(res, [])
                 }
             })
-            .catch(e => response.handlerUnexpectError(`Error to get score ${e}`))
+            .catch(e => response.handlerUnexpectError(res, `Error to get score ${e}`))
         } else {
-            Line.findById(filter)
-            .select(['score'])
-            .then(line => {
-                if (line) {
-                    const result = line.score.reduce((a, b) => {
+            Score.find({ line: filter })
+            .select('star')
+            .then(scores => {
+                if (scores.length) {
+                    const result = scores.reduce((a, b) => {
                         a[ b.star - 1 ] = a[ b.star - 1 ] + 1
                         return a
                     }, [ 0, 0, 0, 0, 0 ])
                     response.handlerResponse(res, result)
                 } else {
-                    return Promise.reject(new HandleError('Not found', 404))
+                    response.handlerResponse(res, [])
                 }
             })
             .catch(e => {
@@ -172,16 +171,13 @@ function getScoreLine(req, res) {
 
 function getScore(req, res) {
     const { id } = req.params
-    const { skip = 0, limit = 10, star = 5 } = req.query
+    const { page = 1, limit = 10, star = 5 } = req.query
     if (id) {
-        let score
-        if (star === undefined || star === null) {
-            score = 'score'
-        } else {
-            score = { score: {$elemMatch: { star: Number(star) }} }
-        }
-        console.log(skip, limit, score)
-        Line.findById(id).slice('score', [ skip, limit ]).select([ 'score', 'description', 'number' ])
+        let query = { $and: [{ line: id }, { star }] }
+        Score.paginate(query, { sort: { createdAt: -1 }, page: Number(page), limit: Number(limit), populate: [
+            { path: 'user', select: 'name' },
+            { path: 'line', select: 'description number' }
+        ],})
         .then(result => response.handlerResponse(res, result))
         .catch(e => response.handlerUnexpectError(res, `Error to get score ${e}`))
     } else {
