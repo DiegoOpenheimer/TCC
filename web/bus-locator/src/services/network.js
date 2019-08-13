@@ -14,5 +14,6 @@ instance.interceptors.request.use(config => {
     return config
 })
 
+export const CancelToken = axios.CancelToken
 
 export default instance
