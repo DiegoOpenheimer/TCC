@@ -6,6 +6,7 @@ let send = true
 const si = require('systeminformation')
 
 si.uuid(result => {
+  console.log(result)
   const TOPIC_PING = result.os + '/ping'
   const TOPIC_PONG = result.os + '/pong'
   const TOPIC_LOCATION = result.os + '/location'

@@ -55,7 +55,7 @@ export const requestTotalDevices = (error = console.log) => dispatch => {
   dispatch(handleErrorTotalDevices(false));
   dispatch(handleLoadingTotalDevices(true));
   network
-    .get("user/count")
+    .get("device/count")
     .then(response => {
       dispatch(handleLoadingTotalDevices(false));
       dispatch(handleTotalDevices(response.data.count));
