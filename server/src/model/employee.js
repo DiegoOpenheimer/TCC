@@ -2,6 +2,9 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const constants = require('../utils/constants')
 const mongoosePaginate = require('mongoose-paginate')
+const News = require('./news')
+const Suggestion = require('./suggestion')
+const logger = require('../utils/logger')
 
 const Schema = mongoose.Schema
 
@@ -35,6 +38,13 @@ employeeSchema.pre('save', function(next) {
     })
 })
 
+employeeSchema.post('findOneAndDelete', function(doc) {
+    News.deleteMany({'author': doc._id})
+    .catch(logger.error)
+    Suggestion.updateMany(
+        { $pull: { messages: { by: doc._id } } }
+    ).catch(logger.error)
+})
 
 employeeSchema.methods.checkPassword = function(password) {
     return new Promise((resolve, reject) => {

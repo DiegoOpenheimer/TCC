@@ -79,3 +79,4 @@
 {"timestamp":"2019-08-02T01:46:11.524Z","message":"Error to get score CastError: Cast to ObjectId failed for value \"123123\" at path \"_id\" for model \"Lines\""}
 {"timestamp":"2019-08-09T23:37:32.343Z","message":"ERROR MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}
 {"timestamp":"2019-08-10T00:16:54.361Z","message":"error to send email Error: connect ETIMEDOUT 64.233.186.108:465"}
+{"timestamp":"2019-08-12T14:05:23.650Z","message":"ERROR MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}

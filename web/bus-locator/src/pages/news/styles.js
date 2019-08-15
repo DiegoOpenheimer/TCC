@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core'
 
-export default makeStyles({
+export default makeStyles(theme => ({
     input: {
         minWidth: '30vw',
         marginLeft: 16
@@ -41,5 +41,34 @@ export default makeStyles({
             marginRight: 10
         }
     },
-    
-})
+    inputRegisterNews: {
+        width: '50vw',
+        marginTop: 16
+    },
+    textMessage: {
+        margin: '16px 0px'
+    },
+    root: {
+        width: '100%',
+        padding: 32,
+    },
+    tableWrapper: {
+        overflowX: 'auto',
+        marginTop: 32,
+        width: '100%'
+    },
+    rightIcon: {
+        marginLeft: theme.spacing(1),
+    },
+    inputSearch: {
+        minWidth: '50%'
+    },
+    tableCellFooter: {
+        paddingRight: '32px !important'
+    },
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2)
+    }
+}))

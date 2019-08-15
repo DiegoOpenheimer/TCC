@@ -30,7 +30,7 @@ async function getDevices(req, res) {
             response.handlerResponse(res, result)
         }
     } catch (error) {
-        response.handlerUnexpectError(res, 'error to get devices ' + error)
+        response.handlerUnexpectError(res, `error to get devices ${error}`)
     }
 }
 

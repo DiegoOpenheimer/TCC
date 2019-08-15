@@ -12,7 +12,7 @@ export default makeStyles(theme => ({
         }),
     },
     appBarShift: {
-        width: `calc(100% - ${drawerWidth}px)`,
+        width: `calc(100% - ${drawerWidth}px) !important`,
         marginLeft: drawerWidth,
         transition: theme.transitions.create(['margin', 'width'], {
           easing: theme.transitions.easing.easeOut,
@@ -47,7 +47,7 @@ export default makeStyles(theme => ({
           duration: theme.transitions.duration.enteringScreen,
         }),
         marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`
+        width: `calc(100% - ${drawerWidth}px) !important`
     },
     result: {
         color: '#000'

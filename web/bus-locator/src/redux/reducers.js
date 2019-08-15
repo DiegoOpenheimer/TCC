@@ -9,6 +9,7 @@ import history from './history/reducer'
 import suggestion from './suggestion/reducer'
 import line from './lines/reducer'
 import device from './devices/reducer'
+import news from './news/reducer'
 
 const reducers = combineReducers({
     login,
@@ -18,7 +19,8 @@ const reducers = combineReducers({
     history,
     suggestion,
     line,
-    device
+    device,
+    news
 })
 
 export default reducers

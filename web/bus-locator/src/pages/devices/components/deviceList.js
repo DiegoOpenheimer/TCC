@@ -3,7 +3,6 @@ import { requestDevices, removeDevice, updateDevice } from '../../../redux/devic
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 import {
-    makeStyles,
     TablePagination,
     Paper,
     Grid,
@@ -19,35 +18,7 @@ import { withRouter } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constants'
 import { compose } from 'recompose'
 import MaterialTable from 'material-table'
-
-const createStyle = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        padding: 32,
-    },
-    tableWrapper: {
-        overflowX: 'auto',
-        marginTop: 32,
-        width: '100%'
-    },
-    rightIcon: {
-        marginLeft: theme.spacing(1),
-    },
-    input: {
-        minWidth: '50%'
-    },
-    tableCellFooter: {
-        paddingRight: '32px !important'
-    },
-    fab: {
-        position: 'absolute',
-        bottom: theme.spacing(2),
-        right: theme.spacing(2),
-        backgroundColor: '#3f51b5',
-        color: '#FFF',
-        borderRadius: '50%'
-    }
-}))
+import createStyle from './style'
 
 const Devices = props => {
 
@@ -100,7 +71,7 @@ const Devices = props => {
             <Grid className={classes.root}>
                     <TextField
                         onChange={ev => subject.next(ev.target.value)}
-                        className={classes.input}
+                        className={classes.inputSearch}
                         variant="outlined"
                         label="Procurar"
                         placeholder="Digite aqui para filtrar na tabela"

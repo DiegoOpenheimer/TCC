@@ -20,5 +20,7 @@ export const ROUTES = {
     LINES: '/home/lines',
     ADD_LINES: '/home/lines/add',
     MAP: '/home/maps',
-    LOGIN: '/login'
+    LOGIN: '/login',
+    NEWS: '/home/news',
+    ADD_NEWS: '/home/news/add'
 }

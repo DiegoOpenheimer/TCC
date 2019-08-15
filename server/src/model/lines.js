@@ -14,19 +14,12 @@ const PointSchema = new Schema({
     lat: Number
 })
 
-const ScoreSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User' },
-    description: String,
-    star: Number
-})
-
 const LineSchema = new Schema({
     number: { type: Number, unique: true },
     description: String,
     routes: [RouteSchema],
     directions: Object,
     points: [PointSchema],
-    score: [ScoreSchema]
 }, { timestamps: true })
 
 LineSchema.plugin(mongoosePaginate)

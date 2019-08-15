@@ -25,6 +25,8 @@ tags:
     description: Everything about lines
   - name: Device
     description: Everything about device
+  - name: News
+    description: Everything about news
 schemes:
   - http
 paths:
@@ -1534,6 +1536,219 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
+      
+  /news/{id}:
+    delete:
+      tags:
+        - News
+      summary: remove a new
+      description: remove a new
+      operationId: removeNewsById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          description: news id to be removed
+          required: true
+      responses:
+        '200':
+          description: device
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+    get:
+      tags:
+        - News
+      summary: get a news by id
+      description: get a new
+      operationId: getNewsById
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          type: string
+          description: news id
+          required: true
+      responses:
+        '200':
+          description: news
+          schema:
+            $ref: '#/definitions/News'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
+  /news:
+    put:
+      tags:
+        - News
+      summary: edit a news
+      description: edit a news
+      operationId: editNews
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: news
+          schema:
+            $ref: '#/definitions/News'
+          description: news object
+      responses:
+        '200':
+          description: news
+          schema:
+            type: object
+            properties:
+              message:
+                type: string        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '409':
+          description: conflict
+          schema:
+            $ref: '#/definitions/ApiResponseConflict'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
+    post:
+      tags:
+        - News
+      summary: create a news
+      description: create a news
+      operationId: createNews
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: news
+          schema:
+            $ref: '#/definitions/News'
+          description: news object
+      responses:
+        '200':
+          description: news
+          schema:
+            type: object
+            properties:
+              message:
+                type: string        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '409':
+          description: conflict
+          schema:
+            $ref: '#/definitions/ApiResponseConflict'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+  
+    get:
+      tags:
+        - News
+      summary: get news
+      description: get news
+      operationId: getNews
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: limit
+          type: number
+          description: limit for device
+        - in: query
+          name: page
+          type: number
+          description: page for device
+        - in: query
+          name: field
+          type: string
+          description: get with filter
+      responses:
+        '200':
+            description: success operation
+            schema:
+              type: object
+              properties:
+                limit:
+                  type: number
+                page:
+                  type: number
+                total:
+                  type: number
+                docs:
+                  type: array
+                  items:
+                    $ref: '#/definitions/News'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '404':
+          description: Not found
+          schema:
+            $ref: '#/definitions/NotFound'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
 
 securityDefinitions:
   ApiKey:
@@ -1702,17 +1917,6 @@ definitions:
               type: number
             latitude:
               type: number
-      score:
-        type: array
-        items:
-          properties:
-            _id:
-              type: string
-            description:
-              type: string
-            star:
-              type: string
-
   Device:
     type: object
     properties:
@@ -1728,3 +1932,14 @@ definitions:
         type: number
       line:
         $ref: '#/definitions/Line'
+  News:
+    type: object
+    properties:
+      _id:
+        type: string
+      author:
+        $ref: '#/definitions/Employee'
+      title:
+        type: string
+      message:
+        type: string

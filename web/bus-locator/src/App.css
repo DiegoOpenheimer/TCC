@@ -25,3 +25,7 @@ html, body, #root {
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
 }
+
+.editor {
+  padding: 8px
+}
