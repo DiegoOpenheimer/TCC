@@ -16,7 +16,7 @@ let subscription
 export default function(props) {
     
     const [ status, setStatus ] = useState('Status')
-    const [ device, setDevice ] = useState({ text: '', topic: '' })
+    const [ device, setDevice ] = useState({ text: '', topic: '', latitude : '', longitude: '', time: '' })
     const classes = styles()
     const dispatch = useDispatch()
     const loading = useSelector(state => state.component.loading)
@@ -54,11 +54,16 @@ export default function(props) {
     }
 
     function onMessage(topic, message) {
-        if (topic === device.topic && message.toString() === 'pong') {
+        if (topic === device.topic && message) {
+            
             client.unsubscribe(device.topic)
             dispatch(updateLoading(false))
             setStatus(CONNECTED)
             subscription.unsubscribe()
+            const payload = JSON.parse(message.toString())
+            if (payload) {
+                setDevice({...device,latitude:payload.lat, longitude:payload.lon, time:payload.time}) 
+            }
         }
     }
     return (

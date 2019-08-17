@@ -32,7 +32,9 @@ function SecondStep(props) {
         const body = {
             uuid: props.device.text,
             name: props.name,
-            line: props.value
+            line: props.value,
+            latitude: props.device.latitude,
+            longitude: props.device.longitude
         }
         if (!body.uuid) {
             toast.error('Identificador do dispositivo está vazio')
