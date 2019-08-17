@@ -14,7 +14,7 @@ const ForgotPassword = props => {
                 margin="normal"
                 variant="outlined"
                 placeholder="Informe email"
-                onChange={setEmail}
+                onChange={ev => setEmail(ev.target.value)}
             />
             <Button disabled={!email} className={classes.addMarginBottom} variant="contained" color="primary" onClick={() => props.recoverPassword(email)}>Enviar</Button>
             <Button onClick={props.goBack}>Voltar</Button>

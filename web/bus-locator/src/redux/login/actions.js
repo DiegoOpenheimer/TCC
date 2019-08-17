@@ -40,7 +40,7 @@ export const createAccount = (user, success, error) => dispatch => {
 
 export const recoverPassword = (email, success, error) => dispatch => {
     dispatch(handleLoading(true))
-    network.post('employee/rocover-password', { email })
+    network.post('employee/recover-password', { email })
     .then(_ => {
         dispatch(handleLoading(false))
         success()

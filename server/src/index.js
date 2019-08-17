@@ -10,6 +10,7 @@ mongoose.connectMongoDb()
             logger.error(` error to initialize ${err} `)
         } else {
             console.log(`server listen on port ${PORT}`)
+            mongoose.listenOnError()
         }
     })
 })

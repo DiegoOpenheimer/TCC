@@ -1,4 +1,5 @@
 import network from '../../services/network'
+import storage from '../../services/storage'
 
 export const type = {
     LOADING_TOTAL_USERS: 'LOADING_TOTAL_USERS',
@@ -108,6 +109,11 @@ export const requestEmployeeToEnable = (error = console.log) => dispatch => {
 
 export const requestUser = (error = console.log) => dispatch => {
     network.get('employee/current')
-    .then(response => dispatch(handleUser(response.data)))
+    .then(response => {
+      if (!response.data) {
+        storage.removeUser()
+      }
+      dispatch(handleUser(response.data))
+    })
     .catch(error)
 }

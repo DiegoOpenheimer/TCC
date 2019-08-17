@@ -1,6 +1,6 @@
 const Employee = require('../model/employee')
 const response = require('./handlerResponse')
-const HandleError = require('./handlerError')
+const HandlerError = require('./handlerError')
 const constants = require('../utils/constants')
 const jwt = require('../utils/jwt')
 const emailService = require('../utils/senderEmail')
@@ -127,7 +127,7 @@ const editEmployee = (req, res) => {
 const enableAccount = (req, res) => {
     jwt.verifyJwt(req.params.id)
     .then(result => Employee.findOneAndUpdate({ email: result.email }, { status: constants.USER_STATUS.NOT_AUTHORIZED }))
-    .then(_ => response.handlerResponse(res, { message: 'Account confirmed' }))
+    .then(_ => res.render('page', { message: 'Conta habilitada' }))
     .catch(e => {
         if (e instanceof JsonWebTokenError) {
             response.handlerResponse(res, { message: 'invalid token', status: 401 })
@@ -173,7 +173,7 @@ const changePassword = (req, res) => {
                 return Promise.reject(new HandlerError('user not found', 404))
             }
         })
-        .then(_ => response.handlerResponse(res, { message: 'password changed' }))
+        .then(_ => response.handlerResponse(res, { message: 'password changed', status: 200 }))
         .catch(e => {
             response.handlerUnexpectError(res, `fail to change password ${e}`)
         })

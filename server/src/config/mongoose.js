@@ -6,7 +6,7 @@ mongoose.Promise = global.Promise
 
 const connectMongoDb = () => mongoose.connect(process.env.MONGODB || 'mongodb://localhost/tcc', { useNewUrlParser: true })
 
-mongoose.connection.on('error', err => {
+const listenOnError = () => mongoose.connection.on('error', err => {
     logger.error(`ERROR MONGODB ${err}`)
 })
 
@@ -19,4 +19,5 @@ mongoose.set('debug', true)
 
 module.exports = {
     connectMongoDb,
+    listenOnError
 }
