@@ -17,7 +17,7 @@ import {
     TableFooter,
     TablePagination
 } from '@material-ui/core'
-import { Close, StarRate, Star } from '@material-ui/icons'
+import { Close, StarRate } from '@material-ui/icons'
 import network, { CancelToken } from '../../../services/network'
 import { updateLoading } from '../../../redux/components/action'
 import { useDispatch } from 'react-redux'
