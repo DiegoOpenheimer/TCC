@@ -2,16 +2,15 @@ const SerialPort = require('serialport')
 const GPS = require('gps')
 const mqtt = require('mqtt')
 let send = true
-
+let currentLocation = { lat: '', lon: '', time: '' }
 const si = require('systeminformation')
-
 si.uuid(result => {
   console.log(result)
   const TOPIC_PING = result.os + '/ping'
   const TOPIC_PONG = result.os + '/pong'
   const TOPIC_LOCATION = result.os + '/location'
   const CLIENT_ID = 'mqtt_rasp' + Math.random().toString(16).substr(2, 8)
-  const client = mqtt.connect('mqtt://localhost:1883', { username: 'TCC', password: 'TCC', clientId: CLIENT_ID })
+  const client = mqtt.connect('mqtt://ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:1883', { username: 'TCC', password: 'TCC', clientId: CLIENT_ID })
   client.subscribe(TOPIC_PING)
   client.on('connect', () => console.log('connected'))
   client.on('reconnect', () => console.log('reconnect'))
@@ -20,16 +19,15 @@ si.uuid(result => {
   client.on('offline', () => console.log('offline'))
   client.on('message', (topic, message) => {
     if (topic === TOPIC_PING && message.toString() === 'ping') {
-      client.publish(TOPIC_PONG, 'pong')
+      console.log(currentLocation)
+      client.publish(TOPIC_PONG, JSON.stringify(currentLocation))
     }
   })
   main(client, TOPIC_LOCATION)
 })
-
 function main(client, topic) {
-
   const port = new SerialPort('/dev/ttyAMA0', {
-    baudRate: 9200,
+    baudRate: 9600,
     autoOpen: false
   })
   
@@ -42,18 +40,25 @@ function main(client, topic) {
   })
    
   gps.on('data', data => {
-    publishLocation(data)
+    if (data && 'lon' in data && 'lat' in data) {
+      currentLocation = data
+      publishLocation()
+    }
   })
   
   port.on('data', data => {
-    gps.updatePartial(data)
+    try {
+      gps.updatePartial(data)
+    } catch(e) {
+      console.log('Error to parse data', e)
+    }
   })
   
-  function publishLocation(location) {
+  function publishLocation() {
     if (send) {
       send = false
       setTimeout(() => {
-        client.publish(topic, location)
+        client.publish(topic, JSON.stringify(currentLocation))
         send = true
       }, 5000)
     }
