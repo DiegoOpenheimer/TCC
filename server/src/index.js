@@ -2,6 +2,7 @@ require('dotenv').load()
 const logger = require('./utils/logger')
 const app = require('./app')
 const mongoose = require('./config/mongoose')
+const mqtt = require('./services/mqtt')
 const PORT = process.env.PORT
 mongoose.connectMongoDb()
 .then(() => {
@@ -10,6 +11,7 @@ mongoose.connectMongoDb()
             logger.error(` error to initialize ${err} `)
         } else {
             console.log(`server listen on port ${PORT}`)
+            mqtt()
             mongoose.listenOnError()
         }
     })

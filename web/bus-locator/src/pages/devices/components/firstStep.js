@@ -55,7 +55,6 @@ export default function(props) {
 
     function onMessage(topic, message) {
         if (topic === device.topic && message) {
-            
             client.unsubscribe(device.topic)
             dispatch(updateLoading(false))
             setStatus(CONNECTED)

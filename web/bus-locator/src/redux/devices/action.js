@@ -21,7 +21,7 @@ export const updateLines = value => ({ type: types.UPDATE_DEVICE_LINES, payload:
 
 export const updateDevicesDocs = value => ({ type: types.UPDATE_DEVICES_DOCS, payload: { value }})
 
-export const updateDevices= value => ({ type: types.UPDATE_DEVICES, payload: { value }})
+export const updateDevices = value => ({ type: types.UPDATE_DEVICES, payload: { value }})
 
 export const updateCurrentDevice = value => ({ type: types.UPDATE_CURRENT_DEVICE, payload: { value }})
 

@@ -9,6 +9,8 @@ import createStyle from '../../style/global'
 import createLocalStyle from './styles'
 import { toast } from 'react-toastify'
 import { Polyline } from 'react-google-maps'
+import mqtt from '../../services/mqtt'
+import store from '../../redux/index'
 
 const mapStateToProps = state => ({devices: state.device.devices, loading: state.component.loading, currentDevice: state.device.currentDevice})
 
@@ -25,8 +27,14 @@ function PageMaps(props) {
         window.initMap = () => setLoad(true)
         if (load || window.google) {
             props.requestAllDevices()
+            mqtt.subscribe('#')
+            mqtt.addListener('message', onMessage)
         }
-        return () => props.updateDevices([])
+        return () => {
+            props.updateDevices([])
+            mqtt.removeListener('message', onMessage)
+            mqtt.unsubscribe('#')
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ load ])
 
@@ -35,6 +43,23 @@ function PageMaps(props) {
             setController({ device: props.currentDevice, open: false, filter: true })
         }
     }, [ props.currentDevice ])
+
+    function onMessage(topic, message) {
+        try {
+            if (topic.endsWith('/location')) {
+                const id = topic.split('/')[0]
+                const stateDevices = store.getState().device.devices
+                const devices = [...stateDevices]
+                const deviceFound = devices.find(device => device.uuid === id)
+                if (deviceFound) {
+                    const payload = JSON.parse(String(message))
+                    deviceFound.latitude = payload.lat
+                    deviceFound.longitude = payload.lon
+                    props.updateDevices(devices) 
+                }
+            }
+        } catch {}
+    }
 
     function buildRoute() {
         if (controller.filter && controller.device.line.directions) {
