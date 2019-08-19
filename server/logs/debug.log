@@ -102,3 +102,6 @@
 {"timestamp":"2019-08-17T15:35:09.754Z","message":"email sent to openheimerdiego@gmail.com with subject Troca de senha"}
 {"timestamp":"2019-08-17T15:44:26.250Z","message":"email sent to openheimerdiego@gmail.com with subject Troca de senha"}
 {"timestamp":"2019-08-17T15:46:56.084Z","message":"email sent to openheimerdiego@gmail.com with subject Confirmação de conta"}
+{"timestamp":"2019-08-19T20:20:19.783Z","message":"FAIL TO CONNECT MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}
+{"timestamp":"2019-08-19T20:27:59.528Z","message":"FAIL TO CONNECT MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}
+{"timestamp":"2019-08-19T20:39:42.644Z","message":"FAIL TO CONNECT MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}

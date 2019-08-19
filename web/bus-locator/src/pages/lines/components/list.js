@@ -25,32 +25,7 @@ import { debounceTime } from 'rxjs/operators'
 import { withRouter } from 'react-router-dom'
 import { ROUTES } from '../../../utils/constants'
 import { compose } from 'recompose'
-
-const createStyle = makeStyles(theme => ({
-    root: {
-        width: '100%',
-        padding: 32,
-    },
-    tableWrapper: {
-        overflowX: 'auto',
-        marginTop: 32,
-        width: '100%'
-    },
-    rightIcon: {
-        marginLeft: theme.spacing(1),
-    },
-    input: {
-        minWidth: '50%'
-    },
-    tableCellFooter: {
-        paddingRight: '32px !important'
-    },
-    fab: {
-        position: 'absolute',
-        bottom: theme.spacing(2),
-        right: theme.spacing(2)
-    }
-}))
+import createStyle from '../styles'
 
 const Lines = props => {
 
@@ -125,7 +100,7 @@ const Lines = props => {
             <Grid className={classes.root}>
                     <TextField
                         onChange={ev => subject.next(ev.target.value)}
-                        className={classes.input}
+                        className={classes.inputSearch}
                         variant="outlined"
                         label="Procurar"
                         placeholder="Digite aqui para buscar por número ou descrição"

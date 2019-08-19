@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Grid, TextField, IconButton, InputAdornment, Paper, Button } from '@material-ui/core'
+import { Grid, TextField, IconButton, InputAdornment, Paper, Button, Fab } from '@material-ui/core'
 import globalStyle from '../../../style/global'
 import { Clear, AddCircle, Search, Save } from '@material-ui/icons'
 import clsx from 'clsx'
@@ -272,9 +272,8 @@ const AddLine = props => {
                     error={!!information.errorDescription}
                     helperText={information.errorDescription}
                 />
-                <Button onClick={validateForms} variant="contained" className={styles.buttonSave} color="primary">
-                    <Save />
-                    <span>SALVAR</span>
+                <Button variant="contained" onClick={() => console.log('ok')} className={styles.buttonSave} color="primary">
+                    <span>Horário</span>
                 </Button>
             </Grid>
             <Grid className={styles.contentBlockMap} container>
@@ -312,6 +311,10 @@ const AddLine = props => {
                 textCancel="Cancelar"
                 onCancel={() => setDialog({ ...dialog, text: '', index: null, open: false })}
             />
+            <Fab variant="extended" onClick={validateForms} className={clsx(styles.buttonSave, styles.fab)} color="primary">
+                <Save />
+                <span>SALVAR</span>
+            </Fab>
         </Grid>
     )
 }
