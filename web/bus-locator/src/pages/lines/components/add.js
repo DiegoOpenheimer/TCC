@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Grid, TextField, IconButton, InputAdornment, Paper, Button, Fab } from '@material-ui/core'
+import { Grid, TextField, IconButton, InputAdornment, Paper, Button, Fab, Dialog } from '@material-ui/core'
 import globalStyle from '../../../style/global'
 import { Clear, AddCircle, Search, Save } from '@material-ui/icons'
 import clsx from 'clsx'
@@ -10,6 +10,7 @@ import localStyles from '../styles'
 import DialogInput from '../../../components/dialogInput'
 import { connect } from 'react-redux'
 import { createLine, getLineById, editLine } from '../../../redux/lines/action'
+import DialogHorary from './horary'
 
 const AddLine = props => {
 
@@ -23,7 +24,8 @@ const AddLine = props => {
     const [ markers, setMarkers ] = useState([])
     const [ dialog, setDialog ] = useState({ index: null, text: '', open: false })
     const [ load, setLoad ] = useState(false)
-
+    const [ openDialogHorary, setOpenDialogHorary ] = useState(false)
+    
     useEffect(() => {
         window.initMap = () => setLoad(true)
         if (id) {
@@ -272,8 +274,8 @@ const AddLine = props => {
                     error={!!information.errorDescription}
                     helperText={information.errorDescription}
                 />
-                <Button variant="contained" onClick={() => console.log('ok')} className={styles.buttonSave} color="primary">
-                    <span>Horário</span>
+                <Button variant="contained" onClick={() => setOpenDialogHorary(true)} className={styles.buttonSave} color="primary">
+                    <span>Horários</span>
                 </Button>
             </Grid>
             <Grid className={styles.contentBlockMap} container>
@@ -315,6 +317,7 @@ const AddLine = props => {
                 <Save />
                 <span>SALVAR</span>
             </Fab>
+            <DialogHorary onOpen={setOpenDialogHorary} open={openDialogHorary} />
         </Grid>
     )
 }
