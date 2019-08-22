@@ -14,11 +14,17 @@ const PointSchema = new Schema({
     lat: Number
 })
 
+const HorarySchema = new Schema({
+    mondayToSaturday: [String],
+    sundayAndHoliday: [String]
+})
+
 const LineSchema = new Schema({
     number: { type: Number, unique: true },
     description: String,
     routes: [RouteSchema],
     directions: Object,
+    horary: HorarySchema,
     points: [PointSchema],
 }, { timestamps: true })
 

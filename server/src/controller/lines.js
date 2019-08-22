@@ -52,6 +52,7 @@ async function editLine(req, res) {
             lineFound.routes = line.routes
             lineFound.directions = line.directions
             lineFound.points = line.points
+            lineFound.horary = line.horary
             await lineFound.save()
             response.handlerResponse(res, { message: 'Line edited' })
         } else {

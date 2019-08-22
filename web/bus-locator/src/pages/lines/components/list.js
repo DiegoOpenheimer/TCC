@@ -3,7 +3,6 @@ import { requestLines, removeLine } from '../../../redux/lines/action'
 import { connect } from 'react-redux'
 import { toast } from 'react-toastify'
 import {
-    makeStyles,
     Table,
     TableRow,
     TableCell,

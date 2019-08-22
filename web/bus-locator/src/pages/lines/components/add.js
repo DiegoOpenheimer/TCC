@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Grid, TextField, IconButton, InputAdornment, Paper, Button, Fab, Dialog } from '@material-ui/core'
+import { Grid, TextField, IconButton, InputAdornment, Paper, Button, Fab } from '@material-ui/core'
 import globalStyle from '../../../style/global'
 import { Clear, AddCircle, Search, Save } from '@material-ui/icons'
 import clsx from 'clsx'
@@ -19,6 +19,7 @@ const AddLine = props => {
     const refDirections = useRef(null)
     const { id } = props.match.params
     const [ directions, setDirections ] = useState()
+    const [ horary, setHorary ] = useState({ mondayToSaturday: [], sundayAndHoliday: [] })
     const [ information, setInformation ] = useState({ line: '', description: '', errorLine: '', errorDescription: '' })
     const [ routes, setRoutes ] = useState([ { route: '' }, { route: '' } ])
     const [ markers, setMarkers ] = useState([])
@@ -41,6 +42,9 @@ const AddLine = props => {
         if (props.line && Object.keys(props.line).length && window.google) {
             setRoutes([ ...props.line.routes ])
             setMarkers([ ...props.line.points ])
+            if (props.line.horary) {
+                setHorary({...props.line.horary})
+            }
             const { google } = window
             const DirectionService = new google.maps.DirectionsService()
             const routes = []
@@ -174,7 +178,8 @@ const AddLine = props => {
                     request: directions.request,
                     routes: directions.routes[0].overview_path
                 },
-                points: markers
+                points: markers,
+                horary
             }
             const callbackError = message => ({ response }) => {
                 if (response && response.status === 409) {
@@ -317,7 +322,12 @@ const AddLine = props => {
                 <Save />
                 <span>SALVAR</span>
             </Fab>
-            <DialogHorary onOpen={setOpenDialogHorary} open={openDialogHorary} />
+            <DialogHorary onOpen={(value, newHorary) => {
+                setOpenDialogHorary(value)
+                if (newHorary) {
+                    setHorary({...newHorary})
+                }
+            }} open={openDialogHorary} horary={horary} />
         </Grid>
     )
 }

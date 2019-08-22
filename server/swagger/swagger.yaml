@@ -1907,6 +1907,17 @@ definitions:
                 type: string
       directions:
           type: object
+      horary:
+        type: object
+        properties:
+          mondayToSaturday:
+            type: array
+            items:
+              type: string
+          sundayAndHoliday:
+            type: array
+            items:
+              type: string
       points:
         type: array
         items:
