@@ -105,3 +105,5 @@
 {"timestamp":"2019-08-19T20:20:19.783Z","message":"FAIL TO CONNECT MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}
 {"timestamp":"2019-08-19T20:27:59.528Z","message":"FAIL TO CONNECT MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}
 {"timestamp":"2019-08-19T20:39:42.644Z","message":"FAIL TO CONNECT MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}
+{"timestamp":"2019-08-23T23:33:09.928Z","message":"FAIL TO CONNECT MONGODB MongoNetworkError: failed to connect to server [localhost:27017] on first connect [MongoNetworkError: connect ECONNREFUSED 127.0.0.1:27017]"}
+{"timestamp":"2019-08-23T23:38:18.454Z","message":"Error to edit line Error: key $b must not start with '$'"}
