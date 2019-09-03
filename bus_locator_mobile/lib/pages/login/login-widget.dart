@@ -1,4 +1,6 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/pages/login/button-login.dart';
+import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
 import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -8,11 +10,15 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
+        key: _scaffoldKey,
         body: SingleChildScrollView(child: Container(
           child: _body(),
           height: MediaQuery.of(context).size.height,
@@ -74,4 +80,16 @@ class _LoginWidgetState extends State<LoginWidget> {
       obscureText: obscureText,
     );
   }
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.getBloc<RegisterBloc>().finishProcessStream.listen((T) {
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        content: Text('Conta criada com sucesso, verique seu email para confirmação'),
+      ));
+    });
+  }
+
+
 }

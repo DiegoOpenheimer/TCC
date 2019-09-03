@@ -14,7 +14,7 @@ class _ButtonLoginState extends State<ButtonLogin> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
   }
 
   @override
