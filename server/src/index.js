@@ -12,7 +12,7 @@ mongoose.connectMongoDb()
         } else {
             console.log(`server listen on port ${PORT}`)
             mqtt()
-            mongoose.listenOnError()
+            mongoose.init()
         }
     })
 })
