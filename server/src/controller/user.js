@@ -36,7 +36,7 @@ const createUser = (req, res) => {
 const enableAccount = (req, res) => {
     jwt.verifyJwt(req.params.id)
     .then(result => User.findOneAndUpdate({ email: result.email }, { status: constants.USER_STATUS.ENABLED }))
-    .then(_ => response.handlerResponse(res, { message: 'user enabled', status: 200 }))
+    .then(_ => res.render('page', { message: 'Conta habilitada' }))
     .catch(e => {
         if (e instanceof JsonWebTokenError) {
             response.handlerResponse(res, { message: 'invalid token', status: 401 })
