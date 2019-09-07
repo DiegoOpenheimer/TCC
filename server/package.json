@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/index.js",
     "start-nodemon": "nodemon src/index.js",
-    "pm2": "pm2 start src/index.js --name tcc"
+    "pm2": "pm2 start src/index.js --name api-rest"
   },
   "author": "Júlio Gonçalves | Diego Alves Openheimer",
   "license": "ISC",

@@ -22,6 +22,7 @@ const init = () => {
             const user = {
                 name: 'admin',
                 password: 'admin',
+                email: 'admin',
                 role: constants.EMPLOYEE_ROLE.ADMIN,
                 status: constants.USER_STATUS.ENABLED,
             }
