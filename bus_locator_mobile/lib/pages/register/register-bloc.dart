@@ -1,8 +1,13 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/services/connection-network.dart';
+import 'package:bus_locator_mobile/services/http.dart';
 import 'package:bus_locator_mobile/share/utils.dart';
+import 'package:dio/dio.dart';
 import 'package:rxdart/rxdart.dart';
 
-class RegisterBloc implements BlocBase {
+class RegisterBloc extends BlocBase {
+
+  Http http;
 
   final Map<String, String> body = {
     'name': '',
@@ -28,10 +33,27 @@ class RegisterBloc implements BlocBase {
   Sink get confirmPasswordSink => _confirmPasswordSubject.sink;
   Sink get finishProcessSink => _finishProcess.sink;
 
-  void save(Function success, Function error) {
+  RegisterBloc(this.http);
+
+  void save(Function success, Function error) async {
     if (_validate()) {
-      success();
-      _finishProcess.add(null);
+      try {
+        await http.post('/user', body);
+        success();
+        _finishProcess.add(null);
+      } on ErrorWithoutConnection {
+        error(Constants.messageWithoutConnection);
+      } on DioError catch (e) {
+        if (e.response.statusCode == Constants.conflict) {
+          error('Usuário já cadastrado');
+        } else {
+          error();
+        }
+      } catch ( e ) {
+        error();
+      }
+    } else {
+      error(null, false);
     }
   }
 
@@ -75,27 +97,12 @@ class RegisterBloc implements BlocBase {
 
   @override
   void dispose() {
+    super.dispose();
     _emailSubject.close();
     _nameSubject.close();
     _passwordSubject.close();
     _confirmPasswordSubject.close();
     _finishProcess.close();
   }
-
-  @override
-  void addListener(listener) {
-  }
-
-  @override
-  bool get hasListeners => null;
-
-  @override
-  void notifyListeners() {
-  }
-
-  @override
-  void removeListener(listener) {
-  }
-
 
 }

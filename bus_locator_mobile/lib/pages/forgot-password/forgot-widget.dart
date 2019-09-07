@@ -3,6 +3,7 @@ import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
 import 'package:bus_locator_mobile/components/loading/loading.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ForgotWidget extends StatefulWidget {
   @override
@@ -54,14 +55,19 @@ class _ForgotWidgetState extends State<ForgotWidget> {
             borderSide: BorderSide(color: Colors.white),
             child: Text('Enviar', style: TextStyle(fontSize: 20, color: Colors.white),),
             onPressed: () {
-              _forgotBloc.save(() async {
-                FocusScope.of(context).requestFocus(FocusNode());
-                _loadingBloc.showLoading(true);
-                await Future.delayed(Duration(seconds: 3));
+              FocusScope.of(context).requestFocus(FocusNode());
+              _loadingBloc.showLoading(true);
+              _forgotBloc.requestServerToChangePassword(() {
                 _loadingBloc.showLoading(false);
                 Navigator.of(context).pop();
-                _forgotBloc.finishProcessSink.add(null);
-              }, print);
+              }, ([String message, bool showMessage = true]) {
+                _loadingBloc.showLoading(false);
+                if (message != null && message.isNotEmpty) {
+                  Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_LONG);
+                } else if(showMessage) {
+                  Fluttertoast.showToast(msg: 'Falha ao fazer o requerimento para modificar senha', toastLength: Toast.LENGTH_LONG);
+                }
+              });
             },
           ),
         )

@@ -3,6 +3,11 @@ import 'dart:async';
 import 'package:connectivity/connectivity.dart';
 
 typedef OnListenConnection(ConnectivityResult result);
+class ErrorWithoutConnection {
+  String message;
+
+  ErrorWithoutConnection({ this.message = 'connection is none' });
+}
 class ConnectionNetwork {
 
   static final ConnectionNetwork _instance = ConnectionNetwork.internal();

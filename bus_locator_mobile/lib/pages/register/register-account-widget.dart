@@ -5,6 +5,7 @@ import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
 import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterAccountWidget extends StatefulWidget {
   @override
@@ -63,7 +64,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
               SizedBox(height: 16,),
               _buildTextField(label: 'Nome', hint: 'Digíte seu nome', icon: Icons.person, stream: registerBloc.nameStream, sink: registerBloc.nameSink, key: 'name'),
               SizedBox(height: 16,),
-              _buildTextField(label: 'Email', hint: 'Digíte seu email', icon: Icons.email, stream: registerBloc.emailStream, sink: registerBloc.emailSink, key: 'email'),
+              _buildTextField(label: 'Email', hint: 'Digíte seu email', icon: Icons.email, stream: registerBloc.emailStream, sink: registerBloc.emailSink, key: 'email', inputType: TextInputType.emailAddress),
               SizedBox(height: 16,),
               _buildTextField(label: 'Senha', hint: 'Digíte sua senha', obscureText: true, icon: Icons.lock, stream: registerBloc.passwordStream, sink: registerBloc.passwordSink, key: 'password'),
               SizedBox(height: 16,),
@@ -83,21 +84,38 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
       child: OutlineButton(
         child: Text('Criar conta', style: TextStyle(color: Colors.white)),
         borderSide: BorderSide(color: Colors.white),
-        onPressed: () => registerBloc.save(
-            () async {
-              FocusScope.of(context).requestFocus(FocusNode());
-              _loadingBloc.showLoading(true);
-              await Future.delayed(Duration(seconds: 3));
-              _loadingBloc.showLoading(false);
-              Navigator.of(context).pop();
-             },
-            () => print('ok')
-        ),
+        onPressed: () {
+          _loadingBloc.showLoading(true);
+          FocusScope.of(context).requestFocus(FocusNode());
+          registerBloc.save(
+              () {
+                _loadingBloc.showLoading(false);
+                Navigator.of(context).pop();
+              },
+              ([String message, bool showMessage = true]) {
+                _loadingBloc.showLoading(false);
+                if (message != null && message.isNotEmpty) {
+                  Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_LONG);
+                } else if (showMessage) {
+                  Fluttertoast.showToast(msg: 'Falha ao criar conta', toastLength: Toast.LENGTH_LONG);
+                }
+              }
+          );
+        },
       ),
     );
   }
 
-  Widget _buildTextField({ String label, String hint, bool obscureText = false, IconData icon, Observable stream, Sink sink, String key }) {
+  Widget _buildTextField({
+    String label,
+    String hint,
+    bool obscureText = false,
+    IconData icon,
+    Observable stream,
+    Sink sink,
+    String key,
+    TextInputType inputType
+  }) {
     return StreamBuilder(
       stream: stream,
       builder: (context, snapshot) {
@@ -121,6 +139,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
           cursorColor: Colors.white,
           style: TextStyle(color: Colors.white),
           obscureText: obscureText,
+          keyboardType: inputType,
         );
       }
     );

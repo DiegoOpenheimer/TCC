@@ -5,6 +5,8 @@ import 'package:bus_locator_mobile/pages/forgot-password/forgot-widget.dart';
 import 'package:bus_locator_mobile/pages/login/login-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-account-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
+import 'package:bus_locator_mobile/services/connection-network.dart';
+import 'package:bus_locator_mobile/services/http.dart';
 import 'package:bus_locator_mobile/share/transition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,9 +24,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       blocs: [
-        Bloc((i) => RegisterBloc()),
+        Bloc((i) => RegisterBloc(i.get<Http>())),
         Bloc((i) => LoadingBloc(), singleton: false),
-        Bloc((i) => ForgotBloc()),
+        Bloc((i) => ForgotBloc(i.get<Http>())),
+      ],
+      dependencies: [
+        Dependency((i) => Http()),
+        Dependency((i) => ConnectionNetwork()),
       ],
       child: MaterialApp(
         title: 'Bus locator',
