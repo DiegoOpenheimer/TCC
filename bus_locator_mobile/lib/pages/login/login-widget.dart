@@ -1,4 +1,5 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/button-login.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
 import 'package:bus_locator_mobile/share/theme.dart';
@@ -59,7 +60,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           _buildTextField(label: 'Senha', hint: 'Informe sua senha', obscureText: true, icon: Icon(Icons.lock)),
           Align(
             alignment: Alignment.centerRight,
-            child: FlatButton(child: Text('Esqueci senha'), onPressed: () => print('ok'),),
+            child: FlatButton(child: Text('Esqueci senha'), onPressed: () => Navigator.of(context).pushNamed('/forgot'),),
           ),
           SizedBox(height: 16,),
           ButtonLogin(),
@@ -84,11 +85,17 @@ class _LoginWidgetState extends State<LoginWidget> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.getBloc<RegisterBloc>().finishProcessStream.listen((T) {
+    Function callback = (String message) => (T) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
-        content: Text('Conta criada com sucesso, verique seu email para confirmação'),
+        content: Text(message),
+        action: SnackBarAction(
+          onPressed: () => _scaffoldKey.currentState.hideCurrentSnackBar(),
+          label: 'Fechar',
+        ),
       ));
-    });
+    };
+    BlocProvider.getBloc<RegisterBloc>().finishProcessStream.listen(callback('Conta criada com sucesso, verique seu email para confirmação'));
+    BlocProvider.getBloc<ForgotBloc>().finishProcessStream.listen(callback('Verique seu email para alterar senha'));
   }
 
 

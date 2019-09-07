@@ -1,7 +1,11 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
+import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
+import 'package:bus_locator_mobile/pages/forgot-password/forgot-widget.dart';
 import 'package:bus_locator_mobile/pages/login/login-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-account-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
+import 'package:bus_locator_mobile/share/transition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,15 +22,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       blocs: [
-        Bloc((i) => RegisterBloc())
+        Bloc((i) => RegisterBloc()),
+        Bloc((i) => LoadingBloc(), singleton: false),
+        Bloc((i) => ForgotBloc()),
       ],
       child: MaterialApp(
         title: 'Bus locator',
         color: Colors.white,
          routes: <String, WidgetBuilder>{
           '/': (context) => LoginWidget(),
-          '/register': (context) => RegisterAccountWidget()
-        }
+          '/register': (context) => RegisterAccountWidget(),
+        },
+        onGenerateRoute: (RouteSettings settings) {
+          if (settings.name == '/forgot') {
+            return CustomSlideTransition(child: ForgotWidget());
+          }
+          return null;
+        },
       ),
     );
   }

@@ -1,7 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/share/utils.dart';
 import 'package:rxdart/rxdart.dart';
-
-RegExp regexEmail = new RegExp(r'''[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?''');
 
 class RegisterBloc implements BlocBase {
 
@@ -65,6 +64,13 @@ class RegisterBloc implements BlocBase {
       result = false;
     }
     return result;
+  }
+
+  void clear() {
+    body['name'] = '';
+    body['email'] = '';
+    body['password'] = '';
+    body['confirmPassword'] = '';
   }
 
   @override

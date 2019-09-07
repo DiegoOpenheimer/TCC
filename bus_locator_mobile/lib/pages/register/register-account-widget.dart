@@ -1,4 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
+import 'package:bus_locator_mobile/components/loading/loading.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
 import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:flutter/material.dart';
@@ -12,29 +14,33 @@ class RegisterAccountWidget extends StatefulWidget {
 class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
 
   RegisterBloc registerBloc;
+  final LoadingBloc _loadingBloc = BlocProvider.getBloc<LoadingBloc>();
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
-      child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            Hero(
-              tag: 'login-to-register',
-              child: Container(
-                color: Colors.blue,
-                height: double.infinity,
+    return LoadingWidget(
+      stream: _loadingBloc.stream,
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: Scaffold(
+          body: Stack(
+            children: <Widget>[
+              Hero(
+                tag: 'login-to-register',
+                child: Container(
+                  color: Colors.blue,
+                  height: double.infinity,
+                ),
               ),
-            ),
-            SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.all(16),
-                height: MediaQuery.of(context).size.height,
-                child: _body(),
+              SingleChildScrollView(
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  height: MediaQuery.of(context).size.height,
+                  child: _body(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -78,7 +84,11 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
         child: Text('Criar conta', style: TextStyle(color: Colors.white)),
         borderSide: BorderSide(color: Colors.white),
         onPressed: () => registerBloc.save(
-            () {
+            () async {
+              FocusScope.of(context).requestFocus(FocusNode());
+              _loadingBloc.showLoading(true);
+              await Future.delayed(Duration(seconds: 3));
+              _loadingBloc.showLoading(false);
               Navigator.of(context).pop();
              },
             () => print('ok')
@@ -121,5 +131,12 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
     super.initState();
     registerBloc = BlocProvider.getBloc<RegisterBloc>();
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    registerBloc.clear();
+  }
+
 
 }
