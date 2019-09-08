@@ -1,22 +1,36 @@
-import 'package:bus_locator_mobile/model/model-dao.dart';
 
-class User extends Model {
+class User {
 
   String id;
   String name;
   String email;
+  String password;
+  String entity;
 
-  User({ this.name, this.email });
+  User({ this.name, this.email, this.password });
 
-  @override
-  void fromMap(Map value) {
-    // TODO: implement fromMap
+  User.fromMap(Map value) {
+    id = value['_id'];
+    name = value['name'];
+    email = value['email'];
+    password = value['password'];
+    entity = value['entity'];
   }
 
-  @override
   Map<String, dynamic> toMap() {
-    // TODO: implement toMap
-    return null;
+    return {
+      '_id': id,
+      'name': name,
+      'email': email,
+      'password': password,
+      'entity': entity
+    };
   }
+
+  @override
+  String toString() {
+    return 'User{id: $id, name: $name, email: $email, password: $password, entity: $entity}';
+  }
+
 
 }

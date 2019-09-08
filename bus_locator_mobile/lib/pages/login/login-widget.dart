@@ -1,9 +1,12 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/button-login.dart';
+import 'package:bus_locator_mobile/pages/login/login-bloc.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
 import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginWidget extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class LoginWidget extends StatefulWidget {
 class _LoginWidgetState extends State<LoginWidget> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  final LoginBloc _loginBloc = BlocProvider.getBloc<LoginBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -55,22 +59,47 @@ class _LoginWidgetState extends State<LoginWidget> {
         children: <Widget>[
           Text('Entrar', style: TextStyle(fontSize: 28, fontFamily: 'WorkSans'),),
           SizedBox(height: 16,),
-          _buildTextField(label: 'Email', hint: 'Informe seu email', icon: Icon(Icons.email)),
+          _buildTextField(
+            label: 'Email',
+            hint: 'Informe seu email',
+            icon: Icon(Icons.email),
+            inputType: TextInputType.emailAddress,
+            onChange: _loginBloc.setEmail
+          ),
           SizedBox(height: 16,),
-          _buildTextField(label: 'Senha', hint: 'Informe sua senha', obscureText: true, icon: Icon(Icons.lock)),
+          _buildTextField(
+            label: 'Senha',
+            hint: 'Informe sua senha',
+            obscureText: true,
+            icon: Icon(Icons.lock),
+            onChange: _loginBloc.setPassword
+          ),
           Align(
             alignment: Alignment.centerRight,
             child: FlatButton(child: Text('Esqueci senha'), onPressed: () => Navigator.of(context).pushNamed('/forgot'),),
           ),
           SizedBox(height: 16,),
-          ButtonLogin(),
+          StreamBuilder<bool>(
+            stream: _loginBloc.listenLoading,
+            initialData: false,
+            builder: (context, snapshot) {
+              return ButtonLogin(loading: snapshot.data, onPress: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+                _loginBloc.login(() {
+                  Navigator.of(context).pushReplacementNamed('/home');
+                }, (String message) {
+                  Fluttertoast.showToast(msg: message, toastLength: Toast.LENGTH_LONG);
+                });
+              },);
+            }
+          ),
           FlatButton(child: Text('Cadastrar'), onPressed: () => Navigator.of(context).pushNamed('/register'),)
         ],
       ),
     );
   }
 
-  Widget _buildTextField({ String label, String hint, bool obscureText = false, Icon icon }) {
+  Widget _buildTextField({ String label, String hint, bool obscureText = false, Icon icon, TextInputType inputType, Function(String) onChange }) {
     return TextField(
       decoration: InputDecoration(
         labelText: label,
@@ -79,11 +108,18 @@ class _LoginWidgetState extends State<LoginWidget> {
         border: OutlineInputBorder()
       ),
       obscureText: obscureText,
+      keyboardType: inputType,
+      onChanged: onChange,
     );
   }
 
   @override
   void initState() {
+    _loginBloc.verifyLogin((bool value) {
+      if (value) {
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
+    });
     super.initState();
     Function callback = (String message) => (T) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(

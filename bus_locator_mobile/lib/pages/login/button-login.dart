@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ButtonLogin extends StatefulWidget {
+
+  final bool loading;
+  final Function onPress;
+
+  ButtonLogin({ this.loading = false, this.onPress });
+
   @override
   _ButtonLoginState createState() => _ButtonLoginState();
 }
@@ -20,15 +26,18 @@ class _ButtonLoginState extends State<ButtonLogin> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     _animation = Tween(begin: MediaQuery.of(context).size.width, end: 50.0).animate(_animationController);
+    if (!widget.loading) {
+      _animationController.reverse();
+    } else {
+      _animationController.forward();
+    }
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
         return GestureDetector(
             onTap: () {
-              if (_animationController.isCompleted) {
-                _animationController.reverse();
-              } else {
-                _animationController.forward();
+              if (!widget.loading) {
+                widget?.onPress();
               }
             },
             child: _buildContentAnimation()

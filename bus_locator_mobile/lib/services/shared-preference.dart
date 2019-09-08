@@ -36,4 +36,9 @@ class SharedPreferenceService {
     SharedPreferences prefs = await getPreferences();
     return prefs?.getString(Constants.token);
   }
+
+  Future<bool> clear() async {
+    SharedPreferences prefs = await getPreferences();
+    return prefs?.clear();
+  }
 }

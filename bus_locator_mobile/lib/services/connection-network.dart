@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:bus_locator_mobile/share/utils.dart';
 import 'package:connectivity/connectivity.dart';
 
 typedef OnListenConnection(ConnectivityResult result);
 class ErrorWithoutConnection {
   String message;
 
-  ErrorWithoutConnection({ this.message = 'connection is none' });
+  ErrorWithoutConnection({ this.message = Constants.messageWithoutConnection });
 }
 class ConnectionNetwork {
 
