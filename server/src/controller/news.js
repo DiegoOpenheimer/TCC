@@ -14,7 +14,7 @@ async function getNews(req, res) {
         query = { $or: [{ message: { $regex: regexField } }, { title: { $regex: regexField } }] }
     }
     try {
-        const result = await News.paginate(query, { page: Number(page), limit: Number(limit), populate: { path: 'author', select: 'name email' } })
+        const result = await News.paginate(query, { sort: { createdAt: -1 }, page: Number(page), limit: Number(limit), populate: { path: 'author', select: 'name email' } })
         response.handlerResponse(res, result)
     } catch (error) {
         response.handlerUnexpectError(res, `error to get news ${error}`)

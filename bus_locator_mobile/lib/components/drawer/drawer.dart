@@ -3,16 +3,30 @@ import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/model/user.dart';
 import 'package:flutter/material.dart';
 
-class DrawerWidget extends StatelessWidget {
+class DrawerWidget extends StatefulWidget {
 
-  final ApplicationBloc applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
   final PageController pageController;
   final GlobalKey<ScaffoldState> scaffoldState;
 
   DrawerWidget({ this.pageController, this.scaffoldState });
 
   @override
+  _DrawerWidgetState createState() => _DrawerWidgetState();
+}
+
+class _DrawerWidgetState extends State<DrawerWidget> {
+  final ApplicationBloc applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
+
+
+  @override
+  void initState() {
+  super.initState();
+  applicationBloc.setIsDrawerOpen(true);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    applicationBloc.setIsDrawerOpen(true);
     return StreamBuilder<Object>(
       stream: applicationBloc.listenUser,
       initialData: applicationBloc.currentUser,
@@ -35,17 +49,18 @@ class DrawerWidget extends StatelessWidget {
         _options(label: 'Tela Inicial', icon: Icons.home, onPress: () => goPage(0), index: 0),
         _options(label: 'Minha conta', icon: Icons.account_circle, onPress: () => goPage(1), index: 1),
         _options(label: 'Notícias', icon: Icons.new_releases, onPress: () => goPage(2), index: 2),
+        Divider(color: Colors.black87,),
         _options(label: 'Sair', icon: Icons.exit_to_app, onPress: () => logout(context))
       ],
     );
   }
 
   void goPage(int index) {
-    scaffoldState.currentState.openEndDrawer();
-    if (index == pageController.page.toInt() + 1) {
-      pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
+    widget.scaffoldState.currentState.openEndDrawer();
+    if (index == widget.pageController.page.toInt() + 1) {
+      widget.pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.fastOutSlowIn);
     } else {
-      pageController.jumpToPage(index);
+      widget.pageController.jumpToPage(index);
     }
   }
 
@@ -55,7 +70,7 @@ class DrawerWidget extends StatelessWidget {
     Function onPress,
     int index
   }) {
-    bool active = index == pageController.page.toInt();
+    bool active = index == widget.pageController.page.toInt();
     return Material(
       child: InkWell(
         onTap: () => onPress(),
@@ -64,9 +79,9 @@ class DrawerWidget extends StatelessWidget {
           child: Container(
             child: Row(
               children: <Widget>[
-                Icon(icon, size: 30, color: active ? Colors.blue : Colors.black,),
-                SizedBox(width: 16),
-                Text(label, style: TextStyle(fontSize: 20, color: active ? Colors.blue : Colors.black),)
+                Icon(icon, size: 28, color: active ? Colors.blue : Colors.black54,),
+                SizedBox(width: 48),
+                Text(label, style: TextStyle(fontSize: 18, color: active ? Colors.blue : Colors.black87),)
               ],
             ),
           ),
@@ -145,5 +160,11 @@ class DrawerWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    applicationBloc.setIsDrawerOpen(false);
   }
 }

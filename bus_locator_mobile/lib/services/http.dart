@@ -28,33 +28,33 @@ class Http {
   ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
 
 
-  Future post(String path, Map<String, dynamic> body) async {
+  Future post(String path, Map<String, dynamic> body, { CancelToken cancelToken }) async {
     if (await _connectionNetwork.connectivityResult != ConnectivityResult.none) {
-      return _dio.post(path, data: body);
+      return _dio.post(path, data: body, cancelToken: cancelToken);
     } else {
       throw new ErrorWithoutConnection();
     }
   }
 
-  Future put(String path, Map<String, dynamic> body) async {
+  Future put(String path, Map<String, dynamic> body, { CancelToken cancelToken }) async {
     if (await _connectionNetwork.connectivityResult != ConnectivityResult.none) {
-      return _dio.put(path, data: body);
+      return _dio.put(path, data: body, cancelToken: cancelToken);
     } else {
       throw new ErrorWithoutConnection();
     }
   }
 
-  Future get(String path, { Map<String, dynamic> query = const {} }) async {
+  Future get(String path, { Map<String, dynamic> query = const {}, CancelToken cancelToken }) async {
     if (await _connectionNetwork.connectivityResult != ConnectivityResult.none) {
-      return _dio.get(path, queryParameters: query);
+      return _dio.get(path, queryParameters: query, cancelToken: cancelToken);
     } else {
       throw new ErrorWithoutConnection();
     }
   }
   
-  Future delete(String path, { Map<String, dynamic> query = const {} }) async {
+  Future delete(String path, { Map<String, dynamic> query = const {}, CancelToken cancelToken }) async {
     if (await _connectionNetwork.connectivityResult != ConnectivityResult.none) {
-      return _dio.delete(path, queryParameters: query);
+      return _dio.delete(path, queryParameters: query, cancelToken: cancelToken);
     } else {
       throw new ErrorWithoutConnection();
     }

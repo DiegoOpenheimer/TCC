@@ -33,7 +33,7 @@ class UserDAO {
   }
 
   Future<List<User>> getUsers() async {
-    final recordSnapshots = await _userStore.find(await database.openDatabase());
+    var recordSnapshots = await _userStore.find(await database.openDatabase());
     return recordSnapshots.map((snapshot) => User.fromMap(snapshot.value)).toList();
   }
 

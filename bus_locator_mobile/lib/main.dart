@@ -7,6 +7,8 @@ import 'package:bus_locator_mobile/pages/forgot-password/forgot-widget.dart';
 import 'package:bus_locator_mobile/pages/home/home-widget.dart';
 import 'package:bus_locator_mobile/pages/login/login-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/login-widget.dart';
+import 'package:bus_locator_mobile/pages/news/news-bloc.dart';
+import 'package:bus_locator_mobile/pages/news/news-details-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-account-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
 import 'package:bus_locator_mobile/repository/user-dao.dart';
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => ForgotBloc(i.get<Http>())),
         Bloc((i) => LoginBloc(i.get<Http>(), i.get<UserDAO>(), i.get<SharedPreferenceService>()), singleton: false),
         Bloc((i) => AccountBloc(i.get<Http>()), singleton: false),
+        Bloc((i) => NewsBloc(i.get<Http>()), singleton: false),
       ],
       dependencies: [
         Dependency((i) => Http()),
@@ -54,6 +57,9 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (RouteSettings settings) {
           if (settings.name == '/forgot') {
             return CustomSlideTransition(child: ForgotWidget());
+          }
+          if (settings.name == '/news-details') {
+            return MaterialPageRoute(builder: (context) => NewsDetailsWidget(settings.arguments));
           }
           return null;
         },

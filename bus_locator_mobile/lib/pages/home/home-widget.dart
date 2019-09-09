@@ -1,3 +1,5 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/components/drawer/drawer.dart';
 import 'package:bus_locator_mobile/pages/account/account-widget.dart';
 import 'package:bus_locator_mobile/pages/news/news-widget.dart';
@@ -40,12 +42,13 @@ class _HomeWidgetState extends State<HomeWidget> {
 class HomeAdapter extends StatelessWidget {
 
   final PageController _pageController = PageController();
+  final ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (_pageController.page.toInt() != 0 ) {
+        if (_pageController.page.toInt() != 0 && !_applicationBloc.isDrawerOpen ) {
           _pageController.jumpToPage(0);
           return Future.value(false);
         }

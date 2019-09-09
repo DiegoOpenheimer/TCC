@@ -11,6 +11,7 @@ class ApplicationBloc extends BlocBase {
   static final ApplicationBloc _instance = ApplicationBloc.internal();
   SharedPreferenceService _sharedPreferenceService = SharedPreferenceService();
   UserDAO _userDAO = UserDAO();
+  bool _isDrawerOpen = false;
 
   User currentUser = User();
 
@@ -26,6 +27,12 @@ class ApplicationBloc extends BlocBase {
     currentUser = user;
     _subjectUser.add(user);
   }
+
+  void setIsDrawerOpen(bool value) {
+    _isDrawerOpen = value;
+  }
+
+  bool get isDrawerOpen => _isDrawerOpen;
 
   void saveUser(User user) {
     currentUser = user;
