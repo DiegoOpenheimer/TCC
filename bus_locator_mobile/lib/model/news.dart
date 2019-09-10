@@ -46,7 +46,7 @@ class News {
         author: Author.fromJson(json["author"]),
         title: json["title"],
         message: json["message"],
-        createdAt: DateTime.parse(json["createdAt"]),
+        createdAt: DateTime.parse(json["createdAt"]).toLocal(),
     );
 
     Map<String, dynamic> toJson() => {

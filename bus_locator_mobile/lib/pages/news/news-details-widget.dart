@@ -17,7 +17,7 @@ class NewsDetailsWidget extends StatelessWidget {
         color: Colors.white,
         onPressed: Navigator.of(context).pop,
         iconSize: 36,
-      ), elevation: 0,),
+      ), elevation: 0, title: Text('Notícia'), centerTitle: true,),
       body: Stack(
         children: <Widget>[
           Hero(

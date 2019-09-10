@@ -9,32 +9,37 @@ class NewsBloc extends BlocBase {
 
   final BehaviorSubject<DocNews> _subject = BehaviorSubject.seeded(DocNews());
   final PublishSubject<String> _subjectMessage = PublishSubject();
+  final BehaviorSubject<bool> _subjectLoading = BehaviorSubject.seeded(false);
   Observable<String> get listenerMessage => _subjectMessage.stream;
+  Observable<bool> get listenerLoading => _subjectLoading.stream;
   Observable<DocNews> get streamDocNews => _subject.stream;
   Sink<DocNews> get sinkDocNews => _subject.sink;
-  DocNews get currentValue => _subject.value;
+  DocNews get currentValue => _subject.value ??= DocNews();
+  bool get isLoading => _subjectLoading.value;
   Http http;
   CancelToken _cancelToken;
   int limit = 10;
   int page = 1;
-  bool isLoading = false;
 
   NewsBloc(this.http);
 
-  Future getNews({ bool increment = false }) async {
+  Future getNews({ bool increment = false, bool isRefresh = false }) async {
     String messageError = 'Falha ao busca notícias, tente novamente';
-    if (currentValue.total >= currentValue.page * currentValue.limit && !isLoading) {
-      bool isRefreshing = increment;
-      if (isRefreshing) {
+    if ((currentValue.total > currentValue.page * currentValue.limit && !isLoading) || (isRefresh && !isLoading)) {
+      if (increment) {
         page += 1;
       } else {
         page = 1;
       }
+      if (isRefresh) {
+        limit = 10;
+        page = 1;
+      }
       try {
         _cancelToken = CancelToken();
-        isLoading = true;
+        _subjectLoading.add(true);
         Response response = await http.get('/news', query: { 'limit': limit, 'page': page }, cancelToken: _cancelToken);
-        if (isRefreshing) {
+        if (increment) {
           DocNews responseDocs = DocNews.fromJson(response.data);
           sinkDocNews.add(currentValue
             ..docs.addAll(responseDocs.docs)
@@ -44,28 +49,28 @@ class NewsBloc extends BlocBase {
         }
         else sinkDocNews.add(DocNews.fromJson(response.data));
       } on DioError catch(e) {
-        if (isRefreshing) page -= 1;
+        if (increment) page -= 1;
         if (e.type != DioErrorType.CANCEL && currentValue.docs.isEmpty) {
           _subject.addError(messageError);
         } else if (e.type != DioErrorType.CANCEL) {
           _subjectMessage.add(messageError);
         }
       } on ErrorWithoutConnection catch(e) {
-        if (isRefreshing) page -= 1;
+        if (increment) page -= 1;
         if (currentValue.docs.isEmpty) {
           _subject.addError(e.message);
         } else {
           _subjectMessage.add(e.message);
         }
       } catch (e) {
-        if (isRefreshing) page -= 1;
+        if (increment) page -= 1;
         if (currentValue.docs.isEmpty) {
           _subject.addError(messageError);
         } else {
           _subjectMessage.add(messageError);
         }
       }
-      isLoading = false;
+      _subjectLoading.add(false);
     }
   }
 
@@ -75,6 +80,7 @@ class NewsBloc extends BlocBase {
     _cancelToken.cancel();
     _subject.close();
     _subjectMessage.close();
+    _subjectLoading.close();
   }
 
 

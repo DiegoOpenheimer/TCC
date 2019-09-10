@@ -2,10 +2,12 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/components/drawer/drawer.dart';
 import 'package:bus_locator_mobile/model/news.dart';
 import 'package:bus_locator_mobile/pages/news/news-bloc.dart';
+import 'package:bus_locator_mobile/share/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:rxdart/rxdart.dart';
 
 class NewsWidget extends StatefulWidget {
 
@@ -48,51 +50,55 @@ class _NewsWidgetState extends State<NewsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: DrawerWidget(pageController: widget.pageController, scaffoldState: _scaffoldKey,),
       appBar: AppBar(title: Text('Notícias'),),
-      body: StreamBuilder<DocNews>(
-        stream: _newsBloc.streamDocNews,
-        initialData: _newsBloc.currentValue,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _body(snapshot.data);
-          }
-          if (snapshot.hasError) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    onPressed: _newsBloc.getNews,
-                    icon: Icon(Icons.replay),
-                    iconSize: 48,
+      drawer: DrawerWidget(pageController: widget.pageController, scaffoldState: _scaffoldKey,),
+      body: StreamBuilder(
+            stream: Observable.merge([_newsBloc.streamDocNews, _newsBloc.listenerLoading]),
+            builder: (context, snapshot) {
+              if (_newsBloc.isLoading) {
+                return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),));
+              }
+              if (_newsBloc.currentValue != null && _newsBloc.currentValue.docs.isNotEmpty) {
+                return _body(_newsBloc.currentValue);
+              }
+              if (snapshot.hasError) {
+                return Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                        onPressed: _newsBloc.getNews,
+                        icon: Icon(Icons.replay),
+                        iconSize: 48,
+                      ),
+                      const SizedBox(height: 16,),
+                      Text(snapshot.error.toString(), textAlign: TextAlign.center, style: TextStyle(fontSize: 22),)
+                    ],
                   ),
-                  const SizedBox(height: 16,),
-                  Text(snapshot.error.toString(), textAlign: TextAlign.center, style: TextStyle(fontSize: 22),)
-                ],
-              ),
-            );
-          }
-          return CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),);
-        }
-      ),
+                );
+              }
+              return Container();
+            }
+          ),
     );
   }
 
   Widget _body(DocNews docsNews) {
     return RefreshIndicator(
-      onRefresh: _newsBloc.getNews,
-      child: ListView.separated(
-        controller: _scrollController,
-        itemCount: docsNews.docs.length,
-        itemBuilder: (context, index) {
-          return _buildItem(docsNews.docs[index]);
-        },
-        separatorBuilder: (context, index) => Divider(color: Colors.black54, height: 0,),
-      ),
-    );
+    onRefresh: () => _newsBloc.getNews(isRefresh: true),
+    child: ListView.separated(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: EdgeInsets.all(0),
+      controller: _scrollController,
+      itemCount: docsNews.docs.length,
+      itemBuilder: (context, index) {
+        return _buildItem(docsNews.docs[index]);
+      },
+      separatorBuilder: (context, index) => Divider(color: Colors.black54, height: 0,),
+    ),
+      );
   }
 
   Widget _buildItem(News news) {
@@ -106,15 +112,15 @@ class _NewsWidgetState extends State<NewsWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Text(news.title, maxLines: 3, style: TextStyle(fontSize: 28), overflow: TextOverflow.ellipsis, ),
+                SizedBox(height: 16,),
                 Row(
                   children: <Widget>[
                     Flexible(child: Text(news?.author?.name, overflow: TextOverflow.ellipsis, style: TextStyle(fontStyle: FontStyle.italic),)),
                     SizedBox(width: 32,),
-                    Flexible(child: Text(news.createdAt.toString(), overflow: TextOverflow.ellipsis,)),
+                    Flexible(child: Text(Utils.formatterDate(news.createdAt), overflow: TextOverflow.ellipsis,)),
                   ],
                 ),
-                SizedBox(height: 16,),
-                Text(news.title, maxLines: 3, style: TextStyle(fontSize: 28), overflow: TextOverflow.ellipsis, )
               ],
             ),
           ),
