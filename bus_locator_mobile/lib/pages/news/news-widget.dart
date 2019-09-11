@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:rxdart/rxdart.dart';
 
 class NewsWidget extends StatefulWidget {
 
@@ -52,16 +51,18 @@ class _NewsWidgetState extends State<NewsWidget> {
       key: _scaffoldKey,
       appBar: AppBar(title: Text('Notícias'),),
       drawer: DrawerWidget(pageController: widget.pageController, scaffoldState: _scaffoldKey,),
-      body: StreamBuilder(
-            stream: Observable.merge([_newsBloc.streamDocNews, _newsBloc.listenerLoading]),
+      body: StreamBuilder<NewsBlocModel>(
+            stream: _newsBloc.streamDocNews,
+            initialData: _newsBloc.currentValue,
             builder: (context, snapshot) {
-              if (_newsBloc.isLoading) {
+              NewsBlocModel model = snapshot.data;
+              if (model.isLoading) {
                 return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),));
               }
-              if (_newsBloc.currentValue != null && _newsBloc.currentValue.docs.isNotEmpty) {
-                return _body(_newsBloc.currentValue);
+              if (model.data != null && model.data.docs.isNotEmpty) {
+                return _body(_newsBloc.currentValue.data);
               }
-              if (snapshot.hasError) {
+              if (model.error != null && model.error.isNotEmpty) {
                 return Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -74,7 +75,7 @@ class _NewsWidgetState extends State<NewsWidget> {
                         iconSize: 48,
                       ),
                       const SizedBox(height: 16,),
-                      Text(snapshot.error.toString(), textAlign: TextAlign.center, style: TextStyle(fontSize: 22),)
+                      Text(model.error.toString(), textAlign: TextAlign.center, style: TextStyle(fontSize: 22),)
                     ],
                   ),
                 );
@@ -112,7 +113,22 @@ class _NewsWidgetState extends State<NewsWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(news.title, maxLines: 3, style: TextStyle(fontSize: 28), overflow: TextOverflow.ellipsis, ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 10),
+                      height: 8,
+                      width: 8,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle
+                      ),
+                    ),
+                    SizedBox(width: 16,),
+                    Flexible(child: Text(news.title, maxLines: 3, style: TextStyle(fontSize: 28), overflow: TextOverflow.ellipsis, )),
+                  ],
+                ),
                 SizedBox(height: 16,),
                 Row(
                   children: <Widget>[

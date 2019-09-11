@@ -5,17 +5,28 @@ import 'package:bus_locator_mobile/services/http.dart';
 import 'package:dio/dio.dart';
 import 'package:rxdart/rxdart.dart';
 
+class NewsBlocModel {
+
+  DocNews data;
+  bool isLoading;
+  String error;
+
+  NewsBlocModel({ this.data, this.isLoading = false }) {
+    if (data == null) {
+      data = DocNews();
+    }
+  }
+
+}
+
 class NewsBloc extends BlocBase {
 
-  final BehaviorSubject<DocNews> _subject = BehaviorSubject.seeded(DocNews());
+  final BehaviorSubject<NewsBlocModel> _subject = BehaviorSubject.seeded(NewsBlocModel());
   final PublishSubject<String> _subjectMessage = PublishSubject();
-  final BehaviorSubject<bool> _subjectLoading = BehaviorSubject.seeded(false);
   Observable<String> get listenerMessage => _subjectMessage.stream;
-  Observable<bool> get listenerLoading => _subjectLoading.stream;
-  Observable<DocNews> get streamDocNews => _subject.stream;
-  Sink<DocNews> get sinkDocNews => _subject.sink;
-  DocNews get currentValue => _subject.value ??= DocNews();
-  bool get isLoading => _subjectLoading.value;
+  Observable<NewsBlocModel> get streamDocNews => _subject.stream;
+  Sink<NewsBlocModel> get sinkDocNews => _subject.sink;
+  NewsBlocModel get currentValue => _subject.value ??= NewsBlocModel();
   Http http;
   CancelToken _cancelToken;
   int limit = 10;
@@ -25,7 +36,7 @@ class NewsBloc extends BlocBase {
 
   Future getNews({ bool increment = false, bool isRefresh = false }) async {
     String messageError = 'Falha ao busca notícias, tente novamente';
-    if ((currentValue.total > currentValue.page * currentValue.limit && !isLoading) || (isRefresh && !isLoading)) {
+    if ((currentValue.data.total > currentValue.data.page * currentValue.data.limit && !currentValue.isLoading) || (isRefresh && !currentValue.isLoading)) {
       if (increment) {
         page += 1;
       } else {
@@ -36,42 +47,55 @@ class NewsBloc extends BlocBase {
         page = 1;
       }
       try {
-        _cancelToken = CancelToken();
-        _subjectLoading.add(true);
-        Response response = await http.get('/news', query: { 'limit': limit, 'page': page }, cancelToken: _cancelToken);
-        if (increment) {
-          DocNews responseDocs = DocNews.fromJson(response.data);
-          sinkDocNews.add(currentValue
-            ..docs.addAll(responseDocs.docs)
-            ..page = responseDocs.page
-            ..limit = responseDocs.limit
-          );
-        }
-        else sinkDocNews.add(DocNews.fromJson(response.data));
+        await _callServiceHttp(increment: increment, isRefresh: isRefresh);
       } on DioError catch(e) {
         if (increment) page -= 1;
-        if (e.type != DioErrorType.CANCEL && currentValue.docs.isEmpty) {
-          _subject.addError(messageError);
+        if (e.type != DioErrorType.CANCEL && currentValue.data.docs.isEmpty) {
+          _subject.add(currentValue..error = messageError..isLoading = false);
         } else if (e.type != DioErrorType.CANCEL) {
+          _hideLoading();
           _subjectMessage.add(messageError);
         }
       } on ErrorWithoutConnection catch(e) {
         if (increment) page -= 1;
-        if (currentValue.docs.isEmpty) {
-          _subject.addError(e.message);
+        if (currentValue.data.docs.isEmpty) {
+          _subject.add(currentValue..error = e.message..isLoading = false);
         } else {
+          _hideLoading();
           _subjectMessage.add(e.message);
         }
       } catch (e) {
         if (increment) page -= 1;
-        if (currentValue.docs.isEmpty) {
-          _subject.addError(messageError);
+        if (currentValue.data.docs.isEmpty) {
+          _subject.add(currentValue..error = messageError..isLoading = false);
         } else {
+          _hideLoading();
           _subjectMessage.add(messageError);
         }
       }
-      _subjectLoading.add(false);
     }
+  }
+
+  void _hideLoading() {
+    if (currentValue.isLoading) {
+      _subject.add(currentValue..isLoading = false);
+    }
+  }
+
+  Future _callServiceHttp({ bool increment = false, bool isRefresh = false }) async {
+      NewsBlocModel model = currentValue;
+      _cancelToken = CancelToken();
+      if (!isRefresh) _subject.add(model..isLoading = true..error = null);
+      Response response = await http.get('/news', query: { 'limit': limit, 'page': page }, cancelToken: _cancelToken);
+      if (increment) {
+        DocNews responseDocs = DocNews.fromJson(response.data);
+        model.data
+        ..docs.addAll(responseDocs.docs)
+        ..page = responseDocs.page
+        ..limit = responseDocs.limit;
+        sinkDocNews.add(model..isLoading = false);
+      }
+      else sinkDocNews.add(NewsBlocModel(data: DocNews.fromJson(response.data)));
   }
 
   @override
@@ -80,7 +104,6 @@ class NewsBloc extends BlocBase {
     _cancelToken.cancel();
     _subject.close();
     _subjectMessage.close();
-    _subjectLoading.close();
   }
 
 
