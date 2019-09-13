@@ -140,7 +140,6 @@ module.exports = {
                         message.by.status = undefined
                         message.by.cpf = undefined
                         message.by.role = undefined
-                        message.by._id = undefined
                     }
                 }))
             }
