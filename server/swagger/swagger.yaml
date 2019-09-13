@@ -878,6 +878,33 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
+      
+  /suggestion/user:
+    get:
+      tags:
+        - Suggestion
+      summary: get suggestions by user
+      description: get suggestions by user
+      operationId: getSuggestionsByUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Suggestions
+          schema:
+            $ref: '#/definitions/Suggestion'        
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
 
   /suggestion/message:
     delete:

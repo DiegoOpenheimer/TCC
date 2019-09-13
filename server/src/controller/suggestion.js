@@ -125,5 +125,27 @@ module.exports = {
         )
         .then(_ => response.handlerResponse(res, { message: 'message removed' }))
         .catch(e => response.handlerUnexpectError(res, `fail to remove a message ${e}`))
+    },
+
+    getSuggestionByUser(req, res) {
+        const jwtDecoced = jwt.decode(req.headers.authorization)
+        Suggestion.find({ author: jwtDecoced._id })
+        .sort({ createdAt: -1 })
+        .populate('messages.by')
+        .then(suggestions => {
+            if (suggestions) {
+                suggestions.forEach(suggestion => suggestion.messages.forEach(message => {
+                    if (message && message.by) {
+                        message.by.password = undefined
+                        message.by.status = undefined
+                        message.by.cpf = undefined
+                        message.by.role = undefined
+                        message.by._id = undefined
+                    }
+                }))
+            }
+            response.handlerResponse(res, suggestions)
+        })
+        .catch(e => response.handlerUnexpectError(res, `fail to get suggestion by user ${e}`))
     }
 }

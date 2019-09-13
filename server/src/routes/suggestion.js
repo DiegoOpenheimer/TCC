@@ -5,6 +5,8 @@ const validation = require('./validation/user')
 
 router.get('/', validationJwt, suggestionController.getSuggestions)
 
+router.get('/user', validationJwt, suggestionController.getSuggestionByUser)
+
 router.get('/:id', validationJwt, validation.validationId, suggestionController.getSuggestionById)
 
 router.post('/', validationJwt, suggestionController.registerSuggestion)
