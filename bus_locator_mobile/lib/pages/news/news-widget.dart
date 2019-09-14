@@ -1,5 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/components/drawer/drawer.dart';
+import 'package:bus_locator_mobile/components/error/message-error-widget.dart';
 import 'package:bus_locator_mobile/model/news.dart';
 import 'package:bus_locator_mobile/pages/news/news-bloc.dart';
 import 'package:bus_locator_mobile/share/utils.dart';
@@ -56,29 +57,19 @@ class _NewsWidgetState extends State<NewsWidget> {
             initialData: _newsBloc.currentValue,
             builder: (context, snapshot) {
               NewsBlocModel model = snapshot.data;
+              print(model);
               if (model.isLoading) {
                 return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),));
               }
-              if (model.data != null && model.data.docs.isNotEmpty) {
-                return _body(_newsBloc.currentValue.data);
-              }
               if (model.error != null && model.error.isNotEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                        onPressed: _newsBloc.getNews,
-                        icon: Icon(Icons.replay),
-                        iconSize: 48,
-                      ),
-                      const SizedBox(height: 16,),
-                      Text(model.error.toString(), textAlign: TextAlign.center, style: TextStyle(fontSize: 22),)
-                    ],
-                  ),
+                return ErrorMessageWidget(
+                  showIcon: true,
+                  onPressIcon: () => _newsBloc.getNews(isRefresh: true),
+                  text: model.error.toString(),
                 );
+              }
+              if (model.data != null) {
+                return _body(_newsBloc.currentValue.data);
               }
               return Container();
             }
@@ -87,19 +78,27 @@ class _NewsWidgetState extends State<NewsWidget> {
   }
 
   Widget _body(DocNews docsNews) {
-    return RefreshIndicator(
-    onRefresh: () => _newsBloc.getNews(isRefresh: true),
-    child: ListView.separated(
-      physics: const AlwaysScrollableScrollPhysics(),
-      padding: EdgeInsets.all(0),
-      controller: _scrollController,
-      itemCount: docsNews.docs.length,
-      itemBuilder: (context, index) {
-        return _buildItem(docsNews.docs[index]);
-      },
-      separatorBuilder: (context, index) => Divider(color: Colors.black54, height: 0,),
-    ),
+    if (docsNews.docs.isNotEmpty) {
+      return RefreshIndicator(
+        onRefresh: () => _newsBloc.getNews(isRefresh: true),
+        child: ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.all(0),
+          controller: _scrollController,
+          itemCount: docsNews.docs.length,
+          itemBuilder: (context, index) {
+            return _buildItem(docsNews.docs[index]);
+          },
+          separatorBuilder: (context, index) => Divider(color: Colors.black54, height: 0,),
+        ),
       );
+    } else {
+      return ErrorMessageWidget(
+        showIcon: true,
+        onPressIcon: () => _newsBloc.getNews(isRefresh: true),
+        text: 'Nenhuma notícia no momento',
+      );
+    }
   }
 
   Widget _buildItem(News news) {

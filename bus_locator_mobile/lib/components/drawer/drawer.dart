@@ -49,6 +49,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         _options(label: 'Tela Inicial', icon: Icons.home, onPress: () => goPage(0), index: 0),
         _options(label: 'Minha conta', icon: Icons.account_circle, onPress: () => goPage(1), index: 1),
         _options(label: 'Notícias', icon: Icons.new_releases, onPress: () => goPage(2), index: 2),
+        _options(label: 'Dúvidas e sugestões', icon: Icons.help, onPress: () => goPage(3), index: 3),
         Divider(color: Colors.black87,),
         _options(label: 'Sair', icon: Icons.exit_to_app, onPress: () => logout(context))
       ],

@@ -17,6 +17,12 @@ class NewsBlocModel {
     }
   }
 
+  @override
+  String toString() {
+    return 'NewsBlocModel{data: $data, isLoading: $isLoading, error: $error}';
+  }
+
+
 }
 
 class NewsBloc extends BlocBase {
@@ -35,7 +41,7 @@ class NewsBloc extends BlocBase {
   NewsBloc(this.http);
 
   Future getNews({ bool increment = false, bool isRefresh = false }) async {
-    String messageError = 'Falha ao busca notícias, tente novamente';
+    String messageError = 'Falha ao buscar notícias, tente novamente';
     if ((currentValue.data.total > currentValue.data.page * currentValue.data.limit && !currentValue.isLoading) || (isRefresh && !currentValue.isLoading)) {
       if (increment) {
         page += 1;

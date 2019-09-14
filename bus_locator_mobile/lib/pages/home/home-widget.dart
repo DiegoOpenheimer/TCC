@@ -3,6 +3,7 @@ import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/components/drawer/drawer.dart';
 import 'package:bus_locator_mobile/pages/account/account-widget.dart';
 import 'package:bus_locator_mobile/pages/news/news-widget.dart';
+import 'package:bus_locator_mobile/pages/suggestions/suggestion-widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeWidget extends StatefulWidget {
@@ -57,7 +58,7 @@ class HomeAdapter extends StatelessWidget {
       child: PageView.builder(
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
-        itemCount: 3,
+        itemCount: 4,
         itemBuilder: (BuildContext context, int index) {
           switch(index) {
             case 0:
@@ -66,6 +67,8 @@ class HomeAdapter extends StatelessWidget {
               return AccountWidget(pageController: _pageController,);
             case 2:
               return NewsWidget(pageController: _pageController,);
+            case 3:
+              return SuggestionWidget(pageController: _pageController,);
           }
           return null;
         },

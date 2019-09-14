@@ -13,7 +13,8 @@ class Http {
       BaseOptions(
         connectTimeout: timeout,
         receiveTimeout: timeout,
-        baseUrl: 'http://ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001',
+        baseUrl: 'http://192.168.0.104:3001'
+     //   baseUrl: 'http://ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001',
       )
   )..interceptors
       .add(InterceptorsWrapper(

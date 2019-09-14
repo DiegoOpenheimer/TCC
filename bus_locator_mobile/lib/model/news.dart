@@ -1,3 +1,5 @@
+import 'author.dart';
+
 class DocNews {
     int limit;
     int page;
@@ -24,6 +26,13 @@ class DocNews {
         "total": total,
         "docs": List.from(docs.map((news) => news.toJson())),
     };
+
+    @override
+    String toString() {
+        return 'DocNews{limit: $limit, page: $page, total: $total, docs: $docs}';
+    }
+
+
 }
 
 class News {
@@ -58,22 +67,3 @@ class News {
     };
 }
 
-class Author {
-    String name;
-    String email;
-
-    Author({
-        this.name,
-        this.email,
-    });
-
-    factory Author.fromJson(Map<String, dynamic> json) => Author(
-        name: json["name"],
-        email: json["email"],
-    );
-
-    Map<String, dynamic> toJson() => {
-        "name": name,
-        "email": email,
-    };
-}

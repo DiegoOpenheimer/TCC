@@ -63,7 +63,9 @@ class LoginBloc extends BlocBase {
       } on ErrorWithoutConnection catch(e) {
         error(e.message);
       } on DioError catch (e) {
-        if (e.response.statusCode == Constants.notAuthorized || e.response.statusCode != Constants.notFound) {
+        if (e.type == DioErrorType.DEFAULT) {
+          error('Falha ao fazer login');
+        } else if (e.response.statusCode == Constants.notAuthorized || e.response.statusCode != Constants.notFound) {
           error('Usuário e/ou senha incorretos');
         }
         error('Falha ao fazer login');

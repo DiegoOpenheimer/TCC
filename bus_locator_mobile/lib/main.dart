@@ -11,6 +11,7 @@ import 'package:bus_locator_mobile/pages/news/news-bloc.dart';
 import 'package:bus_locator_mobile/pages/news/news-details-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-account-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
+import 'package:bus_locator_mobile/pages/suggestions/suggestion-bloc.dart';
 import 'package:bus_locator_mobile/repository/user-dao.dart';
 import 'package:bus_locator_mobile/services/connection-network.dart';
 import 'package:bus_locator_mobile/services/http.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => LoginBloc(i.get<Http>(), i.get<UserDAO>(), i.get<SharedPreferenceService>()), singleton: false),
         Bloc((i) => AccountBloc(i.get<Http>()), singleton: false),
         Bloc((i) => NewsBloc(i.get<Http>()), singleton: false),
+        Bloc((i) => SuggestionBloc(i.get<Http>()), singleton: false),
       ],
       dependencies: [
         Dependency((i) => Http()),
