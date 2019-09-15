@@ -92,10 +92,12 @@ module.exports = {
                 data.createdAt = new Date()
                 suggestion.messages.push(data)
                 return suggestion.save()
+
             } else {
                 return Promise.reject(new HandleError('Suggestion no found', 404))
             }
         })
+        .then(_ => Suggestion.findById(id).populate('messages.by'))
         .then(value => {
             response.handlerResponse(
                 res,
