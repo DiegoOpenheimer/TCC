@@ -96,10 +96,10 @@ module.exports = {
                 return Promise.reject(new HandleError('Suggestion no found', 404))
             }
         })
-        .then(_ => {
+        .then(value => {
             response.handlerResponse(
                 res,
-                'Message added',
+                value,
                 new History(
                     `Usuário com email ${email},
                     respondeu uma discussão com o título de ${title} ao usuário ${nameUser},
