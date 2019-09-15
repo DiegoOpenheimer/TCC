@@ -47,7 +47,7 @@ class LoadingWidget extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 CircularProgressIndicator(),
-                Expanded(child: Text(message, style: TextStyle(fontSize: 20), textAlign: TextAlign.center,))
+                Expanded(child: Text(message, style: TextStyle(fontSize: 20, color: Colors.black), textAlign: TextAlign.center,))
               ],
             ),
           ),

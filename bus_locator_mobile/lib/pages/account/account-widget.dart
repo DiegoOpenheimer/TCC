@@ -40,7 +40,7 @@ class _AccountWidgetState extends State<AccountWidget> {
           body: Stack(
             children: <Widget>[
               Container(
-                color: Colors.blue,
+                color: _applicationBloc.getColor(context),
                 height: double.infinity,
               ),
               SingleChildScrollView(

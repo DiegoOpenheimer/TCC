@@ -22,8 +22,7 @@ class SharedPreferenceService {
       } else {
         return _preferences;
       }
-    } on Exception catch(e) {
-      print(e.toString());
+    } catch(e) {
       return null;
     }
   }

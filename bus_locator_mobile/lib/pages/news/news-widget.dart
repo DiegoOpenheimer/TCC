@@ -57,7 +57,6 @@ class _NewsWidgetState extends State<NewsWidget> {
             initialData: _newsBloc.currentValue,
             builder: (context, snapshot) {
               NewsBlocModel model = snapshot.data;
-              print(model);
               if (model.isLoading) {
                 return Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),));
               }

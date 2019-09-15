@@ -7,7 +7,16 @@ class Suggestion {
   String title;
   String name;
   DateTime createdAt;
-  List<Message> messages;
+  List<Message> messages = const [];
+
+  Suggestion({
+    this.id,
+    this.author,
+    this.title,
+    this.name,
+    this.createdAt,
+    this.messages = const []
+  });
 
   Suggestion.fromMap(Map<String, dynamic> map) {
     id = map['_id'];
@@ -38,6 +47,8 @@ class Message {
   String onModel;
   DateTime createdAt;
 
+  Message({ this.id, this.message, this.by, this.onModel, this.createdAt });
+
   Message.fromMap(Map<String, dynamic> map) {
     id = map['_id'];
     message = map['message'];
@@ -51,7 +62,7 @@ class Message {
     'message': message,
     'by': by.toJson(),
     'onModel': onModel,
-    'createdAt': createdAt,
+    'createdAt': createdAt.toUtc().toString(),
   };
 
 

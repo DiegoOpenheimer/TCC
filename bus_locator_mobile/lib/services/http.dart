@@ -13,8 +13,8 @@ class Http {
       BaseOptions(
         connectTimeout: timeout,
         receiveTimeout: timeout,
-        baseUrl: 'http://192.168.0.104:3001'
-     //   baseUrl: 'http://ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001',
+       // baseUrl: 'http://192.168.0.104:3001'
+        baseUrl: 'http://ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001',
       )
   )..interceptors
       .add(InterceptorsWrapper(
@@ -53,9 +53,9 @@ class Http {
     }
   }
   
-  Future delete(String path, { Map<String, dynamic> query = const {}, CancelToken cancelToken }) async {
+  Future delete(String path, { Map<String, dynamic> query = const {}, CancelToken cancelToken, Map<String, dynamic> data }) async {
     if (await _connectionNetwork.connectivityResult != ConnectivityResult.none) {
-      return _dio.delete(path, queryParameters: query, cancelToken: cancelToken);
+      return _dio.delete(path, data: data, queryParameters: query, cancelToken: cancelToken);
     } else {
       throw new ErrorWithoutConnection();
     }

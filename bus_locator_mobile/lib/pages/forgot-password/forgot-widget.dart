@@ -83,6 +83,7 @@ class _ForgotWidgetState extends State<ForgotWidget> {
       stream: _forgotBloc.streamForm,
       builder: (context, snapshot) {
         return TextField(
+          autofocus: true,
           onChanged: _forgotBloc.handleEmail,
           decoration: InputDecoration(
               errorText: snapshot.hasError ? snapshot.error.toString() : null,

@@ -17,7 +17,6 @@ import 'package:bus_locator_mobile/repository/user-dao.dart';
 import 'package:bus_locator_mobile/services/connection-network.dart';
 import 'package:bus_locator_mobile/services/http.dart';
 import 'package:bus_locator_mobile/services/shared-preference.dart';
-import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:bus_locator_mobile/share/transition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => LoginBloc(i.get<Http>(), i.get<UserDAO>(), i.get<SharedPreferenceService>()), singleton: false),
         Bloc((i) => AccountBloc(i.get<Http>()), singleton: false),
         Bloc((i) => NewsBloc(i.get<Http>()), singleton: false),
-        Bloc((i) => SuggestionBloc(i.get<Http>()), singleton: false),
+        Bloc((i) => SuggestionBloc(i.get<Http>())),
       ],
       dependencies: [
         Dependency((i) => Http()),

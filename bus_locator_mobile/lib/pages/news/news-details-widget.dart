@@ -1,3 +1,5 @@
+import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/model/news.dart';
 import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ class NewsDetailsWidget extends StatelessWidget {
   final News news;
 
   NewsDetailsWidget(this.news);
+  ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class NewsDetailsWidget extends StatelessWidget {
             tag: news.id,
             child: Container(
               height: double.infinity,
-              color: Colors.blue,
+              color: _applicationBloc.getColor(context),
             )
           ),
           SingleChildScrollView(child: _body(context))
