@@ -44,7 +44,7 @@ export default makeStyles(theme => ({
         paddingRight: '32px !important'
     },
     fab: {
-        position: 'absolute !important',
+        position: 'fixed !important',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
         backgroundColor: '#3f51b5 !important',

@@ -96,7 +96,7 @@ function Account(props) {
                             value={user.email}
                             disabled
                             />
-                        <InputMask mask="999.999.999-99" value={user.cpf} onChange={handleInput('cpf')}>
+                        <InputMask mask="999.999.999-99" value={user.cpf || ''} onChange={handleInput('cpf')}>
                             {
                                 props => <TextField
                                     {...props}

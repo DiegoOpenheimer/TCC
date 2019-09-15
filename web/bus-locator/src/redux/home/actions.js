@@ -16,6 +16,7 @@ export const type = {
     UPDATE_SCORE: 'UPDATE_SCORE',
     LOADING_SCORE: 'LOADING_SCORE',
     ERROR_LOAD_SCORE: 'ERROR_LOAD_SCORE',
+    REMOVE_FROM_NOT_AUTHORIZED: 'REMOVE_FROM_NOT_AUTHORIZED',
 }
 
 const handleTotalUsers = value => ({ type: type.TOTAL_USERS, payload: { value } })
@@ -117,3 +118,5 @@ export const requestUser = (error = console.log) => dispatch => {
     })
     .catch(error)
 }
+
+export const deleteUserFromNotAuthorized = value => ({ type: type.REMOVE_FROM_NOT_AUTHORIZED, payload: { value } })

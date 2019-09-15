@@ -60,7 +60,7 @@ export default makeStyles(theme => ({
         paddingRight: '32px !important'
     },
     fab: {
-        position: 'absolute',
+        position: 'fixed',
         bottom: theme.spacing(2),
         right: theme.spacing(2),
         zIndex: 1

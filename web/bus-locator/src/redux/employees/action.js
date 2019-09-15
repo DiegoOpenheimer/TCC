@@ -1,5 +1,6 @@
 import network from '../../services/network'
 import { types as typesLoading } from '../components/action'
+import { deleteUserFromNotAuthorized } from '../home/actions'
 
 export const types = {
     UPDATE_EMPLOYEES: 'UPDATE_EMPLOYEES',
@@ -29,6 +30,7 @@ export const removeEmployee = (body, success = console.log, error = console.log)
     network.delete('employee', { data: body })
     .then(response => {
         dispatch(handleReducer(typesLoading.UPDATE_COMPONENT_LOADING, false))
+        dispatch(deleteUserFromNotAuthorized(body._id))
         success(response)
     })
     .catch(e => {

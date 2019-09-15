@@ -16,6 +16,7 @@ import { EMPLOYEE_ROLE, USER_STATUS } from '../utils/constants'
 import network from '../services/network'
 import { useDispatch } from 'react-redux'
 import { updateLoading as loadingGlobal } from '../redux/components/action'
+import { deleteUserFromNotAuthorized } from '../redux/home/actions'
 
 const createStyle = makeStyles({
     field: {
@@ -67,6 +68,7 @@ const CustomDialog = props => {
             cb()
             setLoading(false)
             dispatch(loadingGlobal(false))
+            dispatch(deleteUserFromNotAuthorized(user._id))
         }
         setLoading(true)
         dispatch(loadingGlobal(true))

@@ -11,7 +11,7 @@ import Home from './pages/home/home'
 import './services/mqtt'
 
 function App() {
-  toast.configure({ position: toast.POSITION.BOTTOM_RIGHT })
+  toast.configure({ position: toast.POSITION.BOTTOM_CENTER })
   return (
     <Provider store={store}>
       <Router>

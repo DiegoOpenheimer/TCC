@@ -60,7 +60,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case type.ERROR_LOAD_SCORE:
         return { ...state, errorToLoadScore: action.payload.value }
-        
+    
+    case type.REMOVE_FROM_NOT_AUTHORIZED:
+        return { ...state, usersNotAuthorized: [...state.usersNotAuthorized.filter(user => user._id !== action.payload.value)] }
     default:
       return { ...state };
   }

@@ -31,7 +31,7 @@ const Login = props => {
     const registerUser = user => {
         if (!props.isLoading) {
             if (user.password !== user.confirmPassword) {
-                toast.error('Senhas diferentes', { position: toast.POSITION.TOP_LEFT })
+                toast.error('Senhas diferentes')
             } else {
                 props.createAccount(
                     user,
@@ -45,7 +45,7 @@ const Login = props => {
     const requestLogin = user => {
         if (!props.isLoading) {
             props.requestLogin(user, () => {
-                toast.success('Login efetuado com sucesso', { position: toast.POSITION.BOTTOM_RIGHT, autoClose: 2000 })
+                toast.success('Login efetuado com sucesso', { autoClose: 2000 })
                 props.history.push('/home')
             }, e => toast.error(e))
         }
@@ -63,7 +63,8 @@ const Login = props => {
                     <LinearProgress className={classes.linearProgress} />
                 }
                 <Grid container justify="center" alignItems="center" item className={classes.contentLogo}>
-                    <Typography variant="h1">Bus Locator</Typography>
+                    <div className={classes.backgroundFilter}></div>
+                    <Typography style={{zIndex: 10}} variant="h1">Bus Locator</Typography>
                 </Grid>
 
 
