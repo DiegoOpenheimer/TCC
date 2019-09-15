@@ -1,4 +1,5 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
 import 'package:bus_locator_mobile/components/loading/loading.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
@@ -16,6 +17,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
 
   RegisterBloc registerBloc;
   final LoadingBloc _loadingBloc = BlocProvider.getBloc<LoadingBloc>();
+  final ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
               Hero(
                 tag: 'login-to-register',
                 child: Container(
-                  color: Colors.blue,
+                  color: _applicationBloc.getColor(context),
                   height: double.infinity,
                 ),
               ),

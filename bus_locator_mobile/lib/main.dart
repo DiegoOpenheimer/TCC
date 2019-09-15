@@ -11,11 +11,13 @@ import 'package:bus_locator_mobile/pages/news/news-bloc.dart';
 import 'package:bus_locator_mobile/pages/news/news-details-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-account-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
+import 'package:bus_locator_mobile/pages/suggestions/new-suggestion-widget.dart';
 import 'package:bus_locator_mobile/pages/suggestions/suggestion-bloc.dart';
 import 'package:bus_locator_mobile/repository/user-dao.dart';
 import 'package:bus_locator_mobile/services/connection-network.dart';
 import 'package:bus_locator_mobile/services/http.dart';
 import 'package:bus_locator_mobile/services/shared-preference.dart';
+import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:bus_locator_mobile/share/transition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,12 +31,15 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+  final ApplicationBloc _applicationBloc = ApplicationBloc();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       blocs: [
         Bloc((i) => RegisterBloc(i.get<Http>())),
-        Bloc((i) => ApplicationBloc()),
+        Bloc((i) => _applicationBloc),
         Bloc((i) => LoadingBloc(), singleton: false),
         Bloc((i) => ForgotBloc(i.get<Http>())),
         Bloc((i) => LoginBloc(i.get<Http>(), i.get<UserDAO>(), i.get<SharedPreferenceService>()), singleton: false),
@@ -48,24 +53,36 @@ class MyApp extends StatelessWidget {
         Dependency((i) => UserDAO()),
         Dependency((i) => SharedPreferenceService()),
       ],
-      child: MaterialApp(
-        title: 'Bus locator',
-        color: Colors.white,
-         routes: <String, WidgetBuilder>{
-          '/': (context) => LoginWidget(),
-          '/register': (context) => RegisterAccountWidget(),
-          '/home': (context) => HomeAdapter()
-        },
-        onGenerateRoute: (RouteSettings settings) {
-          if (settings.name == '/forgot') {
-            return CustomSlideTransition(child: ForgotWidget());
-          }
-          if (settings.name == '/news-details') {
-            return MaterialPageRoute(builder: (context) => NewsDetailsWidget(settings.arguments));
-          }
-          return null;
-        },
-      ),
+      child: buildMaterialApp(),
+    );
+  }
+
+  StreamBuilder buildMaterialApp() {
+    return StreamBuilder<ThemeApplication>(
+      stream: _applicationBloc.listenerTheme,
+      initialData: _applicationBloc.currentTheme,
+      builder: (context, snapshot) {
+        return MaterialApp(
+          theme: snapshot.data == ThemeApplication.DARK ? ThemeData.dark() : ThemeData(),
+          title: 'Bus locator',
+          color: Colors.white,
+           routes: <String, WidgetBuilder>{
+            '/': (context) => LoginWidget(),
+            '/register': (context) => RegisterAccountWidget(),
+            '/home': (context) => HomeAdapter(),
+             '/new-suggestion': (context) => NewSuggestionWidget()
+          },
+          onGenerateRoute: (RouteSettings settings) {
+            if (settings.name == '/forgot') {
+              return CustomSlideTransition(child: ForgotWidget());
+            }
+            if (settings.name == '/news-details') {
+              return MaterialPageRoute(builder: (context) => NewsDetailsWidget(settings.arguments));
+            }
+            return null;
+          },
+        );
+      }
     );
   }
 }

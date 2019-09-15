@@ -1,4 +1,5 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
 import 'package:bus_locator_mobile/components/loading/loading.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
@@ -14,6 +15,8 @@ class _ForgotWidgetState extends State<ForgotWidget> {
 
   final ForgotBloc _forgotBloc = BlocProvider.getBloc<ForgotBloc>();
   final LoadingBloc _loadingBloc = BlocProvider.getBloc<LoadingBloc>();
+  final ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class _ForgotWidgetState extends State<ForgotWidget> {
         child: Scaffold(
           body: Container(
             padding: EdgeInsets.all(16),
-            color: Colors.blue,
+            color: _applicationBloc.getColor(context),
             height: double.infinity,
             child: _body()
           ),

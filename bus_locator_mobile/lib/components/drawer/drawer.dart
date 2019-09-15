@@ -51,6 +51,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         _options(label: 'Notícias', icon: Icons.new_releases, onPress: () => goPage(2), index: 2),
         _options(label: 'Dúvidas e sugestões', icon: Icons.help, onPress: () => goPage(3), index: 3),
         Divider(color: Colors.black87,),
+        _buildDarkTheme(),
         _options(label: 'Sair', icon: Icons.exit_to_app, onPress: () => logout(context))
       ],
     );
@@ -65,6 +66,30 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     }
   }
 
+  Widget _buildDarkTheme() {
+    Color color = applicationBloc.currentTheme == ThemeApplication.DARK ? Colors.white.withOpacity(.7) : Colors.black54;
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Container(
+        child: Row(
+          children: <Widget>[
+            Icon(Icons.color_lens, size: 28, color: color,),
+            SizedBox(width: 48),
+            Text('Tema escuro', style: TextStyle(fontSize: 18, color: color),),
+            Spacer(),
+            Checkbox(value: applicationBloc.currentTheme == ThemeApplication.LIGHT ? false : true, onChanged: (bool value) {
+              if (value) {
+                applicationBloc.updateTheme(ThemeApplication.DARK);
+              } else {
+                applicationBloc.updateTheme(ThemeApplication.LIGHT);
+              }
+            },)
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _options({
     IconData icon,
     String label,
@@ -72,6 +97,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     int index
   }) {
     bool active = index == widget.pageController.page.toInt();
+    Color color = applicationBloc.currentTheme == ThemeApplication.DARK ? active ? Colors.white : Colors.white.withOpacity(.7) :
+    active ? Colors.blue : Colors.black54;
     return Material(
       child: InkWell(
         onTap: () => onPress(),
@@ -80,9 +107,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           child: Container(
             child: Row(
               children: <Widget>[
-                Icon(icon, size: 28, color: active ? Colors.blue : Colors.black54,),
+                Icon(icon, size: 28, color: color,),
                 SizedBox(width: 48),
-                Text(label, style: TextStyle(fontSize: 18, color: active ? Colors.blue : Colors.black87),)
+                Text(label, style: TextStyle(fontSize: 18, color: color),)
               ],
             ),
           ),
@@ -132,7 +159,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         children: <Widget>[
           Text("Atenção", style: TextStyle(color: Colors.black, fontSize: 30),),
           SizedBox(height: 30,),
-          Text('Deseja mesmo remover sair da aplicação?', style: TextStyle(fontSize: 18), textAlign: TextAlign.center,),
+          Text('Deseja mesmo remover sair da aplicação?', style: TextStyle(fontSize: 18, color: Colors.black), textAlign: TextAlign.center,),
           Expanded(
             child:  Align(
               alignment: Alignment.bottomCenter,

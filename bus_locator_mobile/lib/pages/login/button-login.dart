@@ -4,8 +4,9 @@ class ButtonLogin extends StatefulWidget {
 
   final bool loading;
   final Function onPress;
+  final Color backgroundColor;
 
-  ButtonLogin({ this.loading = false, this.onPress });
+  ButtonLogin({ this.loading = false, this.onPress, this.backgroundColor = Colors.blue });
 
   @override
   _ButtonLoginState createState() => _ButtonLoginState();
@@ -50,7 +51,7 @@ class _ButtonLoginState extends State<ButtonLogin> with TickerProviderStateMixin
     return Container(
       height: 50,
       decoration: BoxDecoration(
-        color: Colors.blue,
+        color: widget.backgroundColor,
         borderRadius: BorderRadius.all(Radius.circular(_animationController.value < .7 ? 10 : 25))
       ),
       alignment: Alignment.center,

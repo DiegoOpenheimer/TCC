@@ -28,6 +28,7 @@ class LoginBloc extends BlocBase {
 
   void verifyLogin(Function(bool) userIsLogged) async {
     String token = await sharedPreferenceService.getToken();
+    applicationBloc.loadTheme();
     if (token != null) {
       userIsLogged(true);
       var jwtDecoded = JWT.parse(token);

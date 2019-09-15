@@ -1,4 +1,5 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
+import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/button-login.dart';
 import 'package:bus_locator_mobile/pages/login/login-bloc.dart';
@@ -17,6 +18,7 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   final LoginBloc _loginBloc = BlocProvider.getBloc<LoginBloc>();
+  final ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           child: Container(
             height: MediaQuery.of(context).size.height * .3,
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: _applicationBloc.getColor(context),
               borderRadius: BorderRadius.vertical(bottom: Radius.elliptical(100, 50))
             ),
             child: Center(child: Material(color: Colors.transparent,child: Text('Bus Locator', style: AppTheme.title,))),
@@ -83,7 +85,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             stream: _loginBloc.listenLoading,
             initialData: false,
             builder: (context, snapshot) {
-              return ButtonLogin(loading: snapshot.data, onPress: () {
+              return ButtonLogin(backgroundColor: _applicationBloc.getColor(context), loading: snapshot.data, onPress: () {
                 FocusScope.of(context).requestFocus(FocusNode());
                 _loginBloc.login(() {
                   Navigator.of(context).pushReplacementNamed('/home');

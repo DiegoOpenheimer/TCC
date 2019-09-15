@@ -1,7 +1,10 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/components/drawer/drawer.dart';
+import 'package:bus_locator_mobile/components/error/message-error-widget.dart';
 import 'package:bus_locator_mobile/model/suggestion.dart';
 import 'package:bus_locator_mobile/pages/suggestions/suggestion-bloc.dart';
+import 'package:bus_locator_mobile/share/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
@@ -32,7 +35,11 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
       appBar: AppBar(title: Text('Dúvidas e sugestões'),),
       key: _scaffoldKey,
       drawer: DrawerWidget(scaffoldState: _scaffoldKey, pageController: widget.pageController,),
-      body: _body()
+      body: _body(),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () => Navigator.of(context).pushNamed('/new-suggestion'),
+      ),
     );
   }
 
@@ -41,7 +48,11 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
       stream: _suggestionBloc.listener,
       builder: (BuildContext context, AsyncSnapshot<List<Suggestion>> snapshot) {
         if (snapshot.hasError) {
-          return _buildMessage(snapshot.error.toString());
+          return ErrorMessageWidget(
+            text: snapshot.error.toString(),
+            showIcon: true,
+            onPressIcon: _suggestionBloc.getSuggestions,
+          );
         }
         if (snapshot.hasData) {
           return _buildList(snapshot.data);
@@ -59,41 +70,29 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
         separatorBuilder: (context, index) => Divider(color: Colors.black54, height: 0,),
       );
     } else {
-      return _buildMessage('Nenhuma sugestão ou dúvida registrada', icon: false);
+      return ErrorMessageWidget(text: 'Nenhuma sugestão ou dúvida registrada',);
     }
   }
 
   Widget _buildItem(Suggestion suggestion) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: <Widget>[
-          Text(suggestion.title, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 28),),
-        ],
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(suggestion.title, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 28),),
+            Row(
+              children: <Widget>[
+                Text(Utils.formatterDate(suggestion.createdAt)),
+                const SizedBox(width: 16,),
+                Text(suggestion.messages.length.toString() + ' mensagens'),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildMessage(String message, { bool icon: true }) {
-    return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Visibility(
-                visible: icon,
-                child: IconButton(
-                  icon: Icon(Icons.replay),
-                  iconSize: 48,
-                  onPressed: _suggestionBloc.getSuggestions,
-                ),
-              ),
-              SizedBox(height: 16,),
-              Text(message, style: TextStyle(fontSize: 22), textAlign: TextAlign.center,)
-            ],
-          ),
-        ),
-      );
-  }
 }
