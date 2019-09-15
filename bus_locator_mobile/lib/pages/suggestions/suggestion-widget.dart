@@ -98,46 +98,62 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
   }
 
   Widget _buildItem(Suggestion suggestion) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(suggestion.title, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 28),),
-                Spacer(),
-                PopupMenuButton(
-                  onSelected: (value) async {
-                    _loadingBloc.showLoading(true);
-                    await _suggestionBloc.removeSuggestion(suggestion);
-                    _loadingBloc.showLoading(false);
-                  },
-                  child: Icon(Icons.more_vert),
-                  padding: const EdgeInsets.all(0),
-                  itemBuilder: (context) => <PopupMenuEntry>[
-                    const PopupMenuItem(
-                      value: 'remove',
-                      child: Text('Remover')
-                    )
-                  ],
-                )
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(Utils.formatterDate(suggestion.createdAt)),
-                const SizedBox(width: 16,),
-                Text(suggestion.messages.length.toString() + ' mensagens'),
-              ],
-            )
-          ],
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Material(
+        borderRadius: BorderRadius.circular(5),
+        elevation: 5,
+        child: InkWell(
+          onTap: () async {
+            _suggestionBloc.setSuggestion(suggestion);
+            await Navigator.of(context).pushNamed('/message-detail', arguments: suggestion);
+            _suggestionBloc.getSuggestions();
+          },
+          child: _bodyItem(suggestion),
         ),
       ),
     );
+  }
+
+  Padding _bodyItem(Suggestion suggestion) {
+    return Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(suggestion.title, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 28),),
+                  Spacer(),
+                  PopupMenuButton(
+                    onSelected: (value) async {
+                      _loadingBloc.showLoading(true);
+                      await _suggestionBloc.removeSuggestion(suggestion);
+                      _loadingBloc.showLoading(false);
+                    },
+                    child: Icon(Icons.more_vert),
+                    padding: const EdgeInsets.all(0),
+                    itemBuilder: (context) => <PopupMenuEntry>[
+                      const PopupMenuItem(
+                        value: 'remove',
+                        child: Text('Remover')
+                      )
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(Utils.formatterDate(suggestion.createdAt)),
+                  const SizedBox(width: 16,),
+                  Text(suggestion.messages.length.toString() + ' mensagens'),
+                ],
+              )
+            ],
+          ),
+        );
   }
 
 }

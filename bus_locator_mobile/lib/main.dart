@@ -11,6 +11,7 @@ import 'package:bus_locator_mobile/pages/news/news-bloc.dart';
 import 'package:bus_locator_mobile/pages/news/news-details-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-account-widget.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
+import 'package:bus_locator_mobile/pages/suggestions/messages-widget.dart';
 import 'package:bus_locator_mobile/pages/suggestions/new-suggestion-widget.dart';
 import 'package:bus_locator_mobile/pages/suggestions/suggestion-bloc.dart';
 import 'package:bus_locator_mobile/repository/user-dao.dart';
@@ -69,7 +70,8 @@ class MyApp extends StatelessWidget {
             '/': (context) => LoginWidget(),
             '/register': (context) => RegisterAccountWidget(),
             '/home': (context) => HomeAdapter(),
-             '/new-suggestion': (context) => NewSuggestionWidget()
+            '/new-suggestion': (context) => NewSuggestionWidget(),
+             '/message-detail': (context) => MessagesWidget()
           },
           onGenerateRoute: (RouteSettings settings) {
             if (settings.name == '/forgot') {

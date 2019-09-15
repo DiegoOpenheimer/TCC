@@ -37,6 +37,14 @@ class Http {
     }
   }
 
+  Future patch(String path, Map<String, dynamic> body, { CancelToken cancelToken }) async {
+    if (await _connectionNetwork.connectivityResult != ConnectivityResult.none) {
+      return _dio.patch(path, data: body, cancelToken: cancelToken);
+    } else {
+      throw new ErrorWithoutConnection();
+    }
+  }
+
   Future put(String path, Map<String, dynamic> body, { CancelToken cancelToken }) async {
     if (await _connectionNetwork.connectivityResult != ConnectivityResult.none) {
       return _dio.put(path, data: body, cancelToken: cancelToken);

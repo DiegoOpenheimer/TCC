@@ -13,14 +13,21 @@ import 'package:rxdart/subjects.dart';
 class SuggestionBloc extends BlocBase {
 
   Http http;
+
   BehaviorSubject<List<Suggestion>> _subject = BehaviorSubject();
+  BehaviorSubject<Suggestion> _subjectSuggestion = BehaviorSubject();
+
   PublishSubject<bool> _subjectLoading = PublishSubject();
   PublishSubject<void> _createdSuggestion = PublishSubject();
+
   Observable<List<Suggestion>> get listener => _subject.stream;
   Observable<bool> get listenerLoading => _subjectLoading.stream;
   Observable<void> get listenerCreatedSuggestion => _createdSuggestion.stream;
+  Observable<Suggestion> get listenerSuggestion => _subjectSuggestion.stream;
+
   CancelToken cancelToken;
   ApplicationBloc _applicationBloc = ApplicationBloc();
+  Suggestion get currentSuggestion => _subjectSuggestion.value;
 
   SuggestionBloc(this.http);
 
@@ -88,6 +95,51 @@ class SuggestionBloc extends BlocBase {
     }
   }
 
+  Future removeMessage(Message message) async {
+    Suggestion suggestion = _subjectSuggestion.value;
+    message.isLoading = true;
+    _subjectSuggestion.add(suggestion);
+    try {
+      await http.delete('/suggestion/message', data: { 'suggestion': suggestion.id, 'message': message.id });
+      suggestion.messages.removeWhere((msg) => msg.id == message.id);
+    } catch (e) {
+      Fluttertoast.showToast(msg: 'Houve uma falha, verifique sua conexão');
+    } finally {
+      message.isLoading = false;
+      _subjectSuggestion.add(suggestion);
+    }
+  }
+
+  Future addMessage(String text, { Function callbackSuccess }) async {
+    if (text.isNotEmpty) {
+      User user = _applicationBloc.currentUser;
+      var body = {
+        'id': currentSuggestion.id,
+        'data': {
+          'by': user.id,
+          'message': text,
+          'onModel': user.entity
+        }
+      };
+      try {
+        Response response = await http.patch('/suggestion', body);
+        _subjectSuggestion.add(Suggestion.fromMap(response.data));
+        if (callbackSuccess != null) {
+          callbackSuccess();
+        }
+      } catch (e) {
+        print(e.toString());
+        Fluttertoast.showToast(msg: 'Houve uma falha, verifique sua conexão');
+      }
+    } else {
+      Fluttertoast.showToast(msg: 'Informe alguma mensagem');
+    }
+  }
+
+  void setSuggestion(Suggestion suggestion) {
+      _subjectSuggestion.value = suggestion;
+  }
+
   void cancelRequest() {
     cancelToken?.cancel();
   }
@@ -99,6 +151,7 @@ class SuggestionBloc extends BlocBase {
     _subjectLoading.close();
     _createdSuggestion.close();
     cancelToken?.cancel();
+    _subjectSuggestion.close();
   }
 
 }

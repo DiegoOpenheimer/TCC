@@ -46,6 +46,7 @@ class Message {
   Author by;
   String onModel;
   DateTime createdAt;
+  bool isLoading = false;
 
   Message({ this.id, this.message, this.by, this.onModel, this.createdAt });
 
@@ -58,12 +59,16 @@ class Message {
   }
 
   Map<String, dynamic> toJson() => {
-    '_id': id,
     'message': message,
     'by': by.toJson(),
     'onModel': onModel,
     'createdAt': createdAt.toUtc().toString(),
   };
+
+  @override
+  String toString() {
+    return 'Message{id: $id, message: $message, by: $by, onModel: $onModel, createdAt: $createdAt}';
+  }
 
 
 }
