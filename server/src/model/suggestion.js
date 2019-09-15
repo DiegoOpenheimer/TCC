@@ -14,7 +14,6 @@ const Comment = new Schema({
         required: true,
         enum: ['User', 'Employee']
     },
-    createdAt: Date
 })
 
 const SuggestionSchema = new Schema({
