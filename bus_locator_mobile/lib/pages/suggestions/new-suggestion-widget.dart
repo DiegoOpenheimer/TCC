@@ -78,6 +78,7 @@ class _NewSuggestionWidgetState extends State<NewSuggestionWidget> {
           maxLines: null,
           maxLength: 500,
           decoration: const InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(vertical: 5),
             hintMaxLines: 10,
             hintText: 'Digite aqui a sugestão ou dúvida'
           ),

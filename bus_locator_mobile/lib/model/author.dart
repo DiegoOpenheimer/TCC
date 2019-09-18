@@ -10,7 +10,7 @@ class Author {
         this.id
     });
 
-    factory Author.fromJson(Map<String, dynamic> json) => Author(
+    factory Author.fromJson(json) => Author(
         name: json["name"],
         email: json["email"],
         id: json["_id"],

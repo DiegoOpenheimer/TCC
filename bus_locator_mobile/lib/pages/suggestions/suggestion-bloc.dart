@@ -128,11 +128,20 @@ class SuggestionBloc extends BlocBase {
           callbackSuccess();
         }
       } catch (e) {
-        print(e.toString());
         Fluttertoast.showToast(msg: 'Houve uma falha, verifique sua conexão');
       }
     } else {
       Fluttertoast.showToast(msg: 'Informe alguma mensagem');
+    }
+  }
+
+  Future updateMessages() async {
+    try {
+      Response response = await http.get('/suggestion/${currentSuggestion.id}');
+      _subjectSuggestion.add(Suggestion.fromMap(response.data));
+    } catch (e) {
+      print(e.toString());
+      Fluttertoast.showToast(msg: 'Houve uma falha, verifique sua conexão');
     }
   }
 

@@ -18,13 +18,13 @@ class Suggestion {
     this.messages = const []
   });
 
-  Suggestion.fromMap(Map<String, dynamic> map) {
+  Suggestion.fromMap(map) {
     id = map['_id'];
     author = map['author'];
     title = map['title'];
     name = map['name'];
     createdAt = DateTime.parse(map['createdAt']).toLocal();
-    messages = map['messages'].map<Message>((dynamic message) => Message.fromMap(message)).toList();
+    messages = map['messages'].map<Message>((message) => Message.fromMap(message)).toList();
   }
 
   Map<String, dynamic> toJson() => {
@@ -50,7 +50,7 @@ class Message {
 
   Message({ this.id, this.message, this.by, this.onModel, this.createdAt });
 
-  Message.fromMap(Map<String, dynamic> map) {
+  Message.fromMap(map) {
     id = map['_id'];
     message = map['message'];
     by = Author.fromJson(map['by']);

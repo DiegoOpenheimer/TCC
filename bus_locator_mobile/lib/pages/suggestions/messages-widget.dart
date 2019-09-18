@@ -23,10 +23,11 @@ class _MessagesWidgetState extends State<MessagesWidget> {
   Widget build(BuildContext context) {
     Suggestion suggestion = _suggestionBloc.currentSuggestion;
     AppBar appBar = _applicationBloc.currentTheme == ThemeApplication.LIGHT ? AppBar(
-      title: Hero(tag: suggestion.id,child: Text(suggestion.title, style: TextStyle(color: Colors.black),)),
+      title: Text(suggestion.title, style: TextStyle(color: Colors.black),),
       backgroundColor: Colors.white, brightness: Brightness.light,
       iconTheme: IconThemeData(color: Colors.black),
-    ) : AppBar(title: Text(suggestion.title));
+      actions: <Widget>[_buildIconActions()],
+    ) : AppBar(title: Text(suggestion.title), actions: <Widget>[_buildIconActions()],);
     return GestureDetector(
       onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
       child: Scaffold(
@@ -154,6 +155,13 @@ class _MessagesWidgetState extends State<MessagesWidget> {
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildIconActions() {
+    return IconButton(
+      icon: Icon(Icons.refresh),
+      onPressed: _suggestionBloc.updateMessages,
     );
   }
 }

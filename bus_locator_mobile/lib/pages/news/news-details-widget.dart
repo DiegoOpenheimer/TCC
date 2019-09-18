@@ -8,9 +8,9 @@ import 'package:flutter_html/flutter_html.dart';
 class NewsDetailsWidget extends StatelessWidget {
 
   final News news;
+  final ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
 
   NewsDetailsWidget(this.news);
-  ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
 
   @override
   Widget build(BuildContext context) {
