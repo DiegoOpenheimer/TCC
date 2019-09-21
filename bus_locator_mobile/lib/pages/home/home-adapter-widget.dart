@@ -4,16 +4,12 @@ import 'package:bus_locator_mobile/pages/account/account-widget.dart';
 import 'package:bus_locator_mobile/pages/news/news-widget.dart';
 import 'package:bus_locator_mobile/pages/suggestions/suggestion-widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-import 'home-bloc.dart';
 import 'home-widget.dart';
 
 class HomeAdapter extends StatelessWidget {
 
   final PageController _pageController = PageController();
   final ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
-  final HomeBloc _homeBloc = BlocProvider.getBloc<HomeBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +22,6 @@ class HomeAdapter extends StatelessWidget {
         return Future.value(true);
       },
       child: PageView.builder(
-        onPageChanged: (int value) {
-          if (value == 0) {
-            _homeBloc.init();
-            _homeBloc.getDevices();
-           if (_applicationBloc.currentTheme == ThemeApplication.LIGHT) {
-             SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                 statusBarIconBrightness: Brightness.dark
-             ));
-           }
-          } else if (_applicationBloc.currentTheme == ThemeApplication.LIGHT) {
-            SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-                statusBarIconBrightness: Brightness.light
-            ));
-          }
-        },
         controller: _pageController,
         physics: NeverScrollableScrollPhysics(),
         itemCount: 4,

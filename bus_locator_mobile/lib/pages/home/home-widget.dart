@@ -20,7 +20,7 @@ class HomeWidget extends StatefulWidget {
   _HomeWidgetState createState() => _HomeWidgetState();
 }
 
-class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMixin {
+class _HomeWidgetState extends State<HomeWidget> {
 
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   Future<GoogleMapController> get controllerGoogleMap => _completer.future;
@@ -34,7 +34,6 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       key: _scaffoldState,
       drawer: DrawerWidget(pageController: widget.pageController, scaffoldState: _scaffoldState,),
@@ -78,7 +77,7 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
     ));
     _homeBloc.init();
     _homeBloc.getDevices();
-    _homeBloc.publishSubjectOptions.listen(showOptions);
+    _homeBloc.publishSubjectOptions.listen((device) => showOptions(device));
     _listener = _homeBloc.publishSubjectLocationData.listen((CameraPosition position) async {
       GoogleMapController googleMapController = await controllerGoogleMap;
       googleMapController.animateCamera(CameraUpdate.newCameraPosition(position));
@@ -147,10 +146,6 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
         statusBarIconBrightness: Brightness.light
     ));
   }
-
-  @override
-  bool get wantKeepAlive => true;
-
 }
 
 
