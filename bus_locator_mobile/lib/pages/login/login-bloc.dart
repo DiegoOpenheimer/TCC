@@ -61,6 +61,7 @@ class LoginBloc extends BlocBase {
         success();
       } on ErrorWithoutConnection catch(e) {
         error(e.message);
+        hideLoading();
       } on DioError catch (e) {
         if (e.type == DioErrorType.DEFAULT) {
           error('Falha ao fazer login');
@@ -68,10 +69,11 @@ class LoginBloc extends BlocBase {
           error('Usuário e/ou senha incorretos');
         }
         error('Falha ao fazer login');
+        hideLoading();
       } catch(e) {
         error('Falha ao fazer login');
+        hideLoading();
       }
-      hideLoading();
     } else {
       error('Preencha os campos');
     }

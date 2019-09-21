@@ -4,7 +4,7 @@ import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
 import 'package:bus_locator_mobile/pages/account/account-bloc.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-widget.dart';
-import 'package:bus_locator_mobile/pages/home/home-widget.dart';
+import 'package:bus_locator_mobile/pages/home/home-adapter-widget.dart';
 import 'package:bus_locator_mobile/pages/login/login-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/login-widget.dart';
 import 'package:bus_locator_mobile/pages/news/news-bloc.dart';
@@ -25,7 +25,7 @@ import 'package:flutter/services.dart';
 void main() {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent
+      statusBarColor: Colors.transparent
   ));
   runApp(MyApp());
 }
