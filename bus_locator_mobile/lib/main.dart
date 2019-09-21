@@ -5,6 +5,7 @@ import 'package:bus_locator_mobile/pages/account/account-bloc.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-widget.dart';
 import 'package:bus_locator_mobile/pages/home/home-adapter-widget.dart';
+import 'package:bus_locator_mobile/pages/home/home-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/login-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/login-widget.dart';
 import 'package:bus_locator_mobile/pages/news/news-bloc.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => LoginBloc(i.get<Http>(), i.get<UserDAO>(), i.get<SharedPreferenceService>()), singleton: false),
         Bloc((i) => AccountBloc(i.get<Http>()), singleton: false),
         Bloc((i) => NewsBloc(i.get<Http>()), singleton: false),
+        Bloc((i) => HomeBloc(i.get<Http>())),
         Bloc((i) => SuggestionBloc(i.get<Http>())),
       ],
       dependencies: [

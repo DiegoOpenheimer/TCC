@@ -10,7 +10,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="bus_locator_mobile"
+        android:label="bus locator"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -33,5 +33,6 @@
         </activity>
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCfg6PgpQycYtUFaSRl336lsM8EDPmpmfI"/>
-    </application>
+
+   </application>
 </manifest>
