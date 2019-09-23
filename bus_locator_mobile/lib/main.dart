@@ -4,7 +4,7 @@ import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
 import 'package:bus_locator_mobile/pages/account/account-bloc.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-widget.dart';
-import 'package:bus_locator_mobile/pages/home/home-adapter-widget.dart';
+import 'package:bus_locator_mobile/pages/home/widgets/home-adapter-widget.dart';
 import 'package:bus_locator_mobile/pages/home/home-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/login-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/login-widget.dart';
@@ -73,7 +73,7 @@ class MyApp extends StatelessWidget {
             '/register': (context) => RegisterAccountWidget(),
             '/home': (context) => HomeAdapter(),
             '/new-suggestion': (context) => NewSuggestionWidget(),
-             '/message-detail': (context) => MessagesWidget()
+            '/message-detail': (context) => MessagesWidget()
           },
           onGenerateRoute: (RouteSettings settings) {
             if (settings.name == '/forgot') {

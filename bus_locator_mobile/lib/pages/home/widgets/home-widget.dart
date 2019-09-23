@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/components/drawer/drawer.dart';
+import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
+import 'package:bus_locator_mobile/components/loading/loading.dart';
 import 'package:bus_locator_mobile/model/device.dart';
 import 'package:bus_locator_mobile/pages/home/home-bloc.dart';
 import 'package:bus_locator_mobile/share/utils.dart';
@@ -9,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'home-information-line-widget.dart';
 
 class HomeWidget extends StatefulWidget {
 
@@ -20,13 +24,14 @@ class HomeWidget extends StatefulWidget {
   _HomeWidgetState createState() => _HomeWidgetState();
 }
 
-class _HomeWidgetState extends State<HomeWidget> {
+class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMixin {
 
   final GlobalKey<ScaffoldState> _scaffoldState = GlobalKey();
   Future<GoogleMapController> get controllerGoogleMap => _completer.future;
 
   final HomeBloc _homeBloc = BlocProvider.getBloc<HomeBloc>();
   final ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
+  final LoadingBloc _loadingBloc = BlocProvider.getBloc<LoadingBloc>();
   Completer<GoogleMapController> _completer = Completer();
   StreamSubscription _listener;
   StreamSubscription _listenerToShowOptions;
@@ -34,21 +39,28 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldState,
-      drawer: DrawerWidget(pageController: widget.pageController, scaffoldState: _scaffoldState,),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: <Widget>[
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: _buildMap(),
+    super.build(context);
+    return LoadingWidget(
+      stream: _loadingBloc.stream,
+      child: Scaffold(
+        key: _scaffoldState,
+        drawer: DrawerWidget(pageController: widget.pageController, scaffoldState: _scaffoldState,),
+        body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Stack(
+              children: <Widget>[
+                SingleChildScrollView(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: _buildMap(),
+                  ),
+                ),
+                HomeInformationWidget(_scaffoldState),
+              ],
             )
-          ],
-        )
+        ),
       ),
     );
   }
@@ -58,6 +70,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       stream: _homeBloc.listenerDevices,
       builder: (context, _) {
         return GoogleMap(
+          polylines: _homeBloc.polylines,
           markers: _homeBloc.markers,
           trafficEnabled: true,
           myLocationButtonEnabled: _homeBloc.loadMap,
@@ -119,7 +132,12 @@ class _HomeWidgetState extends State<HomeWidget> {
               OutlineButton.icon(
                 icon: Icon(Icons.location_on),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                onPressed: () {},
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  _loadingBloc.showLoading(true);
+                  await _homeBloc.getLineById(device);
+                  _loadingBloc.showLoading(false);
+                },
                 label: Text('Acompanhar'),
               ),
               SizedBox(height: 16,),
@@ -146,6 +164,9 @@ class _HomeWidgetState extends State<HomeWidget> {
         statusBarIconBrightness: Brightness.light
     ));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 

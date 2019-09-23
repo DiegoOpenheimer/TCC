@@ -140,7 +140,6 @@ class SuggestionBloc extends BlocBase {
       Response response = await http.get('/suggestion/${currentSuggestion.id}');
       _subjectSuggestion.add(Suggestion.fromMap(response.data));
     } catch (e) {
-      print(e.toString());
       Fluttertoast.showToast(msg: 'Houve uma falha, verifique sua conexão');
     }
   }
