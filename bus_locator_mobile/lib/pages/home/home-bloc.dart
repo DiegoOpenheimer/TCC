@@ -25,15 +25,21 @@ class HomeBloc extends BlocBase {
 
   BehaviorSubject<List<Device>> _subjectDevices = BehaviorSubject();
 
+  BehaviorSubject<List<Device>> _subjectFilterDevices = BehaviorSubject();
+
   PublishSubject<CameraPosition> publishSubjectLocationData = PublishSubject();
 
   PublishSubject<Device> publishSubjectOptions = PublishSubject();
 
   Observable<List<Device>> get listenerDevices => _subjectDevices.stream;
 
+  Observable<List<Device>> get listenerFilterDevices => _subjectFilterDevices.stream;
+
   Observable<CurrentInformationDevice> get listenerCurrentDevice => _subjectCurrentDevice.stream;
 
   List<Device> get currentListDevice => _subjectDevices.value ??= List();
+
+  List<Device> get filterListDevice => _subjectFilterDevices.value ??= List();
 
   CurrentInformationDevice get currentInformationDevice => _subjectCurrentDevice.value;
 
@@ -187,6 +193,18 @@ class HomeBloc extends BlocBase {
     _subjectDevices.add(currentListDevice);
   }
 
+  void search(String value) {
+    if (value.isNotEmpty) {
+      List<Device> devices = currentListDevice.where((Device device) {
+        String content = '${device.lineNumber} - ${device.lineDescription}';
+        return content.contains(value);
+      }).toList();
+      _subjectFilterDevices.add(devices);
+    } else {
+      _subjectFilterDevices.add([]);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -194,6 +212,7 @@ class HomeBloc extends BlocBase {
     publishSubjectLocationData.close();
     publishSubjectOptions.close();
     _subjectCurrentDevice.close();
+    _subjectFilterDevices?.close();
   }
 
 }

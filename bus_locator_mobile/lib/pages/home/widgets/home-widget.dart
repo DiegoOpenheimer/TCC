@@ -7,6 +7,8 @@ import 'package:bus_locator_mobile/components/loading/loading.dart';
 import 'package:bus_locator_mobile/model/device.dart';
 import 'package:bus_locator_mobile/pages/home/home-bloc.dart';
 import 'package:bus_locator_mobile/share/utils.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -57,7 +59,14 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
                     child: _buildMap(),
                   ),
                 ),
-                HomeInformationWidget(_scaffoldState),
+                HomeInformationWidget(
+                  _scaffoldState,
+                  onPress: (Device device) async {
+                    _loadingBloc.showLoading(true);
+                    await _homeBloc.getLineById(device);
+                    _loadingBloc.showLoading(false);
+                  },
+                ),
               ],
             )
         ),
@@ -70,6 +79,12 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
       stream: _homeBloc.listenerDevices,
       builder: (context, _) {
         return GoogleMap(
+          onTap: (T) => FocusScope.of(context).requestFocus(FocusNode()),
+          gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
+            Factory<OneSequenceGestureRecognizer>(
+                  () => EagerGestureRecognizer(),
+            ),
+          ].toSet(),
           polylines: _homeBloc.polylines,
           markers: _homeBloc.markers,
           trafficEnabled: true,

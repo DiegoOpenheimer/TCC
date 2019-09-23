@@ -1,5 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
+import 'package:bus_locator_mobile/model/device.dart';
 import 'package:flutter/material.dart';
 
 import '../home-bloc.dart';
@@ -7,8 +8,9 @@ import '../home-bloc.dart';
 class HomeInformationWidget extends StatefulWidget {
 
   final GlobalKey<ScaffoldState> scaffoldState;
+  final void Function(Device) onPress;
 
-  HomeInformationWidget(this.scaffoldState);
+  HomeInformationWidget(this.scaffoldState, { this.onPress });
 
   @override
   _HomeInformationWidgetState createState() => _HomeInformationWidgetState();
@@ -20,6 +22,7 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
   final HomeBloc _homeBloc = BlocProvider.getBloc<HomeBloc>();
   AnimationController _animationController;
   Animation<double> _animation;
+  TextEditingController _textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -33,32 +36,98 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
 
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+        _homeBloc.search('');
+        _textEditingController.text = '';
+      },
+      child: Stack(
+        children: <Widget>[
+          StreamBuilder<Object>(
+              stream: _homeBloc.listenerCurrentDevice,
+              builder: (context, snapshot) {
+                if (_homeBloc.currentInformationDevice != null) {
+                  _animationController.forward();
+                } else {
+                  _animationController.reverse();
+                }
+                return SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      children: <Widget>[
+                        AnimatedCrossFade(
+                          duration: const Duration(milliseconds: 300),
+                          firstChild: buildRow(),
+                          secondChild: buildFilterRemoveBtn(),
+                          crossFadeState: _homeBloc.currentInformationDevice == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height * .05,),
+                        Align(alignment: Alignment.topRight, child: buildActionButtons())
+                      ],
+                    ),
+                  ),
+                );
+              }
+          ),
+          buildList()
+        ],
+      ),
+    );
+  }
+
+  Widget buildList() {
     return StreamBuilder<Object>(
-      stream: _homeBloc.listenerCurrentDevice,
+      stream: _homeBloc.listenerFilterDevices,
       builder: (context, snapshot) {
-        if (_homeBloc.currentInformationDevice != null) {
-          _animationController.forward();
-        } else {
-          _animationController.reverse();
-        }
-        return SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: <Widget>[
-                AnimatedCrossFade(
-                  duration: const Duration(milliseconds: 300),
-                  firstChild: buildRow(),
-                  secondChild: buildFilterRemoveBtn(),
-                  crossFadeState: _homeBloc.currentInformationDevice == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * .05,),
-                Align(alignment: Alignment.topRight, child: buildActionButtons())
-              ],
+        List<Device> list = _homeBloc.filterListDevice;
+        return Visibility(
+          visible: list.isNotEmpty,
+          child: Positioned(
+            top: 55,
+            left: 0,
+            right: 0,
+            bottom: 20,
+            child: SafeArea(
+              child: ListView.builder(
+                padding: EdgeInsets.all(0),
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  Device device = list[index];
+                  return buildItem(device);
+                }
+              ),
             ),
           ),
         );
       }
+    );
+  }
+
+  Widget buildItem(Device device) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+      child: Material(
+        child: InkWell(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+            _homeBloc.search('');
+            _textEditingController.text = '';
+            widget?.onPress(device);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.search),
+                SizedBox(width: 16),
+                Text('${device.lineNumber} - ${device.lineDescription}')
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -97,6 +166,13 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
                   boxShadow: [ BoxShadow(color: Colors.black38, spreadRadius: 2, blurRadius: 10, offset: Offset(2,0)) ]
                 ),
                 child: TextField(
+                  onSubmitted: (T) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _homeBloc.search('');
+                    _textEditingController.text = '';
+                  },
+                  controller: _textEditingController,
+                  onChanged: (String text) => _homeBloc.search(text),
                   decoration: InputDecoration.collapsed(hintText: 'Destino ou linha', hintStyle: TextStyle(color: Colors.black54)),
                 ),
               ),
