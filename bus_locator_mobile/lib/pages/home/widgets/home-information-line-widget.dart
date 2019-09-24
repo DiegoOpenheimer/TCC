@@ -166,6 +166,7 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
                   boxShadow: [ BoxShadow(color: Colors.black38, spreadRadius: 2, blurRadius: 10, offset: Offset(2,0)) ]
                 ),
                 child: TextField(
+                  style: TextStyle(color: Colors.black),
                   onSubmitted: (T) {
                     FocusScope.of(context).requestFocus(FocusNode());
                     _homeBloc.search('');

@@ -197,7 +197,7 @@ class HomeBloc extends BlocBase {
     if (value.isNotEmpty) {
       List<Device> devices = currentListDevice.where((Device device) {
         String content = '${device.lineNumber} - ${device.lineDescription}';
-        return content.contains(value);
+        return content.toUpperCase().contains(value.toUpperCase());
       }).toList();
       _subjectFilterDevices.add(devices);
     } else {
