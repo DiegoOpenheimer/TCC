@@ -8,8 +8,8 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-#host: 'ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001'
-host: 'localhost:3001'
+host: 'ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001'
+#host: 'localhost:3001'
 basePath: /
 tags:
   - name: User
