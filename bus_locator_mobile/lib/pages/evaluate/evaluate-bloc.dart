@@ -1,7 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/model/score.dart';
-import 'package:bus_locator_mobile/services/connection-network.dart';
 import 'package:bus_locator_mobile/services/http.dart';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,7 +9,6 @@ import 'package:rxdart/rxdart.dart';
 class EvaluateBloc extends BlocBase {
 
   Http http;
-  ConnectionNetwork connectionNetwork;
   ApplicationBloc _applicationBloc = ApplicationBloc();
   BehaviorSubject<Score> _subject = BehaviorSubject();
 
@@ -22,7 +20,7 @@ class EvaluateBloc extends BlocBase {
 
   Score get currentScore => _subject.value;
 
-  EvaluateBloc(this.http, this.connectionNetwork);
+  EvaluateBloc(this.http);
 
   Future<Score> getScore(String line) async {
     _subject.add(null);

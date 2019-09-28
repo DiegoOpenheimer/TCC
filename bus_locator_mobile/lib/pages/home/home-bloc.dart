@@ -1,7 +1,12 @@
+import 'dart:async';
+
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/model/device.dart';
 import 'package:bus_locator_mobile/model/line.dart';
+import 'package:bus_locator_mobile/services/connection-network.dart';
 import 'package:bus_locator_mobile/services/http.dart';
+import 'package:bus_locator_mobile/services/mqtt.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,6 +19,8 @@ import 'data/home-data.dart';
 class HomeBloc extends BlocBase {
 
   final Http http;
+  final ConnectionNetwork connectionNetwork;
+  final MqttService mqtt;
   final Location location = Location();
   bool hasPermissionUserLocation = false;
   CameraPosition cameraPosition = CameraPosition(
@@ -47,7 +54,9 @@ class HomeBloc extends BlocBase {
 
   Set<Polyline> polylines = Set();
 
-  HomeBloc(this.http);
+  StreamSubscription _listenerNetwork;
+
+  HomeBloc(this.http, this.connectionNetwork, this.mqtt);
 
   Future<void> getDevices() async {
     try {
@@ -205,6 +214,16 @@ class HomeBloc extends BlocBase {
     }
   }
 
+  void listenerNetwork() {
+    _listenerNetwork = connectionNetwork.onListenConnection(listener: (ConnectivityResult result) {
+      if (result != ConnectivityResult.none) {
+        getDevices();
+      }
+    });
+  }
+
+  void cancelListenerNetwork() => _listenerNetwork?.cancel();
+
   @override
   void dispose() {
     super.dispose();
@@ -213,6 +232,7 @@ class HomeBloc extends BlocBase {
     publishSubjectOptions.close();
     _subjectCurrentDevice.close();
     _subjectFilterDevices?.close();
+    _listenerNetwork?.cancel();
   }
 
 }

@@ -29,12 +29,14 @@ class HomeAdapter extends StatelessWidget {
           if (value == 0) {
             _homeBloc.init();
             _homeBloc.getDevices();
+            _homeBloc.listenerNetwork();
             if (_applicationBloc.currentTheme == ThemeApplication.LIGHT) {
               SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                   statusBarIconBrightness: Brightness.dark
               ));
             }
           } else {
+            _homeBloc.cancelListenerNetwork();
             SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
                 statusBarIconBrightness: Brightness.light
             ));

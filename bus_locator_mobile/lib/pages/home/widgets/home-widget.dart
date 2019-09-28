@@ -109,6 +109,7 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
     ));
     init();
     _homeBloc.getDevices();
+    _homeBloc.listenerNetwork();
     _homeBloc.publishSubjectOptions.listen((device) => showOptions(device));
     _listener = _homeBloc.publishSubjectLocationData.listen((CameraPosition position) async {
       GoogleMapController googleMapController = await controllerGoogleMap;
@@ -190,6 +191,7 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
     _listener?.cancel();
     _listenerToShowOptions?.cancel();
     _listenerTheme?.cancel();
+    _homeBloc.cancelListenerNetwork();
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.light
     ));

@@ -1,5 +1,6 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
+import 'package:bus_locator_mobile/components/status-information/status-information.dart';
 import 'package:bus_locator_mobile/model/device.dart';
 import 'package:flutter/material.dart';
 
@@ -65,14 +66,15 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
                           crossFadeState: _homeBloc.currentInformationDevice == null ? CrossFadeState.showFirst : CrossFadeState.showSecond,
                         ),
                         SizedBox(height: MediaQuery.of(context).size.height * .05,),
-                        Align(alignment: Alignment.topRight, child: buildActionButtons())
+                        Align(alignment: Alignment.topRight, child: buildActionButtons()),
                       ],
                     ),
                   ),
                 );
               }
           ),
-          buildList()
+          buildList(),
+          _buildStatusInformation()
         ],
       ),
     );
@@ -254,6 +256,15 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
           child: Icon(icon, color: Colors.black,),
         ),
       ),
+    );
+  }
+
+  Widget _buildStatusInformation() {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: StatusInformation(),
     );
   }
 }

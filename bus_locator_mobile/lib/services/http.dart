@@ -13,7 +13,6 @@ class Http {
       BaseOptions(
         connectTimeout: timeout,
         receiveTimeout: timeout,
-       // baseUrl: 'http://192.168.0.104:3001'
         baseUrl: 'http://ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001',
       )
   )..interceptors
@@ -26,7 +25,7 @@ class Http {
       return options;
     }
   ));
-  //..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+ // ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
 
 
   Future post(String path, Map<String, dynamic> body, { CancelToken cancelToken }) async {

@@ -20,6 +20,7 @@ import 'package:bus_locator_mobile/pages/suggestions/suggestion-bloc.dart';
 import 'package:bus_locator_mobile/repository/user-dao.dart';
 import 'package:bus_locator_mobile/services/connection-network.dart';
 import 'package:bus_locator_mobile/services/http.dart';
+import 'package:bus_locator_mobile/services/mqtt.dart';
 import 'package:bus_locator_mobile/services/shared-preference.dart';
 import 'package:bus_locator_mobile/share/transition.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ void main() {
 class MyApp extends StatelessWidget {
 
   final ApplicationBloc _applicationBloc = ApplicationBloc();
+  final MqttService mqttService = MqttService();
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +50,16 @@ class MyApp extends StatelessWidget {
         Bloc((i) => LoginBloc(i.get<Http>(), i.get<UserDAO>(), i.get<SharedPreferenceService>()), singleton: false),
         Bloc((i) => AccountBloc(i.get<Http>()), singleton: false),
         Bloc((i) => NewsBloc(i.get<Http>()), singleton: false),
-        Bloc((i) => HomeBloc(i.get<Http>())),
+        Bloc((i) => HomeBloc(i.get<Http>(), i.get<ConnectionNetwork>(), i.get<MqttService>())),
         Bloc((i) => SuggestionBloc(i.get<Http>())),
-        Bloc((i) => EvaluateBloc(i.get<Http>(), i.get<ConnectionNetwork>()), singleton: false),
+        Bloc((i) => EvaluateBloc(i.get<Http>()), singleton: false),
       ],
       dependencies: [
         Dependency((i) => Http()),
         Dependency((i) => ConnectionNetwork()),
         Dependency((i) => UserDAO()),
         Dependency((i) => SharedPreferenceService()),
+        Dependency((i) => mqttService),
       ],
       child: buildMaterialApp(),
     );
