@@ -38,6 +38,7 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
   StreamSubscription _listener;
   StreamSubscription _listenerToShowOptions;
   StreamSubscription _listenerTheme;
+  bool loadMap = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +79,9 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
     return StreamBuilder<Object>(
       stream: _homeBloc.listenerDevices,
       builder: (context, _) {
+        if (!loadMap) {
+          return Center(child: CircularProgressIndicator(),);
+        }
         return GoogleMap(
           onTap: (T) => FocusScope.of(context).requestFocus(FocusNode()),
           gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
@@ -103,7 +107,7 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarIconBrightness: Brightness.dark
     ));
-    _homeBloc.init();
+    init();
     _homeBloc.getDevices();
     _homeBloc.publishSubjectOptions.listen((device) => showOptions(device));
     _listener = _homeBloc.publishSubjectLocationData.listen((CameraPosition position) async {
@@ -127,6 +131,14 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
         }
       }
     });
+  }
+
+  void init() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    setState(() {
+      loadMap = true;
+    });
+    _homeBloc.init();
   }
 
   void showOptions(Device device) {
