@@ -1093,9 +1093,7 @@ paths:
           description: score
           schema:
             type: object
-            properties:
-                message:
-                  type: string
+            $ref: '#/definitions/Score'
         '401':
           description: Not Authorzied
           schema:
@@ -1136,9 +1134,7 @@ paths:
           description: score
           schema:
             type: object
-            properties:
-                message:
-                  type: string
+            $ref: '#/definitions/Score'
         '401':
           description: Not Authorzied
           schema:

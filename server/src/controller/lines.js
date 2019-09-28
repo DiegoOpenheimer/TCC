@@ -203,7 +203,7 @@ function saveScore(req, res) {
         }
         return Score.create(req.body)
     })
-    .then(_ => response.handlerResponse(res, { message: 'Score registered' }))
+    .then(score => response.handlerResponse(res, score))
     .catch(e => {
         if (e instanceof HandleError) {
             response.handlerResponse(res, e)
@@ -216,7 +216,7 @@ function saveScore(req, res) {
 function editScore(req, res) {
     const {_id} = req.body
     Score.updateOne({ _id }, req.body)
-    .then(_ => response.handlerResponse(res, { message: 'Score registered' }))
+    .then(score => response.handlerResponse(res, score))
     .catch(e => response.handlerUnexpectError(res, `Error to save score by user ${e}`))
 }
 
