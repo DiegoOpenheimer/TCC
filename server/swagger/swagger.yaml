@@ -8,7 +8,8 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-host: 'ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001'
+#host: 'ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001'
+host: 'localhost:3001'
 basePath: /
 tags:
   - name: User
@@ -1062,6 +1063,126 @@ paths:
             $ref: '#/definitions/UnknownServerError'
       security:
       - ApiKey: []
+  
+    post:
+      tags:
+        - Line
+      summary: save score line
+      description: save score line
+      operationId: saveScore
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: score
+          schema:
+            type: object
+            properties:
+              user:
+                type: string
+              line:
+                type: string
+              description:
+                type: string
+              star:
+                type: number
+      responses:
+        '200':
+          description: score
+          schema:
+            type: object
+            properties:
+                message:
+                  type: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+      
+    put:
+      tags:
+        - Line
+      summary: edit score line
+      description: edit score line
+      operationId: editScore
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: score
+          schema:
+            type: object
+            properties:
+              user:
+                type: string
+              line:
+                type: string
+              description:
+                type: string
+              star:
+                type: number
+      responses:
+        '200':
+          description: score
+          schema:
+            type: object
+            properties:
+                message:
+                  type: string
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+      
+  /line/{lineId}/score/user:
+    get:
+      tags:
+        - Line
+      summary: get score by user
+      description: get score by user
+      operationId: getScoreByUser
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: lineId
+          type: string
+          description: line id to be filtered
+          required: true
+      responses:
+        '200':
+          description: line
+          schema:
+            $ref: '#/definitions/Score'
+        '401':
+          description: Not Authorzied
+          schema:
+            $ref: '#/definitions/NotAuthorized'
+        '500':
+          description: unknown error
+          schema:
+            $ref: '#/definitions/UnknownServerError'
+      security:
+      - ApiKey: []
+
 
   /line/{id}:
     delete:
@@ -1981,3 +2102,17 @@ definitions:
         type: string
       message:
         type: string
+  Score:
+    type: object
+    properties:
+      _id:
+        type: string
+      user:
+        $ref: '#/definitions/User'
+      line:
+        $ref: '#/definitions/Line'
+      description:
+        type: string
+      star:
+        type: number
+

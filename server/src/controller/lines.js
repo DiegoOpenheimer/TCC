@@ -186,4 +186,53 @@ function getScore(req, res) {
     }
 }
 
-module.exports = { getLines, getLineById, editLine, removeLine, createLine, getLinesToAssociate, lineAmount, getScoreLine, getScore }
+function getScoreByUser(req, res) {
+    const {lineId} = req.params
+    const { _id } = jwt.decode(req.headers.authorization)
+    Score.findOne({ user: _id, line: lineId})
+    .populate([ { path: 'user', select: 'name' }, { path: 'line', select: 'description number' } ])
+    .then(result => response.handlerResponse(res, result))
+    .catch(e => response.handlerUnexpectError(res, `Error to get score by user ${e}`))
+}
+
+function saveScore(req, res) {
+    Score.findOne({ user: req.body.user, line: req.body.line })
+    .then(result => {
+        if (result) {
+            return Promise.reject(new HandleError('User already evaluated', 409))
+        }
+        return Score.create(req.body)
+    })
+    .then(_ => response.handlerResponse(res, { message: 'Score registered' }))
+    .catch(e => {
+        if (e instanceof HandleError) {
+            response.handlerResponse(res, e)
+        } else {
+            response.handlerUnexpectError(res, `Error to save score by user ${e}`)
+        }
+    })
+}
+
+function editScore(req, res) {
+    const {_id} = req.body
+    Score.updateOne({ _id }, req.body)
+    .then(_ => response.handlerResponse(res, { message: 'Score registered' }))
+    .catch(e => response.handlerUnexpectError(res, `Error to save score by user ${e}`))
+}
+
+
+
+module.exports = {
+    getLines,
+    getLineById,
+    editLine,
+    removeLine,
+    createLine,
+    getLinesToAssociate,
+    lineAmount,
+    getScoreLine,
+    getScore,
+    getScoreByUser,
+    saveScore,
+    editScore
+}
