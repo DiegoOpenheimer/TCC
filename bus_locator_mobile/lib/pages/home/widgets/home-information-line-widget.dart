@@ -23,6 +23,7 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
   AnimationController _animationController;
   Animation<double> _animation;
   TextEditingController _textEditingController = TextEditingController();
+  FocusNode _focusTextField = FocusNode();
 
   @override
   void initState() {
@@ -155,8 +156,18 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
               onPressed: () => widget.scaffoldState.currentState.openDrawer(),
             ),
             SizedBox(width: 16,),
-            Expanded(
-              child: Container(
+            buildTextField(),
+            SizedBox(width: 32,)
+          ],
+        ),
+    );
+  }
+
+  Expanded buildTextField() {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(_focusTextField),
+        child: Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 16),
                 height: 40,
@@ -166,6 +177,7 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
                   boxShadow: [ BoxShadow(color: Colors.black38, spreadRadius: 2, blurRadius: 10, offset: Offset(2,0)) ]
                 ),
                 child: TextField(
+                  focusNode: _focusTextField,
                   style: TextStyle(color: Colors.black),
                   onSubmitted: (T) {
                     FocusScope.of(context).requestFocus(FocusNode());
@@ -177,10 +189,7 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
                   decoration: InputDecoration.collapsed(hintText: 'Destino ou linha', hintStyle: TextStyle(color: Colors.black54)),
                 ),
               ),
-            ),
-            SizedBox(width: 32,)
-          ],
-        ),
+      ),
     );
   }
 

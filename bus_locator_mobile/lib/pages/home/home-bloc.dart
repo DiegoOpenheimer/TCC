@@ -15,7 +15,7 @@ class HomeBloc extends BlocBase {
 
   final Http http;
   final Location location = Location();
-  bool loadMap = false;
+  bool hasPermissionUserLocation = false;
   CameraPosition cameraPosition = CameraPosition(
     target: LatLng(-22.2295935, -45.9434848),
     zoom: 17,
@@ -117,13 +117,13 @@ class HomeBloc extends BlocBase {
         if (!hasPermission) {
           hasPermission = await location.requestPermission();
           if (hasPermission) {
-            loadMap = true;
+            hasPermissionUserLocation = true;
             await _handleLocation();
           } else {
-            loadMap = false;
+            hasPermissionUserLocation = false;
           }
         } else {
-          loadMap = true;
+          hasPermissionUserLocation = true;
           _handleLocation();
         }
       } catch (e) { }

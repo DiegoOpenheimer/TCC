@@ -88,8 +88,8 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
           polylines: _homeBloc.polylines,
           markers: _homeBloc.markers,
           trafficEnabled: true,
-          myLocationButtonEnabled: _homeBloc.loadMap,
-          myLocationEnabled: _homeBloc.loadMap,
+          myLocationButtonEnabled: _homeBloc.hasPermissionUserLocation,
+          myLocationEnabled: _homeBloc.hasPermissionUserLocation,
           initialCameraPosition: _homeBloc.cameraPosition,
           onMapCreated: _completer.complete
         );
