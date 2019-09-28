@@ -36,10 +36,8 @@ class _StatusInformationState extends State<StatusInformation> with TickerProvid
         bool isConnected = _mqttService.isConnected;
         if (isConnected) {
           _animationControllerSuccess.forward();
-          if (_animationController.isCompleted) {
             Future.delayed(const Duration(milliseconds: 500))
                 .then((T) => _animationController.reverse());
-          }
         } else {
           _animationControllerSuccess.reset();
           _animationController.forward();

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/model/device.dart';
@@ -56,6 +57,8 @@ class HomeBloc extends BlocBase {
 
   StreamSubscription _listenerNetwork;
 
+  StreamSubscription _listenerMqtt;
+
   HomeBloc(this.http, this.connectionNetwork, this.mqtt);
 
   Future<void> getDevices() async {
@@ -73,7 +76,7 @@ class HomeBloc extends BlocBase {
     await Future.forEach(devices, (Device device) async {
       markers.add(Marker(
         onTap: () => publishSubjectOptions.add(device),
-        markerId: MarkerId(device.id),
+        markerId: MarkerId(device.uuid),
         position: LatLng(device.latitude, device.longitude),
         infoWindow: InfoWindow(title: '${device.lineNumber} ${device.lineDescription}'),
         icon: await BitmapDescriptor.fromAssetImage(
@@ -94,7 +97,7 @@ class HomeBloc extends BlocBase {
       _subjectCurrentDevice.add(currentInformationDevice);
       markers.clear();
       markers.add(Marker(
-          markerId: MarkerId(device.id),
+          markerId: MarkerId(device.uuid),
           position: LatLng(device.latitude, device.longitude),
           infoWindow: InfoWindow(title: '${device.lineNumber} ${device.lineDescription}'),
           icon: await BitmapDescriptor.fromAssetImage(
@@ -189,7 +192,7 @@ class HomeBloc extends BlocBase {
     await Future.forEach(currentListDevice, (Device device) async {
       markers.add(Marker(
           onTap: () => publishSubjectOptions.add(device),
-          markerId: MarkerId(device.id),
+          markerId: MarkerId(device.uuid),
           position: LatLng(device.latitude, device.longitude),
           infoWindow: InfoWindow(title: '${device.lineNumber} ${device.lineDescription}'),
           icon: await BitmapDescriptor.fromAssetImage(
@@ -220,9 +223,43 @@ class HomeBloc extends BlocBase {
         getDevices();
       }
     });
+    mqtt.subscribe('#');
+    _listenerMqtt = mqtt.listenerMessages.listen((MqttModel model) {
+      if (model.topic.endsWith('location')) {
+        String deviceId = model.topic.split('/')[0];
+        _parsePayloadMqtt(deviceId, model.message);
+      }
+    });
   }
 
-  void cancelListenerNetwork() => _listenerNetwork?.cancel();
+  void cancelListenerNetwork() {
+    _listenerNetwork?.cancel();
+    mqtt.unsubscribe('#');
+    _listenerMqtt?.cancel();
+  }
+
+  void _parsePayloadMqtt(String deviceId, String message) {
+    try {
+      Map<String, dynamic> value = jsonDecode(message);
+      if (value["lat"] != null && value["lon"] != null) {
+        Device device = currentListDevice.firstWhere((Device device) => device.uuid == deviceId);
+        device.latitude = value["lat"];
+        device.longitude = value["lon"];
+        Marker copyMarker;
+        markers.removeWhere((Marker marker) {
+          if (marker.markerId.value == deviceId) {
+            copyMarker = marker.copyWith(positionParam: LatLng(device.latitude, device.longitude));
+            return true;
+          }
+          return false;
+        });
+        if (copyMarker != null) {
+          markers.add(copyMarker);
+          _subjectDevices.add(currentListDevice);
+        }
+      }
+    } catch(e) {}
+  }
 
   @override
   void dispose() {

@@ -3,12 +3,32 @@ import 'dart:math';
 
 import 'package:rxdart/rxdart.dart';
 
+class MqttModel {
+  String topic;
+  String message;
+
+  MqttModel({ this.topic, this.message });
+
+  @override
+  String toString() {
+    return 'MqttModel{topic: $topic, message: $message}';
+  }
+
+
+}
+
 class MqttService {
 
   MqttClient client;
   BehaviorSubject<bool> _subject = BehaviorSubject.seeded(false);
 
+  PublishSubject<MqttModel> _publishSubject = PublishSubject();
+
   Observable<bool> get listenerConnectionMqtt => _subject.stream;
+
+  Observable<MqttModel> get listenerMessages => _publishSubject.stream;
+
+  Map<String, bool> topics = Map();
 
   bool get isConnected => _subject.value;
 
@@ -25,29 +45,66 @@ class MqttService {
       ..keepAlivePeriod = 600;
   }
 
+  void receiveMessage() {
+    client.updates.listen((List<MqttReceivedMessage<MqttMessage>> c) {
+      final MqttPublishMessage recMess = c[0].payload;
+      final String value = MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
+      _publishSubject.add(MqttModel(topic: c[0].topic, message: value));
+    });
+  }
+
   void keepConnected() async {
     while (true) {
       try {
         MqttClientConnectionStatus status = await client.connect('TCC', 'TCC');
-        print(status.state);
         if (status.state == MqttConnectionState.connected ) {
           _subject.add(true);
+          subscribesAgain();
+          receiveMessage();
           break;
         } else {
           _subject.add(false);
+          markWithFalseSubscribers();
         }
         await Future.delayed(const Duration(seconds: 3));
       } catch (e) {
-        print('Error mqtt: ${e.toString()}');
         _subject.add(false);
+        markWithFalseSubscribers();
         await Future.delayed(const Duration(seconds: 3));
       }
     }
-    print('connected');
+  }
+
+  void subscribe(String topic) {
+    if (isConnected) {
+      client.subscribe(topic, MqttQos.atMostOnce);
+      topics[topic] = true;
+    } else {
+      topics[topic] = false;
+    }
+  }
+
+  void unsubscribe(String topic) {
+    topics.remove(topic);
+    client.unsubscribe(topic);
+  }
+
+  void subscribesAgain() {
+    topics.forEach((key, value) {
+      if (!value)
+        client.subscribe(key, MqttQos.atMostOnce);
+    });
+  }
+
+  void markWithFalseSubscribers() {
+    topics.forEach((key, value) {
+      topics[key] = false;
+    });
   }
 
   void close() {
     _subject.close();
+    _publishSubject.close();
   }
 
 }
