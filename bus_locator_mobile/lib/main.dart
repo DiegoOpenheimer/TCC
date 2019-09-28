@@ -2,6 +2,8 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/components/loading/loading-bloc.dart';
 import 'package:bus_locator_mobile/pages/account/account-bloc.dart';
+import 'package:bus_locator_mobile/pages/evaluate/evaluate-bloc.dart';
+import 'package:bus_locator_mobile/pages/evaluate/evaluate-widget.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:bus_locator_mobile/pages/forgot-password/forgot-widget.dart';
 import 'package:bus_locator_mobile/pages/home/widgets/home-adapter-widget.dart';
@@ -48,6 +50,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => NewsBloc(i.get<Http>()), singleton: false),
         Bloc((i) => HomeBloc(i.get<Http>())),
         Bloc((i) => SuggestionBloc(i.get<Http>())),
+        Bloc((i) => EvaluateBloc(i.get<Http>()), singleton: false),
       ],
       dependencies: [
         Dependency((i) => Http()),
@@ -81,6 +84,9 @@ class MyApp extends StatelessWidget {
             }
             if (settings.name == '/news-details') {
               return MaterialPageRoute(builder: (context) => NewsDetailsWidget(settings.arguments));
+            }
+            if (settings.name == '/evaluate') {
+              return MaterialPageRoute(builder: (context) => EvaluateWidget(settings.arguments));
             }
             return null;
           },

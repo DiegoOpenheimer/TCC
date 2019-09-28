@@ -36,14 +36,14 @@ class AccountBloc extends BlocBase {
           await http.put('/user', user.toMap());
           _applicationBloc.saveUser(user);
         } on DioError catch(e) {
-          if (e.response.statusCode == Constants.notAuthorized) {
+          if (e?.response?.statusCode == Constants.notAuthorized) {
             throw 'Sem permissão';
           }
-          throw 'Falha ao editar conta';
+          throw 'Falha ao editar conta, verifique sua conexão';
         } on ErrorWithoutConnection catch (e) {
           throw e.message;
         } catch (e) {
-          throw 'Falha ao editar conta';
+          throw 'Falha ao editar conta, verifique sua conexão';
         }
       } else {
         throw '';

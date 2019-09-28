@@ -14,7 +14,6 @@ class NewSuggestionWidget extends StatefulWidget {
 
 class _NewSuggestionWidgetState extends State<NewSuggestionWidget> {
 
-  bool isLoading = false;
   ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
   SuggestionBloc _suggestionBloc = BlocProvider.getBloc<SuggestionBloc>();
   TextEditingController _controllerSubject = TextEditingController();

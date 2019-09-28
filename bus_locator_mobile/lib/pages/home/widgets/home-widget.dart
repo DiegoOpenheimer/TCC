@@ -171,7 +171,10 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
               OutlineButton.icon(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
                 icon: Icon(Icons.star),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed('/evaluate', arguments: device);
+                },
                 label: Text('Avaliar linha'),
               ),
             ],

@@ -159,7 +159,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         children: <Widget>[
           Text("Atenção", style: TextStyle(color: Colors.black, fontSize: 30),),
           SizedBox(height: 30,),
-          Text('Deseja mesmo remover sair da aplicação?', style: TextStyle(fontSize: 18, color: Colors.black), textAlign: TextAlign.center,),
+          Text('Deseja mesmo sair da aplicação?', style: TextStyle(fontSize: 18, color: Colors.black), textAlign: TextAlign.center,),
           Expanded(
             child:  Align(
               alignment: Alignment.bottomCenter,

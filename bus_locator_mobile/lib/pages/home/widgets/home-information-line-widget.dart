@@ -186,7 +186,7 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
                   },
                   controller: _textEditingController,
                   onChanged: (String text) => _homeBloc.search(text),
-                  decoration: InputDecoration.collapsed(hintText: 'Destino ou linha', hintStyle: TextStyle(color: Colors.black54)),
+                  decoration: InputDecoration.collapsed(hintText: 'Buscar linha', hintStyle: TextStyle(color: Colors.black54)),
                 ),
               ),
       ),
