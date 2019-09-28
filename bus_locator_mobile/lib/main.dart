@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         Bloc((i) => NewsBloc(i.get<Http>()), singleton: false),
         Bloc((i) => HomeBloc(i.get<Http>())),
         Bloc((i) => SuggestionBloc(i.get<Http>())),
-        Bloc((i) => EvaluateBloc(i.get<Http>()), singleton: false),
+        Bloc((i) => EvaluateBloc(i.get<Http>(), i.get<ConnectionNetwork>()), singleton: false),
       ],
       dependencies: [
         Dependency((i) => Http()),
