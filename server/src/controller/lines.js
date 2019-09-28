@@ -190,7 +190,6 @@ function getScoreByUser(req, res) {
     const {lineId} = req.params
     const { _id } = jwt.decode(req.headers.authorization)
     Score.findOne({ user: _id, line: lineId})
-    .populate([ { path: 'user', select: 'name' }, { path: 'line', select: 'description number' } ])
     .then(result => response.handlerResponse(res, result))
     .catch(e => response.handlerUnexpectError(res, `Error to get score by user ${e}`))
 }

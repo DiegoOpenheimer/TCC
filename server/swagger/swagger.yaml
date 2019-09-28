@@ -2104,9 +2104,9 @@ definitions:
       _id:
         type: string
       user:
-        $ref: '#/definitions/User'
+        type: string
       line:
-        $ref: '#/definitions/Line'
+        type: string
       description:
         type: string
       star:
