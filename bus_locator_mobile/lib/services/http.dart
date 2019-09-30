@@ -25,7 +25,7 @@ class Http {
       return options;
     }
   ));
- // ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+  // ..interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
 
 
   Future post(String path, Map<String, dynamic> body, { CancelToken cancelToken }) async {

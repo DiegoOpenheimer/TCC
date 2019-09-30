@@ -29,7 +29,7 @@ class EvaluateBloc extends BlocBase {
       if (response.data != null && response.data != '') {
         _subject.add(Score.fromJson(response.data));
       } else {
-        _subject.add(Score());
+        _subject.add(Score()..star = 5);
       }
       return currentScore;
     } catch (e) {
@@ -57,6 +57,7 @@ class EvaluateBloc extends BlocBase {
     try {
       Response response = await http.post('/line/score', body);
       _subject.add(Score.fromJson(response.data));
+      Fluttertoast.showToast(msg: 'Avaliação Salva com sucesso, Obrigado');
     } catch (e) {
       Fluttertoast.showToast(msg: 'Falha ao salvar avaliação, verifique sua conexão');
     } finally {

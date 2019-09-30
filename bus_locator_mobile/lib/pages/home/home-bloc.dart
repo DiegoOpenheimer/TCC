@@ -66,13 +66,18 @@ class HomeBloc extends BlocBase {
       Response response = await http.get('/device', query: { 'all': true });
       _subjectDevices.add(await _parseData(response.data));
     } catch (e) {
+      print('ERROR TO GET DEVICES: ${e.toString()}');
       Fluttertoast.showToast(msg: 'Houve uma falha, verifique sua conexão com a internet');
     }
   }
 
   Future<List<Device>> _parseData(data) async {
     markers.clear();
-    List<Device> devices = data.map<Device>((value) => Device.fromJson(value)).toList();
+    List<Device> devices = data
+    .map<Device>((value) => Device.fromJson(value))
+    .toList()
+    .where((Device device) => device.latitude != null && device.longitude != null)
+    .toList();
     await Future.forEach(devices, (Device device) async {
       markers.add(Marker(
         onTap: () => publishSubjectOptions.add(device),
