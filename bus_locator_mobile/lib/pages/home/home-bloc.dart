@@ -66,7 +66,6 @@ class HomeBloc extends BlocBase {
       Response response = await http.get('/device', query: { 'all': true });
       _subjectDevices.add(await _parseData(response.data));
     } catch (e) {
-      print('ERROR TO GET DEVICES: ${e.toString()}');
       Fluttertoast.showToast(msg: 'Houve uma falha, verifique sua conexão com a internet');
     }
   }
