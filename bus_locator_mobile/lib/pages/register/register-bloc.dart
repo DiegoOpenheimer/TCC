@@ -44,9 +44,9 @@ class RegisterBloc extends BlocBase {
       } on ErrorWithoutConnection {
         error(Constants.messageWithoutConnection);
       } on DioError catch (e) {
-        if (e.type == DioErrorType.DEFAULT) {
+        if (e?.type == DioErrorType.DEFAULT) {
           error();
-        } else if (e.response.statusCode == Constants.conflict) {
+        } else if (e?.response?.statusCode == Constants.conflict) {
           error('Usuário já cadastrado');
         } else {
           error();

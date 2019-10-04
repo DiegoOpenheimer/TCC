@@ -48,7 +48,7 @@ class LoginBloc extends BlocBase {
     user.password = password;
   }
 
-  void login(Function success, Function error) async {
+  void login(Function success, Function(String) error) async {
     if (_validate()) {
       showLoading();
       try {
@@ -63,12 +63,13 @@ class LoginBloc extends BlocBase {
         error(e.message);
         hideLoading();
       } on DioError catch (e) {
-        if (e.type == DioErrorType.DEFAULT) {
+        if (e?.type == DioErrorType.DEFAULT) {
           error('Falha ao fazer login');
-        } else if (e.response.statusCode == Constants.notAuthorized || e.response.statusCode != Constants.notFound) {
+        } else if (e?.response?.statusCode == Constants.notAuthorized || e?.response?.statusCode != Constants.notFound) {
           error('Usuário e/ou senha incorretos');
+        } else {
+          error('Falha ao fazer login');
         }
-        error('Falha ao fazer login');
         hideLoading();
       } catch(e) {
         error('Falha ao fazer login');

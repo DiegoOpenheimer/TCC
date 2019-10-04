@@ -39,7 +39,7 @@ class ForgotBloc extends BlocBase {
       } on ErrorWithoutConnection {
         error(Constants.messageWithoutConnection);
       } on DioError catch (e) {
-        if (e.response.statusCode == Constants.notFound) {
+        if (e?.response?.statusCode == Constants.notFound) {
           error('Email não encontrado');
         } else {
           error();
