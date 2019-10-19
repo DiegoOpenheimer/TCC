@@ -38,7 +38,7 @@ const createEmployee = (req, res) => {
     Employee.findOne({ email: employee.email })
     .then(user => {
         if (user && user.status === constants.USER_STATUS.ENABLED) {
-            return Promise.reject(new HandleError('user employee registed', 409))
+            return Promise.reject(new HandlerError('user employee registed', 409))
         } else if (!user) {
             return Employee.create(employee)
         }
@@ -50,7 +50,7 @@ const createEmployee = (req, res) => {
         response.handlerResponse(res, { message: 'employee registered'})
     })
     .catch(e => {
-        if (e instanceof HandleError) {
+        if (e instanceof HandlerError) {
             response.handlerResponse(res, e)
         } else {
             response.handlerUnexpectError(res, 'error to create employee ' + e)
@@ -116,7 +116,7 @@ const editEmployee = (req, res) => {
         )
     })        
     .catch(e => {
-        if (e instanceof HandleError) {
+        if (e instanceof HandlerError) {
             response.handlerResponse(res, e)
         } else {
             response.handlerUnexpectError(res, 'fail to edit employee ' + e)
