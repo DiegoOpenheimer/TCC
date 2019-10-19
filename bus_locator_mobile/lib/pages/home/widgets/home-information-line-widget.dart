@@ -138,7 +138,6 @@ class _HomeInformationWidgetState extends State<HomeInformationWidget> with Tick
     return Align(
           alignment: Alignment.topCenter,
           child: RaisedButton(
-            color: Colors.blue,
             padding: EdgeInsets.all(16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
             onPressed: _homeBloc.removeFilter,

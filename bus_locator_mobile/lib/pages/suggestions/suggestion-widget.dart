@@ -86,10 +86,9 @@ class _SuggestionWidgetState extends State<SuggestionWidget> {
     if (suggestions.isNotEmpty) {
       return RefreshIndicator(
         onRefresh: _suggestionBloc.getSuggestions,
-        child: ListView.separated(
+        child: ListView.builder(
           itemCount: suggestions.length,
           itemBuilder: (context, index) => _buildItem(suggestions[index]),
-          separatorBuilder: (context, index) => Divider(color: Colors.black54, height: 0,),
         ),
       );
     } else {

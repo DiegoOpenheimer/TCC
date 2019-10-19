@@ -104,6 +104,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget _buildTextField({ String label, String hint, bool obscureText = false, Icon icon, TextInputType inputType, Function(String) onChange }) {
     return TextField(
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(16),
         labelText: label,
         hintText: hint,
         prefixIcon: icon,

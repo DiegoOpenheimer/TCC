@@ -25,6 +25,7 @@ class _ForgotWidgetState extends State<ForgotWidget> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           body: Container(
             padding: EdgeInsets.all(16),
             color: _applicationBloc.getColor(context),

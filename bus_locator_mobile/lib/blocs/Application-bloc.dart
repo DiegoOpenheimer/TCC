@@ -66,7 +66,7 @@ class ApplicationBloc extends BlocBase {
       if (color != null) {
         return currentTheme == ThemeApplication.DARK ? Theme.of(context).primaryColor : color;
       } else {
-        return currentTheme == ThemeApplication.DARK ? Theme.of(context).primaryColor : Colors.blue;
+        return Theme.of(context).primaryColor;
       }
   }
 

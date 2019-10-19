@@ -10,6 +10,7 @@ import 'package:bus_locator_mobile/services/mqtt.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -92,7 +93,7 @@ class HomeBloc extends BlocBase {
     return devices;
   }
 
-  Future<void> getLineById(Device device) async {
+  Future<void> getLineById(Device device, { Color colorPolyline = Colors.black }) async {
     try {
       Response response = await http.get('/line/${device.line}');
       CurrentInformationDevice currentInformationDevice = CurrentInformationDevice()..device = device;
@@ -118,7 +119,10 @@ class HomeBloc extends BlocBase {
       });
       polylines.add(Polyline(
         polylineId: PolylineId(device.id),
-        points: currentInformationDevice.line.directions['routes'].map<LatLng>((route) => LatLng(route['lat'], route['lng'])).toList()
+        points: currentInformationDevice.line.directions['routes'].map<LatLng>((route) => LatLng(route['lat'], route['lng'])).toList(),
+        endCap: Cap.roundCap,
+        startCap: Cap.roundCap,
+        color: colorPolyline
       ));
       _subjectDevices.add(currentListDevice);
     } catch(e) {

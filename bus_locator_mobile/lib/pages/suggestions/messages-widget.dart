@@ -65,7 +65,8 @@ class _MessagesWidgetState extends State<MessagesWidget> {
   Widget _buildItem(Message message) {
     bool isUser = _applicationBloc.currentUser.id == message.by.id;
     MainAxisAlignment alignment = isUser ? MainAxisAlignment.end : MainAxisAlignment.start;
-    Color colorContainer = isUser ? Colors.blue : Colors.green;
+    Color colorContainer = isUser ? Theme.of(context).primaryColor :
+    _applicationBloc.currentTheme == ThemeApplication.DARK ? Colors.green : Theme.of(context).accentColor;
     return Row(
       mainAxisAlignment: alignment,
       children: <Widget>[
@@ -110,7 +111,7 @@ class _MessagesWidgetState extends State<MessagesWidget> {
                   height: 30,
                   width: 30,
                   padding: const EdgeInsets.all(8),
-                  child: FittedBox(fit: BoxFit.cover,child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.white),)),
+                  child: FittedBox(fit: BoxFit.contain,child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.white),)),
                 ),
                 duration: const Duration(milliseconds: 500),
                 crossFadeState: message.isLoading ? CrossFadeState.showSecond : CrossFadeState.showFirst,

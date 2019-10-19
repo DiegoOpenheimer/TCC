@@ -64,7 +64,7 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
                   _scaffoldState,
                   onPress: (Device device) async {
                     _loadingBloc.showLoading(true);
-                    await _homeBloc.getLineById(device);
+                    await _homeBloc.getLineById(device, colorPolyline: Theme.of(context).primaryColor);
                     _loadingBloc.showLoading(false);
                   },
                 ),
@@ -83,6 +83,8 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
           return Center(child: CircularProgressIndicator(),);
         }
         return GoogleMap(
+          mapToolbarEnabled: true,
+          compassEnabled: true,
           onTap: (T) => FocusScope.of(context).requestFocus(FocusNode()),
           gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>[
             Factory<OneSequenceGestureRecognizer>(
@@ -91,7 +93,6 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
           ].toSet(),
           polylines: _homeBloc.polylines,
           markers: _homeBloc.markers,
-          trafficEnabled: true,
           myLocationButtonEnabled: _homeBloc.hasPermissionUserLocation,
           myLocationEnabled: _homeBloc.hasPermissionUserLocation,
           initialCameraPosition: _homeBloc.cameraPosition,
@@ -163,7 +164,7 @@ class _HomeWidgetState extends State<HomeWidget> with AutomaticKeepAliveClientMi
                 onPressed: () async {
                   Navigator.of(context).pop();
                   _loadingBloc.showLoading(true);
-                  await _homeBloc.getLineById(device);
+                  await _homeBloc.getLineById(device, colorPolyline: Theme.of(context).primaryColor);
                   _loadingBloc.showLoading(false);
                 },
                 label: Text('Acompanhar'),

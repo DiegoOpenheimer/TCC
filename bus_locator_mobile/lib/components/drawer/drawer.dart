@@ -32,7 +32,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       initialData: applicationBloc.currentUser,
       builder: (context, snapshot) {
         return Drawer(
-          child: _body(context, snapshot.data),
+          child: SingleChildScrollView(child: _body(context, snapshot.data)),
         );
       }
     );
@@ -98,7 +98,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }) {
     bool active = index == widget.pageController.page.toInt();
     Color color = applicationBloc.currentTheme == ThemeApplication.DARK ? active ? Colors.white : Colors.white.withOpacity(.7) :
-    active ? Colors.blue : Colors.black54;
+    active ? Theme.of(context).primaryColor : Colors.black54;
     return Material(
       child: InkWell(
         onTap: () => onPress(),
