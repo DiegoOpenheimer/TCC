@@ -74,7 +74,13 @@ class MyApp extends StatelessWidget {
           theme: snapshot.data == ThemeApplication.DARK ? ThemeData.dark() : ThemeData(
             primaryColor: Color(0xFF4F9DA6),
             accentColor: Color(0xFFE6A18A),
-            buttonColor: Color(0xFF4F9DA6)
+            buttonColor: Color(0xFF4F9DA6),
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: <TargetPlatform, PageTransitionsBuilder>{
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.android: OpenUpwardsPageTransitionsBuilder(),
+              },
+            )
           ),
           title: 'Bus locator',
           color: Colors.white,

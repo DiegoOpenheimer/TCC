@@ -93,9 +93,9 @@ class _MessagesWidgetState extends State<MessagesWidget> {
     );
   }
 
-  Row _buildInformationMessage(bool isUser, Message message) {
-    return Row(
-          mainAxisSize: MainAxisSize.min,
+  Wrap _buildInformationMessage(bool isUser, Message message) {
+    return Wrap(
+          direction: Axis.horizontal,
           children: <Widget>[
             Visibility(visible: !isUser,child: Text(message.by.name + ' - ', style: TextStyle(color: Colors.white),)),
             Text(Utils.formatterDate(message.createdAt), style: TextStyle(color: Colors.white),),

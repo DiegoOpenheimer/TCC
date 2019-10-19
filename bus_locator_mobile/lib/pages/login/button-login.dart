@@ -57,7 +57,7 @@ class _ButtonLoginState extends State<ButtonLogin> with TickerProviderStateMixin
       alignment: Alignment.center,
       width: _animation.value,
       child: _animationController.value < .7 ?
-      _addPadding(Text('Entrar', style: TextStyle(color: Colors.white, fontSize: 19),)) :
+      _addPadding(Text('Entrar', style: TextStyle(color: Colors.white, fontSize: 19 / MediaQuery.of(context).textScaleFactor),)) :
       CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.white)),
     );
   }

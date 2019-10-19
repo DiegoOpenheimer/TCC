@@ -51,7 +51,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
 
   Widget _body() {
     return LayoutBuilder(builder: (context, constraints) {
-      double padding = constraints.maxHeight < 540 ? 10 : 16;
+      EdgeInsetsGeometry padding = constraints.maxHeight < 540 ? EdgeInsets.all(10) : null;
       double fontSize = constraints.maxHeight < 540 ? 25 : 36;
       return Column(
         children: <Widget>[
@@ -84,7 +84,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                   stream: registerBloc.nameStream,
                   sink: registerBloc.nameSink,
                   key: 'name',
-                  padding: EdgeInsets.all(padding)
+                  padding: padding
                 ),
                 SizedBox(
                   height: 16,
@@ -97,7 +97,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                     sink: registerBloc.emailSink,
                     key: 'email',
                     inputType: TextInputType.emailAddress,
-                    padding: EdgeInsets.all(padding)),
+                    padding: padding),
                 SizedBox(
                   height: 16,
                 ),
@@ -109,7 +109,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                     stream: registerBloc.passwordStream,
                     sink: registerBloc.passwordSink,
                     key: 'password',
-                    padding: EdgeInsets.all(padding)),
+                    padding: padding),
                 SizedBox(
                   height: 16,
                 ),
@@ -121,7 +121,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                     stream: registerBloc.confirmPasswordStream,
                     sink: registerBloc.confirmPasswordSink,
                     key: 'confirmPassword',
-                    padding: EdgeInsets.all(padding)),
+                    padding: padding),
                 SizedBox(
                   height: 16,
                 ),

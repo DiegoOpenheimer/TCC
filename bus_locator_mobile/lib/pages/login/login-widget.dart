@@ -19,6 +19,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
   final LoginBloc _loginBloc = BlocProvider.getBloc<LoginBloc>();
   final ApplicationBloc _applicationBloc = BlocProvider.getBloc<ApplicationBloc>();
+  EdgeInsetsGeometry contentPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +28,15 @@ class _LoginWidgetState extends State<LoginWidget> {
       child: Scaffold(
         key: _scaffoldKey,
         body: SingleChildScrollView(child: Container(
-          child: _body(),
-          height: MediaQuery.of(context).size.height,
-        )),
+              child: LayoutBuilder(
+                builder: (_, constraints) {
+                  contentPadding = constraints.maxHeight <= 540 ? EdgeInsets.all(16) : null;
+                  return _body();
+                },
+              ),
+              height: MediaQuery.of(context).size.height,
+            ),
+        ),
       ),
     );
   }
@@ -104,7 +111,7 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget _buildTextField({ String label, String hint, bool obscureText = false, Icon icon, TextInputType inputType, Function(String) onChange }) {
     return TextField(
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.all(16),
+        contentPadding: contentPadding,
         labelText: label,
         hintText: hint,
         prefixIcon: icon,

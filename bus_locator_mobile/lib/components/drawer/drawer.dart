@@ -1,7 +1,9 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:bus_locator_mobile/blocs/Application-bloc.dart';
 import 'package:bus_locator_mobile/model/user.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 class DrawerWidget extends StatefulWidget {
 
@@ -109,7 +111,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               children: <Widget>[
                 Icon(icon, size: 28, color: color,),
                 SizedBox(width: 48),
-                Text(label, style: TextStyle(fontSize: 18, color: color),)
+                Flexible(child: Text(label, style: TextStyle(fontSize: 18, color: color)))
               ],
             ),
           ),
