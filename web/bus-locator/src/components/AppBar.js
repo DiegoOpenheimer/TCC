@@ -37,13 +37,14 @@ const CustomAppBar = props => {
         [ROUTES.LINES]: 'Linhas',
         [ROUTES.ADD_LINES]: 'Adicionar linha',
         [ROUTES.MAP]: 'Mapa',
+        [ROUTES.NEWS]: 'Notícias'
     }
     const user = useSelector(state => state.home.user)
     const classes = createStyle()
     const classesLocal = createStyleLocal()
     const [ open, setOpen ] = useState(false)
     const [ openDrawer, setDrawer ] = useState(false)
-    const [anchorEl, setAnchorEl] = React.useState(null)
+    const [anchorEl, setAnchorEl] = useState(null)
     const size = props.usersNotAuthorized.length
 
     const handleClose = () => setOpen(!open)
