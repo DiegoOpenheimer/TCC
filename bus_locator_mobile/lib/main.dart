@@ -22,6 +22,7 @@ import 'package:bus_locator_mobile/services/connection-network.dart';
 import 'package:bus_locator_mobile/services/http.dart';
 import 'package:bus_locator_mobile/services/mqtt.dart';
 import 'package:bus_locator_mobile/services/shared-preference.dart';
+import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:bus_locator_mobile/share/transition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,9 +73,10 @@ class MyApp extends StatelessWidget {
       builder: (context, snapshot) {
         return MaterialApp(
           theme: snapshot.data == ThemeApplication.DARK ? ThemeData.dark() : ThemeData(
-            primaryColor: Color(0xFF4F9DA6),
-            accentColor: Color(0xFFE6A18A),
-            buttonColor: Color(0xFF4F9DA6),
+            primaryColor: AppTheme.primaryColor,
+            accentColor: AppTheme.accentColor,
+            buttonColor: AppTheme.primaryColor,
+            cursorColor: AppTheme.primaryColor,
             pageTransitionsTheme: const PageTransitionsTheme(
               builders: <TargetPlatform, PageTransitionsBuilder>{
                 TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),

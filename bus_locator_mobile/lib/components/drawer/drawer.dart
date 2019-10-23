@@ -34,7 +34,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       initialData: applicationBloc.currentUser,
       builder: (context, snapshot) {
         return Drawer(
-          child: SingleChildScrollView(child: _body(context, snapshot.data)),
+          child: SingleChildScrollView(child: _body(context, snapshot.data), physics: ClampingScrollPhysics()),
         );
       }
     );

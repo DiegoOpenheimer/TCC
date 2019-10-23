@@ -86,6 +86,7 @@ class _ForgotWidgetState extends State<ForgotWidget> {
         return TextField(
           autofocus: true,
           onChanged: _forgotBloc.handleEmail,
+          keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
               errorText: snapshot.hasError ? snapshot.error.toString() : null,
               labelText: 'Email',
