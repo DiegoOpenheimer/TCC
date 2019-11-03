@@ -50,7 +50,7 @@ class _LoginWidgetState extends State<LoginWidget> {
             height: MediaQuery.of(context).size.height * .3,
             decoration: BoxDecoration(
               color: _applicationBloc.getColor(context),
-              borderRadius: BorderRadius.vertical(bottom: Radius.elliptical(100, 50))
+              borderRadius: BorderRadius.vertical(bottom: Radius.elliptical(200, 50))
             ),
             child: Center(child: Material(color: Colors.transparent,child: Text('Bus Locator', style: AppTheme.title,))),
           ),

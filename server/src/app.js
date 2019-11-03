@@ -13,5 +13,4 @@ app.use(bodyParser.json({extended: true, limit: '10mb'}))
 app.use(bodyParser.urlencoded({extended: true, limit: '10mb'}))
 app.use(cors())
 app.use(require('./routes'))
-
 module.exports = app
