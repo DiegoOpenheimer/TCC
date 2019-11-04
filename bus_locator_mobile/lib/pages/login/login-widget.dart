@@ -52,7 +52,12 @@ class _LoginWidgetState extends State<LoginWidget> {
               color: _applicationBloc.getColor(context),
               borderRadius: BorderRadius.vertical(bottom: Radius.elliptical(200, 50))
             ),
-            child: Center(child: Material(color: Colors.transparent,child: Text('Bus Locator', style: AppTheme.title,))),
+            child: Center(child: Material(color: Colors.transparent,child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/logo.png')),
+              boxShadow: [BoxShadow(color: Color.fromRGBO(0, 0, 0, .05), blurRadius: 100)]
+            ),
+          ))),
           ),
         ),
         Expanded(child: Center(child: _buildForm(),),)

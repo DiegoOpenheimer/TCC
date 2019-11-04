@@ -22,8 +22,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   @override
   void initState() {
-  super.initState();
-  applicationBloc.setIsDrawerOpen(true);
+    super.initState();
+    applicationBloc.setIsDrawerOpen(true);
   }
 
   @override
@@ -46,7 +46,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         UserAccountsDrawerHeader(
           accountEmail: Text(user.email),
           accountName: Text(user.name),
-          currentAccountPicture: Center(child: Text('logo'),),
+          currentAccountPicture: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: AssetImage('assets/logo.png')),
+              boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 100)]
+            ),
+          ),
         ),
         _options(label: 'Tela Inicial', icon: Icons.home, onPress: () => goPage(0), index: 0),
         _options(label: 'Minha conta', icon: Icons.account_circle, onPress: () => goPage(1), index: 1),
@@ -125,16 +130,35 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       context: context,
       pageBuilder: (BuildContext buildContext, Animation<double> animation,
           Animation<double> secondaryAnimation) {
+        double width = MediaQuery.of(context).size.width * .7;
+        double height = MediaQuery.of(context).size.height;
         return WillPopScope(
           onWillPop: () => Future.value(false),
-          child: Center(
-            child: Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(15))),
-              width: MediaQuery.of(context).size.width * .7,
-              height: 200.0,
-              child: materialAlert(context),
-            ),
+          child: Stack(
+            children: <Widget>[
+              Center(
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(15))),
+                  width: width,
+                  height: 250.0,
+                  child: materialAlert(context),
+                ),
+              ),
+              Positioned(
+                left: MediaQuery.of(context).size.width/2 - 50,
+                top: (height - 250) / 2 - 50,
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(image: AssetImage('assets/logo.png'), fit: BoxFit.contain, alignment: Alignment.center),
+                    color: Theme.of(context).primaryColor
+                  ),
+                  height: 100,
+                  width: 100,
+                ),
+              ),
+            ],
           ),
         );
       },
@@ -159,6 +183,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15))),
       child: Column(
         children: <Widget>[
+          SizedBox(height: 40,),
           Text("Atenção", style: TextStyle(color: Colors.black, fontSize: 30),),
           SizedBox(height: 30,),
           Text('Deseja mesmo sair da aplicação?', style: TextStyle(fontSize: 18, color: Colors.black), textAlign: TextAlign.center,),
