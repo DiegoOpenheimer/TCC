@@ -173,7 +173,7 @@ const CustomDrawer = props => {
         >
             <Divider />
             <Grid container justify="center" direction="column" alignItems="center" className={classes.header} >
-                <img className={classes.img} src={LOGO} />
+                <img className={classes.img} src={LOGO} alt="logo" />
                 <Typography variant="h6" >{ user.name }</Typography>
                 <span>{ user.email }</span>
             </Grid>
