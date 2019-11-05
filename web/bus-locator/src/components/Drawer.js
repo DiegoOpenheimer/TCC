@@ -6,6 +6,7 @@ import clsx from 'clsx'
 import { withRouter } from 'react-router-dom'
 import { ROUTES, EMPLOYEE_ROLE } from '../utils/constants'
 import { useSelector } from 'react-redux'
+import LOGO from '../assets/logo.png'
 
 const styles = makeStyles({
     header: {
@@ -48,6 +49,11 @@ const styles = makeStyles({
     },
     list: {
         paddingLeft: 8
+    },
+    img: {
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        height: '15vh'
     }
 })
 
@@ -167,7 +173,7 @@ const CustomDrawer = props => {
         >
             <Divider />
             <Grid container justify="center" direction="column" alignItems="center" className={classes.header} >
-                <h1>Logo</h1>
+                <img className={classes.img} src={LOGO} />
                 <Typography variant="h6" >{ user.name }</Typography>
                 <span>{ user.email }</span>
             </Grid>
