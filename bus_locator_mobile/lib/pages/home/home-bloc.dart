@@ -166,15 +166,15 @@ class HomeBloc extends BlocBase {
     switch(value + currentInformationDevice.zoom) {
       case 0:
         _subjectCurrentDevice.add(currentInformationDevice..zoom += value);
-        _updateCurrentLocation(zoom: 14);
+        _updateCurrentLocation(zoom: 14, latLng: LatLng(currentInformationDevice.device.latitude, currentInformationDevice.device.longitude));
         break;
       case 1:
         _subjectCurrentDevice.add(currentInformationDevice..zoom += value);
-        _updateCurrentLocation(zoom: 15);
+        _updateCurrentLocation(zoom: 15, latLng: LatLng(currentInformationDevice.device.latitude, currentInformationDevice.device.longitude));
         break;
       case 2:
         _subjectCurrentDevice.add(currentInformationDevice..zoom += value);
-        _updateCurrentLocation(zoom: 17);
+        _updateCurrentLocation(zoom: 17, latLng: LatLng(currentInformationDevice.device.latitude, currentInformationDevice.device.longitude));
         break;
       case 3:
         _subjectCurrentDevice.add(currentInformationDevice..zoom += value);
@@ -254,6 +254,7 @@ class HomeBloc extends BlocBase {
         device.latitude = value["lat"];
         device.longitude = value["lon"];
         Marker copyMarker;
+        _subjectCurrentDevice.value.device = device;
         markers.removeWhere((Marker marker) {
           if (marker.markerId.value == deviceId) {
             copyMarker = marker.copyWith(positionParam: LatLng(device.latitude, device.longitude));

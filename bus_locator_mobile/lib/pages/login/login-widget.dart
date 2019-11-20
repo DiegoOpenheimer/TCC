@@ -4,7 +4,6 @@ import 'package:bus_locator_mobile/pages/forgot-password/forgot-bloc.dart';
 import 'package:bus_locator_mobile/pages/login/button-login.dart';
 import 'package:bus_locator_mobile/pages/login/login-bloc.dart';
 import 'package:bus_locator_mobile/pages/register/register-bloc.dart';
-import 'package:bus_locator_mobile/share/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
