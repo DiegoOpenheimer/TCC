@@ -10,7 +10,7 @@ si.uuid(result => {
   const TOPIC_PONG = result.os + '/pong'
   const TOPIC_LOCATION = result.os + '/location'
   const CLIENT_ID = 'mqtt_rasp' + Math.random().toString(16).substr(2, 8)
-  const client = mqtt.connect('mqtt://ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:1883', { username: 'TCC', password: 'TCC', clientId: CLIENT_ID })
+  const client = mqtt.connect('mqtt://ec2-54-233-110-27.sa-east-1.compute.amazonaws.com:1883', { username: 'TCC', password: 'TCC', clientId: CLIENT_ID })
   client.subscribe(TOPIC_PING)
   client.on('connect', () => console.log('connected'))
   client.on('reconnect', () => console.log('reconnect'))

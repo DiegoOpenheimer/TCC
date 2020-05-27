@@ -34,7 +34,7 @@ class MqttService {
 
   MqttService() {
     String identifier = 'bus_locator_mobile_' + Random().nextDouble().toString().substring(2, 8);
-    client = MqttClient('ec2-18-228-196-51.sa-east-1.compute.amazonaws.com', identifier);
+    client = MqttClient('ec2-54-233-110-27.sa-east-1.compute.amazonaws.com', identifier);
     init();
   }
 

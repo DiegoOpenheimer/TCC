@@ -13,7 +13,7 @@ class Http {
       BaseOptions(
         connectTimeout: timeout,
         receiveTimeout: timeout,
-        baseUrl: 'http://ec2-18-228-196-51.sa-east-1.compute.amazonaws.com:3001',
+        baseUrl: 'http://bus-locator.online:3000',
       )
   )..interceptors
       .add(InterceptorsWrapper(
