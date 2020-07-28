@@ -28,11 +28,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
+  runApp(MyApp());
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent
   ));
-  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {

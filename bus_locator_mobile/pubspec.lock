@@ -71,13 +71,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  cookie_jar:
-    dependency: transitive
-    description:
-      name: cookie_jar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   corsac_jwt:
     dependency: "direct main"
     description:
@@ -112,7 +105,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.16"
+    version: "3.0.9"
   event_bus:
     dependency: transitive
     description:
@@ -172,6 +165,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.14.0+2"
+  http_parser:
+    dependency: transitive
+    description:
+      name: http_parser
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.1.4"
   image:
     dependency: transitive
     description:
