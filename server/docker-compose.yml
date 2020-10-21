@@ -28,9 +28,6 @@ services:
   bus-locator-web:
     image: diegoopenheimer/bus-locator-web:1.0
     restart: always
-    environment:
-      MQTT: ws://mosca:9001
-      API: http://bus-locator-server:3000
     ports:
       - 80:80
     depends_on:
@@ -44,6 +41,7 @@ services:
       NODE_ENV: production
       DB: mongo/tcc
       MQTT: mosca:1883
+      PORT: 3000
     ports:
       - 3000:3000
     depends_on:

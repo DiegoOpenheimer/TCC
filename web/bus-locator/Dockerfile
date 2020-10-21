@@ -16,6 +16,7 @@ COPY . /app
 # add the node_modules folder to $PATH
 
 ENV PATH /app/node_modules/.bin:$PATH
+
 # install and cache dependencies
 RUN yarn
 #build the project for production
