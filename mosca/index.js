@@ -1,6 +1,6 @@
 const Mosca = require('mosca')
-const user = 'TCC'
-const pass = 'TCC'
+const user = process.env.USER
+const pass = process.env.PASSWORD
 const settings = {
     port: 1883,
     http: {
