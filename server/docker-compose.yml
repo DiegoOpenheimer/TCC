@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+  mosca:
+    image: diegoopenheimer/mqtt:1.0
+    restart: always
+    environment:
+      USER: TCC
+      PASSWORD: TCC
+    ports:
+      - 1883:1883
+      - 9001:9001
+
+  mongo:
+    image: mongo:4.0.20
+    restart: always
+    volumes:
+        - /d/utils/data-mongodb:/data/db
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+
+  bus-locator-web:
+    image: diegoopenheimer/bus-locator-web:1.0
+    restart: always
+    environment:
+      MQTT: ws://mosca:9001
+      API: http://bus-locator-server:3000
+    ports:
+      - 80:80
+    depends_on:
+      - mosca
+      - bus-locator-server
+
+  bus-locator-server:
+    image: diegoopenheimer/bus-locator-server:1.0
+    container_name: bus-locator-server
+    environment:
+      NODE_ENV: production
+      DB: mongo/tcc
+      MQTT: mosca:1883
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+      - mosca
