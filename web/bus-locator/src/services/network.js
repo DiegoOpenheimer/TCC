@@ -2,7 +2,7 @@ import axios from 'axios'
 import storage from './storage'
 
 const instance = axios.create({
-    baseURL: 'http://bus-locator.online:3000/',
+    baseURL: process.env.API,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json'
