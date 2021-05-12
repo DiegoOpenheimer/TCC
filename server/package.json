@@ -22,7 +22,7 @@
     "mongoose": "^5.4.13",
     "mongoose-paginate": "^5.0.3",
     "mqtt": "^3.0.0",
-    "nodemailer": "^5.1.1",
+    "nodemailer": "^6.4.16",
     "swagger-ui-express": "^4.0.2",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2",
